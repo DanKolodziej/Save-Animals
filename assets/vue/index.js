@@ -1,20 +1,22 @@
 import Vue from "vue";
 import App from "./App";
 import Index from "./components/Index";
-import SignIn from "./components/SignIn";
 import Adoption from "./components/Adoption";
+import LostAnimals from "./components/LostAnimals";
 import EndangeredSpecies from "./components/EndangeredSpecies";
 import Blog from "./components/Blog";
+import SignIn from "./components/SignIn";
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
 const routes = [
     { path: '/', component: Index },
-    { path: '/zaloguj', component: SignIn },
     { path: '/adopcja', component: Adoption },
+    { path: '/zaginione-zwierzaki', component: LostAnimals },
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
-    { path: '/blog', component: Blog }
+    { path: '/blog', component: Blog },
+    { path: '/zaloguj', component: SignIn }
 ];
 
 const router = new VueRouter({

@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -19,12 +20,18 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
 
@@ -34,28 +41,22 @@ class User
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\UserType", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $type;
+    private $city;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Person", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $person;
+    private $adress;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\AnimalShelter", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=6, nullable=true)
      */
-    private $animalShelter;
+    private $postalCode;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Administrator", mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $administrator;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Animal", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="App\Entity\Animal", mappedBy="species")
      */
     private $animals;
 
@@ -81,9 +82,41 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        return $this->password;
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -91,6 +124,23 @@ class User
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getName(): ?string
@@ -105,65 +155,38 @@ class User
         return $this;
     }
 
-    public function getType(): ?UserType
+    public function getCity(): ?string
     {
-        return $this->type;
+        return $this->city;
     }
 
-    public function setType(?UserType $type): self
+    public function setCity(string $city): self
     {
-        $this->type = $type;
+        $this->city = $city;
 
         return $this;
     }
 
-    public function getPerson(): ?Person
+    public function getAdress(): ?string
     {
-        return $this->person;
+        return $this->adress;
     }
 
-    public function setPerson(Person $person): self
+    public function setAdress(?string $adress): self
     {
-        $this->person = $person;
-
-        // set the owning side of the relation if necessary
-        if ($person->getUser() !== $this) {
-            $person->setUser($this);
-        }
+        $this->adress = $adress;
 
         return $this;
     }
 
-    public function getAnimalShelter(): ?AnimalShelter
+    public function getPostalCode(): ?string
     {
-        return $this->animalShelter;
+        return $this->postalCode;
     }
 
-    public function setAnimalShelter(AnimalShelter $animalShelter): self
+    public function setPostalCode(?string $postalCode): self
     {
-        $this->animalShelter = $animalShelter;
-
-        // set the owning side of the relation if necessary
-        if ($animalShelter->getUser() !== $this) {
-            $animalShelter->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function getAdministrator(): ?Administrator
-    {
-        return $this->administrator;
-    }
-
-    public function setAdministrator(Administrator $administrator): self
-    {
-        $this->administrator = $administrator;
-
-        // set the owning side of the relation if necessary
-        if ($administrator->getUser() !== $this) {
-            $administrator->setUser($this);
-        }
+        $this->postalCode = $postalCode;
 
         return $this;
     }
@@ -180,7 +203,7 @@ class User
     {
         if (!$this->animals->contains($animal)) {
             $this->animals[] = $animal;
-            $animal->setOwner($this);
+            $animal->setSpecies($this);
         }
 
         return $this;
@@ -191,8 +214,8 @@ class User
         if ($this->animals->contains($animal)) {
             $this->animals->removeElement($animal);
             // set the owning side to null (unless already changed)
-            if ($animal->getOwner() === $this) {
-                $animal->setOwner(null);
+            if ($animal->getSpecies() === $this) {
+                $animal->setSpecies(null);
             }
         }
 

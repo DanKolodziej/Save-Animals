@@ -9,10 +9,11 @@ class MainController extends AbstractController
 {
     /**
      * @Route("/", name="index")
-     * @Route("/zaloguj", name="singIn")
      * @Route("/adopcja", name="adoption")
+     * @Route("/zaginione-zwierzaki", name="lostAnimals")
      * @Route("/zagrozone-gatunki", name="endangeredSpecies")
      * @Route("/blog", name="blog")
+     * @Route("/zaloguj", name="singIn")
      */
     public function main()
     {

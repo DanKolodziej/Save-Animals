@@ -1,17 +1,20 @@
 <template>
-    <div>
+    <div class="app-content">
         <navigation-bar></navigation-bar>
-        <router-view></router-view>
+        <router-view class="main-content"></router-view>
+        <footer-bar></footer-bar>
     </div>
 </template>
 
 <script>
     import NavigationBar from './components/NavigationBar';
+    import FooterBar from "./components/FooterBar";
 
     export default {
         name: "App",
         components: {
-            NavigationBar
+            NavigationBar,
+            FooterBar
         }
     }
 </script>
@@ -31,11 +34,9 @@
     body {
         margin: 0;
         font-family: Roboto;
-    }
 
-    div {
-        span {
-            color: #C82829;
+        .main-content {
+            min-height: calc(100vh - 180px);
         }
     }
 </style>
