@@ -1,27 +1,76 @@
 <template>
-    <form class="form">
+    <form class="form" method="post">
         <h1 class="form__title">Zaloguj się</h1>
         <label class="form__label" for="email">
             Email:
-            <input class="form__input" type="email" id="email" name="email">
+            <input class="form__input" type="email" id="email" name="email" v-model="email">
         </label>
 
         <label class="form__label" for="password">
             Hasło:
-            <input class="form__input" type="password" id="password" name="password">
+            <input class="form__input" type="password" id="password" name="password" v-model="password">
         </label>
         <label class="form__remember" for="remember">
             Zapamiętaj mnie
             <input class="form__remember-input" type="checkbox" id="remember" name="remember">
             <span class="form__remember-checkbox"></span>
         </label>
-        <input class="form__submit" type="submit" value="Zatwierdź">
+        <input class="form__submit" type="submit" value="Zatwierdź" @click.prevent="performLogin()">
+        <div class="form__links">
+            <a class="form__link" href="#">Utwórz konto</a>
+            <a class="form__link" href="#">Nie pamiętam hasła</a>
+        </div>
     </form>
 </template>
 
 <script>
     export default {
-        name: "SignInForm"
+        name: "SignInForm",
+        props: ['csrf_token', 'last_email'],
+        data () {
+            return {
+                email: '',
+                password: '',
+                errorMessage: ''
+            }
+        },
+        computed: {
+            isLoading() {
+                return this.$store.getters.isLoading;
+            },
+            hasError() {
+                return this.$store.getters.hasError;
+            },
+            error() {
+                return this.$store.getters.error;
+            }
+        },
+        created() {
+            let redirect = this.$route.query.redirect;
+
+            if (this.$store.getters.isAuthenticated) {
+                if (typeof redirect !== "undefined") {
+                    this.$router.push({path: redirect});
+                } else {
+                    this.$router.push({path: "/"});
+                }
+            }
+        },
+        methods: {
+            async performLogin() {
+                let payload = {email: this.$data.email, password: this.$data.password},
+                    redirect = this.$route.query.redirect;
+
+                await this.$store.dispatch("login", payload);
+                if (!this.$store.getters.hasError) {
+                    if (typeof redirect !== "undefined") {
+                        this.$router.push({path: redirect});
+                    } else {
+                        this.$router.push({path: "/"});
+                    }
+                }
+            }
+        }
     }
 </script>
 
@@ -117,6 +166,18 @@
             border: 1px solid #192BC2;
             border-radius: 3px;
             cursor: pointer;
+        }
+
+        &__links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        &__link {
+            color: #192BC2;
+            font-size: 13px;
+            text-decoration: none;
         }
     }
 </style>

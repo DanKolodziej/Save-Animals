@@ -13,7 +13,7 @@ class MainController extends AbstractController
      * @Route("/zaginione-zwierzaki", name="lostAnimals")
      * @Route("/zagrozone-gatunki", name="endangeredSpecies")
      * @Route("/blog", name="blog")
-     * @Route("/zaloguj", name="singIn")
+     * @Route("/logowanie", name="singIn")
      */
     public function main()
     {

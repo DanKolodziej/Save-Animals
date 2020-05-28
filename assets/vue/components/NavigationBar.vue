@@ -8,7 +8,7 @@
             <router-link to="/blog" class="navigation__item" :class="{'navigation__item--active': isBlogActive}">Blog</router-link>
         </div>
         <div class="navigation__sign-in">
-            <router-link to="/zaloguj" class="navigation__item" :class="{'navigation__item--active': isSignInActive}">Zaloguj się</router-link>
+            <router-link to="/logowanie" class="navigation__item" :class="{'navigation__item--active': isSignInActive}">Zaloguj się</router-link>
         </div>
     </nav>
 </template>
@@ -69,11 +69,5 @@
                 box-shadow: inset 0px -5px 0px 0px #192BC2;
             }
         }
-
-        /*<!--&__item:hover, &__item.&__item&#45;&#45;active {-->*/
-        /*<!--    background-color: #00D764;-->*/
-        /*<!--    !*border-bottom: 4px solid #192BC2;*!-->*/
-        /*<!--    box-shadow: inset 0px -5px 0px 0px #192BC2;-->*/
-        /*<!--}-->*/
     }
 </style>

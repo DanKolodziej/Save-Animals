@@ -7,16 +7,17 @@ import EndangeredSpecies from "./components/EndangeredSpecies";
 import Blog from "./components/Blog";
 import SignIn from "./components/SignIn";
 import VueRouter from "vue-router";
+import { store } from "./store/security";
 
 Vue.use(VueRouter);
 
 const routes = [
     { path: '/', component: Index },
-    { path: '/adopcja', component: Adoption },
+    { path: '/adopcja', component: Adoption},
     { path: '/zaginione-zwierzaki', component: LostAnimals },
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
-    { path: '/blog', component: Blog },
-    { path: '/zaloguj', component: SignIn }
+    { path: '/blog', component: Blog, meta: { requiresAuth: true }  },
+    { path: '/logowanie', component: SignIn, props: true }
 ];
 
 const router = new VueRouter({
@@ -24,8 +25,26 @@ const router = new VueRouter({
     routes
 });
 
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        if (store.getters.isAuthenticated) {
+            next();
+        } else {
+            next({
+                path: "/logowanie",
+                query: { redirect: to.fullPath }
+            });
+        }
+    } else {
+        next(); // make sure to always call next()!
+    }
+});
+
 new Vue({
     components: { App },
     template: "<App/>",
-    router
+    router,
+    store
 }).$mount("#app");

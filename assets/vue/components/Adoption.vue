@@ -1,6 +1,12 @@
 <template>
     <div class="adoption-page">
         <h1 class="page-title">Adopcja Zwierzaków</h1>
+        <div class="adoption-page__radio-group">
+            <label for="adoption-waiting">Zwierzaki do adopcji</label>
+            <input type="radio" id="adoption-waiting" name="adoption" value="waiting">
+            <label for="adoption-wanted">Zwierzaki poszukiwane do adopcji</label>
+            <input type="radio" id="adoption-wanted" name="adoption" value="wanted">
+        </div>
         <div class="adoption-content">
             <div class="animal-cards-container">
                 <animal-card></animal-card>
@@ -21,7 +27,7 @@
 
     export default {
         name: "Adoption",
-        components: {AnimalCard}
+        components: {AnimalCard},
     }
 </script>
 
@@ -35,14 +41,15 @@
             margin: 0 0 30px;
         }
 
+        &__radio-group {
+            width: 445px;
+            margin: 0 auto;
+        }
+
         .adoption-content {
-            /*width: calc(100% - 50px);*/
-            /*margin: 0 auto;*/
             display: flex;
             justify-content: center;
             .animal-cards-container {
-                /*margin: 0 auto;*/
-                /*width: calc(100% - 50px);*/
                 max-width: 1200px;
                 display: flex;
                 justify-content: flex-start;
