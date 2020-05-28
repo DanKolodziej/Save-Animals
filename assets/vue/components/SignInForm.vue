@@ -1,6 +1,9 @@
 <template>
     <form class="form" method="post">
         <h1 class="form__title">Zaloguj się</h1>
+        <p v-if="error" class="form__error">
+            {{ errorMessage }}
+        </p>
         <label class="form__label" for="email">
             Email:
             <input class="form__input" type="email" id="email" name="email" v-model="email">
@@ -26,7 +29,6 @@
 <script>
     export default {
         name: "SignInForm",
-        props: ['csrf_token', 'last_email'],
         data () {
             return {
                 email: '',
@@ -68,6 +70,8 @@
                     } else {
                         this.$router.push({path: "/"});
                     }
+                } else {
+                    this.errorMessage = 'Nieprawidłowe dane logowania'
                 }
             }
         }
@@ -89,6 +93,10 @@
             color: #192BC2;
             font-weight: normal;
             margin: 0 0 30px;
+        }
+
+        &__error {
+            color: #C82829;
         }
 
         &__label, &__remember {

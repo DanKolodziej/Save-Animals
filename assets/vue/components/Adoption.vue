@@ -27,7 +27,7 @@
 
     export default {
         name: "Adoption",
-        components: {AnimalCard},
+        components: {AnimalCard}
     }
 </script>
 
