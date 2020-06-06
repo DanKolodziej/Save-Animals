@@ -32,6 +32,7 @@
     }
 
     body {
+        background-color: #e9ffff;
         margin: 0;
         font-family: Roboto;
 

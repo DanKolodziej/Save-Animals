@@ -1,19 +1,47 @@
 <template>
     <nav class="navigation">
-        <div class="navigation__hamburger-icon" @click="toggleMobileMenu">
+        <div class="navigation__hamburger-icon"
+             :class="{'navigation__hamburger-icon--active': isMobileMenuActive}"
+             @click="toggleMobileMenu">
             <div class="navigation__hamburger-icon-bar"></div>
             <div class="navigation__hamburger-icon-bar"></div>
             <div class="navigation__hamburger-icon-bar"></div>
         </div>
-        <div class="navigation__items" :class="{'navigation__items--active': isMobileMenuActive}">
-            <router-link to="/" class="navigation__item" :class="{'navigation__item--active': isMainPageActive}">Strona główna</router-link>
-            <router-link to="/adopcja" class="navigation__item" :class="{'navigation__item--active': isAdoptionActive}">Adopcja zwierzaka</router-link>
-            <router-link to="/zaginione-zwierzaki" class="navigation__item" :class="{'navigation__item--active': isLostAnimalsActive}">Zaginione zwierzaki</router-link>
-            <router-link to="/zagrozone-gatunki" class="navigation__item" :class="{'navigation__item--active': isEndangeredSpeciesActive}">Informacje o zagrożonych gatunkach</router-link>
-            <router-link to="/blog" class="navigation__item" :class="{'navigation__item--active': isBlogActive}">Blog</router-link>
+        <div class="navigation__items" :class="{'navigation__items--mobile': isMobileMenuActive}" @click="toggleMobileMenu">
+            <router-link to="/"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isMainPageActive}">
+                Strona główna
+            </router-link>
+            <router-link to="/adopcja"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isAdoptionActive}">
+                Adopcja zwierzaka
+            </router-link>
+            <router-link to="/zaginione-zwierzaki"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isLostAnimalsActive}">
+                Zaginione zwierzaki
+            </router-link>
+            <router-link to="/zagrozone-gatunki"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isEndangeredSpeciesActive}">
+                Informacje o zagrożonych gatunkach
+            </router-link>
+            <router-link to="/blog"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isBlogActive}">
+                Blog
+            </router-link>
         </div>
-        <div class="navigation__sign-in" :class="{'navigation__sign-in--active': isMobileMenuActive}">
-            <router-link to="/logowanie" class="navigation__item" :class="{'navigation__item--active': isSignInActive}">Zaloguj się</router-link>
+        <div class="navigation__sign-in"
+             :class="{'navigation__sign-in--mobile': isMobileMenuActive}"
+             @click="toggleMobileMenu">
+            <router-link to="/logowanie"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isSignInActive}">
+                Zaloguj się
+            </router-link>
         </div>
     </nav>
 </template>
@@ -71,23 +99,34 @@
             cursor: pointer;
             width: fit-content;
             height: fit-content;
-            margin: 27.5px 0 27.5px 20px;
-            background-color: #e9ffff;
+            margin: 28.5px 0 28.5px 20px;
+            /*background-color: #e9ffff;*/
             padding: 2px 8px;
-            border: 1px solid #192BC2;
+            /*border: 1px solid #192BC2;*/
             border-radius: 3px;
+            transition: 350ms ease-in-out;
 
             @media (min-width: 768px) {
                 display: none;
+            }
+
+            &:hover, &--active {
+                background-color: #fff;
+                color: #00A8E8;
+            }
+
+            &:hover > &-bar, &--active > &-bar {
+                background-color: #00A8E8;
             }
         }
 
         &__hamburger-icon-bar {
             width: 25px;
             height: 3px;
-            background-color: #192BC2;
+            background-color: #fff;
             margin: 5px 0;
             border-radius: 2px;
+            transition: 350ms ease-in-out;
         }
 
         &__items {
@@ -96,16 +135,17 @@
             background-color: #00A8E8;
             position: relative;
             z-index: 99;
-            max-width: 400px;
-            margin-left: -400px;
+            max-width: 345px;
+            margin-left: -345px;
             transition: all 0.5s ease-out;
 
             @media (min-width: 768px) {
                 flex-direction: row;
                 max-width: none;
+                margin-left: 0;
             }
 
-            &--active {
+            &--mobile {
                 margin-left: 0;
             }
         }
@@ -122,8 +162,8 @@
             padding: 15px 20px 20px;
             box-sizing: border-box;
             transition: 350ms ease-in-out;
-            box-shadow: inset 0px -5px 0px 0px #192BC2;
-            border-right: 5px solid #192BC2;
+            box-shadow: inset 0px -2px 0px 0px #192BC2;
+            border-right: 2px solid #192BC2;
 
             @media (min-width: 768px) {
                 text-align: center;
@@ -137,13 +177,16 @@
             }
 
             &:hover, &--active {
-                background-color: #00BB00;
-                box-shadow: inset 0px -5px 0px 0px #192BC2;
+                background-color: #008c4b;
+
+                @media (min-width: 768px) {
+                    box-shadow: inset 0px -5px 0px 0px #192BC2;
+                }
             }
         }
 
         &__items > &__item:first-child {
-            border-top: 5px solid #192BC2;
+            border-top: 2px solid #192BC2;
             @media (min-width: 768px) {
                 border-top: none;
             }
@@ -154,15 +197,16 @@
             background-color: #00A8E8;
             position: relative;
             z-index: 99;
-            max-width: 400px;
-            margin-left: -400px;
+            max-width: 345px;
+            margin-left: -345px;
             transition: all 0.5s ease-out;
 
             @media (min-width: 768px) {
                 max-width: none;
+                margin-left: 0;
             }
 
-            &--active {
+            &--mobile {
                 margin-left: 0;
             }
         }

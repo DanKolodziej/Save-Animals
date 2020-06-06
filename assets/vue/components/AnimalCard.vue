@@ -6,7 +6,7 @@
             <h2 class="animal-card__name">Title</h2>
             <p class="animal-card__description">
                 This is a placeholder This is a placeholder This is a placeholder
-                This is a placeholder This is a placeholder This is a placeholder
+                This is a placeholder
             </p>
         </div>
     </div>
@@ -20,15 +20,26 @@
 
 <style lang="scss" scoped>
     .animal-card {
-        max-width: 250px;
-        border: 2px solid #192BC2;
-        box-shadow: 10px 0 50px -10px rgba(0,0,0,0.75);
-        margin-right: 30px;
-        margin-bottom: 30px;
+        /*border: 2px solid #192BC2;*/
+        background-color: #fff;
+        box-shadow: 0 0 15px 0 rgba(0,0,0,0.75);
+        border-radius: 5px;
+        width: 60%;
+        margin: 15px auto;
+        max-width: none;
+
+        @media (min-width: 768px) {
+            width: auto;
+            max-width: 200px;
+            margin: 0 15px 30px;
+        }
+
         &__image {
             width: 100%;
             object-fit: cover;
+            border-radius: 5px 5px 0 0;
         }
+
         &__text {
             padding: 0 15px;
         }

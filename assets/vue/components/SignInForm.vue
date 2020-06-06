@@ -83,14 +83,14 @@
         width: 250px;
         margin: 0 auto;
         padding: 15px;
-        background-color: #e9ffff;
-        border: 1px solid #192BC2;
+        background-color: #008c4b;
+        /*border: 1px solid #192BC2;*/
         border-radius: 5px;
-        box-shadow: 0 0 25px -10px rgba(0, 0, 0, 0.75);
+        box-shadow: 0 0 20px 0 rgba(0,0,0,0.75);
 
         &__title {
             text-align: center;
-            color: #192BC2;
+            color: #fff;
             font-weight: normal;
             margin: 0 0 30px;
         }
@@ -100,7 +100,7 @@
         }
 
         &__label, &__remember {
-            color: #192BC2;
+            color: #fff;
         }
 
         &__remember {
@@ -130,8 +130,9 @@
                 height: 15px;
                 width: 15px;
                 background-color: #fff;
-                border: 1px solid #192BC2;
+                border: 1px solid transparent;
                 border-radius: 3px;
+                box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
 
                 &:after {
                     content: "";
@@ -159,21 +160,23 @@
             margin: 5px 0 10px;
             padding: 5px;
             font-size: 18px;
-            border: 1px solid #192BC2;
+            border: 2px solid #00A8E8;
             border-radius: 3px;
             box-sizing: border-box;
+            box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
         }
 
         &__submit {
             width: 50%;
             padding: 7px 0;
-            background-color: #192BC2;
+            background-color: #00A8E8;
             color: #fff;
             font-size: 16px;
             font-weight: bold;
-            border: 1px solid #192BC2;
+            border: 1px solid transparent;
             border-radius: 3px;
             cursor: pointer;
+            box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
         }
 
         &__links {
@@ -183,7 +186,7 @@
         }
 
         &__link {
-            color: #192BC2;
+            color: #fff;
             font-size: 13px;
             text-decoration: none;
         }
