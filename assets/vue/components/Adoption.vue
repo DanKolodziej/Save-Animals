@@ -27,6 +27,9 @@
                 </div>
                 <div class="results-list-container">
                     <ul class="results-list" :class="{'results-list--displayed': areResultsDisplayed}">
+<!--                        <li class="results-list__item" v-for="speciesName in species">-->
+<!--                            {{ speciesName.name }}-->
+<!--                        </li>-->
                         <li class="results-list__item">This</li>
                         <li class="results-list__item">is</li>
                         <li class="results-list__item">a</li>
@@ -58,19 +61,30 @@
 
 <script>
     import AnimalCard from "./AnimalCard";
+    import axios from 'axios';
 
     export default {
         name: "Adoption",
         components: {AnimalCard},
-        data () {
+        data() {
             return {
-                areResultsDisplayed: false
+                areResultsDisplayed: false,
+                species: []
             }
         },
         methods: {
-            toggleResults: function () {
+            toggleResults: function() {
                 this.areResultsDisplayed = !this.areResultsDisplayed;
+            },
+            getSpecies: function() {
+                axios.get('/species')
+                .then(response => {
+                    this.species = response.data;
+                });
             }
+        },
+        mounted() {
+            this.getSpecies();
         }
     }
 </script>
@@ -111,7 +125,6 @@
                 }
 
                 @media (min-width: 1024px) {
-                    /*width: auto;*/
                     margin: unset;
                     width: 55%;
                     max-width: 951px;
@@ -134,9 +147,7 @@
                 }
 
                 &__input {
-                    /*display: block;*/
                     width: 80%;
-                    /*margin: 5px 0 10px;*/
                     padding: 5px;
                     font-size: 18px;
                     border: 2px solid #00A8E8;
@@ -157,14 +168,19 @@
 
                 .results-list-container {
                     overflow: hidden;
+                    /*overflow-y: scroll;*/
                     position: absolute;
                     width: 200px;
                     height: 124.33px;
                     margin-top: -10px;
+                    /*transition: all 0.5s ease-out;*/
+
+                    /*&--displayed {*/
+                    /*    overflow-y: scroll;*/
+                    /*}*/
                 }
 
                 .results-list {
-                    /*display: none;*/
                     visibility: hidden;
                     list-style: none;
                     background-color: #fff;
@@ -178,7 +194,6 @@
                     transition: all 0.5s ease-out;
 
                     &--displayed {
-                        /*display: block;*/
                         visibility: visible;
                         margin-top: 0;
                     }
