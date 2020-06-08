@@ -5,6 +5,7 @@ import Adoption from "./components/Adoption";
 import LostAnimals from "./components/LostAnimals";
 import EndangeredSpecies from "./components/EndangeredSpecies";
 import Blog from "./components/Blog";
+import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import VueRouter from "vue-router";
 import { store } from "./store/security";
@@ -21,7 +22,8 @@ const routes = [
     { path: '/adopcja', component: Adoption},
     { path: '/zaginione-zwierzaki', component: LostAnimals },
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
-    { path: '/blog', component: Blog, meta: { requiresAuth: true }  },
+    { path: '/blog', component: Blog, meta: { requiresAuth: true }},
+    { path: '/zwierzaki-uzytkownika', component: UserAnimals },
     { path: '/logowanie', component: SignIn, props: true }
 ];
 

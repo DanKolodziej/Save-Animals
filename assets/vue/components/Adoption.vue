@@ -20,20 +20,20 @@
                     Gatunki zwierząt:
                 </label>
                 <div class="filter-options__input-group">
-                    <input type="text" id="animal-species" class="filter-options__input">
+                    <input type="text" id="animal-species" class="filter-options__input"
+                           v-model="selectedSpecies" @input="filterSpecies" @click="showResults">
                     <div class="filter-options__input-arrow" @click="toggleResults">
                         <font-awesome-icon icon="chevron-down"/>
                     </div>
                 </div>
                 <div class="results-list-container">
                     <ul class="results-list" :class="{'results-list--displayed': areResultsDisplayed}">
-<!--                        <li class="results-list__item" v-for="speciesName in species">-->
-<!--                            {{ speciesName.name }}-->
-<!--                        </li>-->
-                        <li class="results-list__item">This</li>
-                        <li class="results-list__item">is</li>
-                        <li class="results-list__item">a</li>
-                        <li class="results-list__item">placeholder</li>
+                        <li class="results-list__item"
+                            v-for="speciesName in filteredSpecies"
+                            @click="setSpecies(speciesName.name)"
+                            :class="{'results-list__item--disabled': speciesName.name === 'Brak wyników'}">
+                            {{ speciesName.name }}
+                        </li>
                     </ul>
                 </div>
                 <label for="animal-name" class="filter-options__label">
@@ -69,18 +69,46 @@
         data() {
             return {
                 areResultsDisplayed: false,
-                species: []
+                species: [],
+                filteredSpecies: [],
+                selectedSpecies: ''
             }
         },
         methods: {
             toggleResults: function() {
                 this.areResultsDisplayed = !this.areResultsDisplayed;
             },
+            showResults: function() {
+                this.areResultsDisplayed = true;
+            },
             getSpecies: function() {
                 axios.get('/species')
                 .then(response => {
                     this.species = response.data;
+                    this.species.sort(this.compareSpeciesIds);
+                    this.filteredSpecies = this.species;
                 });
+            },
+            setSpecies: function(speciesName) {
+                this.selectedSpecies  = speciesName;
+                this.areResultsDisplayed = false;
+            },
+            compareSpeciesIds: function(a, b) {
+                if(a.id > b.id) {
+                    return 1
+                } else  if(a.id < b.id) {
+                    return -1
+                }
+                return 0;
+            },
+            filterSpecies: function() {
+                this.filteredSpecies = this.species.filter(species => {
+                    return species.name.toLowerCase().includes(this.selectedSpecies.toLowerCase())
+                });
+                this.areResultsDisplayed = true;
+                if (this.filteredSpecies.length === 0) {
+                    this.filteredSpecies.push({name: 'Brak wyników'});
+                }
             }
         },
         mounted() {
@@ -168,16 +196,10 @@
 
                 .results-list-container {
                     overflow: hidden;
-                    /*overflow-y: scroll;*/
                     position: absolute;
                     width: 200px;
-                    height: 124.33px;
+                    height: 128.33px;
                     margin-top: -10px;
-                    /*transition: all 0.5s ease-out;*/
-
-                    /*&--displayed {*/
-                    /*    overflow-y: scroll;*/
-                    /*}*/
                 }
 
                 .results-list {
@@ -192,6 +214,22 @@
                     border: 2px solid #00A8E8;
                     border-radius: 3px;
                     transition: all 0.5s ease-out;
+                    max-height: 124.33px;
+                    overflow-y: auto;
+                    scrollbar-width: thin;
+                    scrollbar-color: #00A8E8 #e0e0e0;
+                    &::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    &::-webkit-scrollbar-track {
+                        background-color: #e0e0e0;
+                        border-radius: 10px;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        background-color: #00A8E8;
+                        border-radius: 10px;
+                        box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                    }
 
                     &--displayed {
                         visibility: visible;
@@ -201,9 +239,20 @@
                     &__item {
                         padding: 5px;
                         border-bottom: 1px solid #00A8E8;
+                        cursor: pointer;
+                        transition: all 0.5s ease-out;
+
+                        &:hover {
+                            background-color: #e0e0e0;
+                        }
 
                         &:last-child {
                             border-bottom: 0;
+                        }
+
+                        &--disabled {
+                            cursor: default;
+                            pointer-events: none;
                         }
                     }
                 }

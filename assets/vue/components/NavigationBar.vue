@@ -33,6 +33,11 @@
                          :class="{'navigation__item--active': isBlogActive}">
                 Blog
             </router-link>
+            <router-link to="/zwierzaki-uzytkownika"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isUserAnimalsActive}">
+                Moje zwierzaki
+            </router-link>
         </div>
         <div class="navigation__sign-in"
              :class="{'navigation__sign-in--mobile': isMobileMenuActive}"
@@ -69,6 +74,9 @@
             },
             isBlogActive: function () {
                 return this.$route.path === '/blog';
+            },
+            isUserAnimalsActive: function () {
+                return this.$route.path === '/zwierzaki-uzytkownika';
             },
             isSignInActive: function () {
                 return this.$route.path === '/logowanie';
@@ -158,7 +166,6 @@
             display: flex;
             align-items: center;
             height: 100%;
-            /*line-height: 80px;*/
             padding: 15px 20px 20px;
             box-sizing: border-box;
             transition: 350ms ease-in-out;
@@ -170,6 +177,7 @@
                 padding: 0 25px;
                 box-shadow: none;
                 border-right: none;
+                font-size: 14px;
             }
 
             @media (min-width: 1024px) {

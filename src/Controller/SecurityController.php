@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
@@ -25,6 +28,15 @@ class SecurityController extends AbstractController
      */
     public function login()
     {
+//        $serializer = new Serializer([new ObjectNormalizer()]);
+//
+//        $data = null;
+//        if($this->getUser()) {
+//            $data = $serializer->normalize($this->getUser(), null, [AbstractNormalizer::ATTRIBUTES => ['id', 'email', 'name']]);
+//        }
+//
+//        return new JsonResponse($data);
+
         return $this->json([
                 'user' => $this->getUser() ? $this->getUser()->getId() : null]
         );
