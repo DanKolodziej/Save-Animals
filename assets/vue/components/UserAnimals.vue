@@ -7,35 +7,43 @@
         </div>
         <div class="animal-tabs">
             <div class="animal-tabs__titles">
-                <div class="animal-tabs__tab-title animal-tabs__tab-title--active">
+                <div class="animal-tabs__tab-title"
+                     :class="{'animal-tabs__tab-title--active': isAdoptionTabActive}"
+                     @click="setAdoptionTabActive">
                     Zwierzak/i do adopcji
                     <div class="animal-tabs__title-underline adoption-underline"></div>
                 </div>
-                <div class="animal-tabs__tab-title">
+                <div class="animal-tabs__tab-title"
+                     :class="{'animal-tabs__tab-title--active': isWantedTabActive}"
+                     @click="setWantedTabActive">
                     Zwierzak/i, które chciałbym przygarnąć
                     <div class="animal-tabs__title-underline wanted-underline"></div>
                 </div>
-                <div class="animal-tabs__tab-title">
+                <div class="animal-tabs__tab-title"
+                     :class="{'animal-tabs__tab-title--active': isLostTabActive}"
+                     @click="setLostTabActive">
                     Zwierzak/i, które mi zaginęły
                     <div class="animal-tabs__title-underline lost-underline"></div>
                 </div>
-                <div class="animal-tabs__tab-title">
+                <div class="animal-tabs__tab-title"
+                     :class="{'animal-tabs__tab-title--active': isFoundTabActive}"
+                     @click="setFoundTabActive">
                     Zwierzak/i, które znalazłem
                     <div class="animal-tabs__title-underline found-underline"></div>
                 </div>
             </div>
-            <div class="animal-tabs__content animal-tabs__adoption">
+            <div class="animal-tabs__content animal-tabs__adoption" v-show="isAdoptionTabActive">
                 <animal-card></animal-card>
             </div>
-<!--            <div class="animal-tabs__content animal-tabs__wanted">-->
-
-<!--            </div>-->
-<!--            <div class="animal-tabs__content animal-tabs__lost">-->
-
-<!--            </div>-->
-<!--            <div class="animal-tabs__content animal-tabs__found">-->
-
-<!--            </div>-->
+            <div class="animal-tabs__content animal-tabs__wanted" v-show="isWantedTabActive">
+                <animal-card></animal-card>
+            </div>
+            <div class="animal-tabs__content animal-tabs__lost" v-show="isLostTabActive">
+                <animal-card></animal-card>
+            </div>
+            <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
+                <animal-card></animal-card>
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +55,40 @@
         name: "UserAnimals",
         components: {
             AnimalCard
+        },
+        data() {
+            return {
+                isAdoptionTabActive: true,
+                isWantedTabActive: false,
+                isLostTabActive: false,
+                isFoundTabActive: false,
+            }
+        },
+        methods: {
+            setAdoptionTabActive: function() {
+                this.isAdoptionTabActive = true;
+                this.isWantedTabActive = false;
+                this.isLostTabActive = false;
+                this.isFoundTabActive = false;
+            },
+            setWantedTabActive: function() {
+                this.isAdoptionTabActive = false;
+                this.isWantedTabActive = true;
+                this.isLostTabActive = false;
+                this.isFoundTabActive = false;
+            },
+            setLostTabActive: function() {
+                this.isAdoptionTabActive = false;
+                this.isWantedTabActive = false;
+                this.isLostTabActive = true;
+                this.isFoundTabActive = false;
+            },
+            setFoundTabActive: function() {
+                this.isAdoptionTabActive = false;
+                this.isWantedTabActive = false;
+                this.isLostTabActive = false;
+                this.isFoundTabActive = true;
+            }
         }
     }
 </script>
@@ -73,12 +115,15 @@
                 justify-content: space-between;
                 text-align: center;
                 border-radius: 5px 5px 0 0;
+                border: 1px solid transparent;
                 border-bottom: 1px solid #e0e0e0;
                 padding: 5px 15px;
                 cursor: pointer;
+                /*transition: all 0.5s ease-out;*/
 
                 &:hover {
                     background-color: #e0e0e0;
+                    transition: all 0.5s ease-out;
                 }
 
                 &--active {
