@@ -84,7 +84,6 @@
         margin: 0 auto;
         padding: 15px;
         background-color: #008c4b;
-        /*border: 1px solid #192BC2;*/
         border-radius: 5px;
         box-shadow: 0 0 20px 0 rgba(0,0,0,0.75);
 

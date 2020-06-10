@@ -10,10 +10,10 @@ import SignIn from "./components/SignIn";
 import VueRouter from "vue-router";
 import { store } from "./store/security";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faChevronDown);
+library.add(faChevronDown, faPlus, faMinus);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(VueRouter);
 

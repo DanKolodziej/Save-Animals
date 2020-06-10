@@ -17,7 +17,7 @@
             </div>
             <div class="filter-options">
                 <label for="animal-species" class="filter-options__label">
-                    Gatunki zwierząt:
+                    Gatunek zwierzaka:
                 </label>
                 <div class="filter-options__input-group">
                     <input type="text" id="animal-species" class="filter-options__input"
