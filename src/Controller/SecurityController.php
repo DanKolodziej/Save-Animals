@@ -18,16 +18,14 @@ class SecurityController extends AbstractController
     /** @var SerializerInterface */
     private $serializer;
 
-    public function __construct(SerializerInterface $serializer)
-    {
+    public function __construct(SerializerInterface $serializer) {
         $this->serializer = $serializer;
     }
 
     /**
      * @Route("/login", name="app_login", methods={"POST"})
      */
-    public function login()
-    {
+    public function login() {
 //        $serializer = new Serializer([new ObjectNormalizer()]);
 //
 //        $data = null;
@@ -45,8 +43,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout()
-    {
+    public function logout() {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

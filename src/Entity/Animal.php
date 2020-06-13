@@ -3,12 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnimalRepository")
  */
-class Animal
-{
+class Animal {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -18,12 +18,14 @@ class Animal
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Zwierzak musi mieć imię")
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Species", inversedBy="animals")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Nie wybrano gatunek")
      */
     private $species;
 
@@ -35,13 +37,21 @@ class Animal
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="animals")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Zwierzak musi mieć właściciela")
      */
     private $owner;
 
     /**
      * @ORM\Column(type="string", length=8)
+     * @Assert\Choice(choices={"adoption", "wanted", "lost", "found"},
+     *     message="Wybierz prawidłową kategorię dla zwierzaka")
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageFileName;
 
     public function getId(): ?int
     {
@@ -104,6 +114,18 @@ class Animal
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getImageFileName()
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName($imageFileName)
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

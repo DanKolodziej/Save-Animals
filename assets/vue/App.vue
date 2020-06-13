@@ -39,5 +39,9 @@
         .main-content {
             min-height: calc(100vh - 180px);
         }
+
+        textarea {
+            resize: none;
+        }
     }
 </style>

@@ -15,8 +15,7 @@ class SpeciesController extends AbstractController
     /**
      * @Route("/species", name="getSpecies", methods={"GET"})
      */
-    public function getSpecies(): JsonResponse
-    {
+    public function getSpecies(): JsonResponse {
         $species = $this->getDoctrine()->getRepository(Species::class)->findAll();
 
         $serializer = new Serializer([new ObjectNormalizer()]);

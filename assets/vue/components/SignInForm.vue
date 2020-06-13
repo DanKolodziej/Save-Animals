@@ -100,6 +100,7 @@
 
         &__label, &__remember {
             color: #fff;
+            font-weight: bold;
         }
 
         &__remember {
@@ -113,6 +114,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            font-weight: normal;
 
             &-input {
                 position: absolute;
@@ -163,6 +165,11 @@
             border-radius: 3px;
             box-sizing: border-box;
             box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 5px 0 #00dce8;
+            }
         }
 
         &__submit {

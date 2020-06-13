@@ -10,10 +10,10 @@ import SignIn from "./components/SignIn";
 import VueRouter from "vue-router";
 import { store } from "./store/security";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronDown, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faPlus, faMinus, faFileImage } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faChevronDown, faPlus, faMinus);
+library.add(faChevronDown, faPlus, faMinus, faFileImage);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(VueRouter);
 
@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
-        next(); // make sure to always call next()!
+        next();
     }
 });
 

@@ -41,18 +41,12 @@
                 </label>
                 <div class="filter-options__input-group">
                     <input type="text" id="animal-name" class="filter-options__input">
-                    <div class="filter-options__input-arrow">
-                        <font-awesome-icon icon="chevron-down"/>
-                    </div>
                 </div>
                 <label for="animal-description" class="filter-options__label">
                     Opis:
                 </label>
                 <div class="filter-options__input-group">
-                    <input type="text" id="animal-description" class="filter-options__input">
-                    <div class="filter-options__input-arrow">
-                        <font-awesome-icon icon="chevron-down"/>
-                    </div>
+                    <textarea id="animal-description" class="filter-options__input" rows="4" cols="20"></textarea>
                 </div>
             </div>
         </div>
@@ -162,6 +156,7 @@
 
             .filter-options {
                 position: relative;
+                height: fit-content;
                 background-color: #008c4b;
                 padding: 15px;
                 border-radius: 5px;
@@ -169,19 +164,28 @@
                 width: 250px;
                 box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
 
+                &__label {
+                    font-weight: bold;
+                }
+
                 &__input-group {
                     display: flex;
                     margin: 5px 0 10px;
                 }
 
                 &__input {
-                    width: 80%;
+                    width: 100%;
                     padding: 5px;
                     font-size: 18px;
                     border: 2px solid #00A8E8;
                     border-radius: 3px 0 0 3px;
                     box-sizing: border-box;
                     box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+                    &:focus {
+                        outline: none;
+                        box-shadow: 0 0 5px 0 #00dce8;
+                    }
                 }
 
                 &__input-arrow {
@@ -200,6 +204,7 @@
                     width: 200px;
                     height: 128.33px;
                     margin-top: -10px;
+                    pointer-events: none;
                 }
 
                 .results-list {
@@ -216,6 +221,7 @@
                     transition: all 0.5s ease-out;
                     max-height: 124.33px;
                     overflow-y: auto;
+                    pointer-events: all;
                     scrollbar-width: thin;
                     scrollbar-color: #00A8E8 #e0e0e0;
                     &::-webkit-scrollbar {
