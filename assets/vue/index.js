@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App";
 import Index from "./components/Index";
-import Adoption from "./components/Adoption";
+import Animals from "./components/Animals";
 import LostAnimals from "./components/LostAnimals";
 import EndangeredSpecies from "./components/EndangeredSpecies";
 import Blog from "./components/Blog";
@@ -19,8 +19,8 @@ Vue.use(VueRouter);
 
 const routes = [
     { path: '/', component: Index },
-    { path: '/adopcja', component: Adoption},
-    { path: '/zaginione-zwierzaki', component: LostAnimals },
+    { path: '/adopcja', component: Animals, props: {category: 'adoption'}},
+    { path: '/zaginione-zwierzaki', component: Animals, props: {category: 'lost'} },
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
     { path: '/blog', component: Blog, meta: { requiresAuth: true }},
     { path: '/zwierzaki-uzytkownika', component: UserAnimals },

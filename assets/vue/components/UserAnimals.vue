@@ -51,22 +51,20 @@
                                    value="found" v-model="category">
                         </div>
                     </div>
-                    <label class="add-animal-form__label">
-                        Imię zwierzaka:
-                    </label>
-                    <div class="add-animal-form__input-group">
-                        <input class="add-animal-form__input"
-                               :class="{'add-animal-form__input--error': nameError.length > 0}"
-                               v-model="name" @click="nameError = ''" type="text">
-                    </div>
+                    <text-input
+                            :label="'Imię zwierzaka:'"
+                            :error="nameError"
+                            @updateValue="nameUpdate"
+                            @deleteErrorMessage="nameErrorDelete">
+                    </text-input>
                     <label class="add-animal-form__label">
                         Gatunek:
                     </label>
-                    <div class="add-animal-form__input-group" @click="toggleSpecies">
+                    <div class="add-animal-form__dropdown-group" @click="toggleSpecies">
                         <input type="text" id="animal-species" class="add-animal-form__dropdown"
-                               :class="{'add-animal-form__input--error': speciesError.length > 0}"
+                               :class="{'add-animal-form__dropdown--error': speciesError.length > 0}"
                                v-model="selectedSpecies" disabled>
-                        <div class="add-animal-form__input-arrow">
+                        <div class="add-animal-form__dropdown-arrow">
                             <font-awesome-icon icon="chevron-down"/>
                         </div>
                     </div>
@@ -81,16 +79,18 @@
                     </div>
                     <label class="add-animal-form__label">
                         Opis:
-                    </label>
-                    <div class="add-animal-form__input-group">
                         <textarea class="add-animal-form__input" rows="4" cols="20" v-model="description"></textarea>
-                    </div>
+                    </label>
+<!--                    <div class="add-animal-form__input-group">-->
+<!--                        <textarea class="add-animal-form__input" rows="4" cols="20" v-model="description"></textarea>-->
+<!--                    </div>-->
                     <label class="add-animal-form__label">
                         Zdjęcie:
+                        <input class="add-animal-form__image-input" type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">
                     </label>
-                    <div class="add-animal-form__input-group">
-                        <input type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">
-                    </div>
+<!--                    <div class="add-animal-form__input-group">-->
+<!--                        <input type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">-->
+<!--                    </div>-->
                     <input class="add-animal-form__submit"
                            type="submit"
                            value="Dodaj zwierzaka"
@@ -99,59 +99,22 @@
                     <clip-loader :loading="isLoading" :color="'#00A8E8'" :size="'45px'"></clip-loader>
                 </form>
             </transition>
-            <div class="animal-tabs">
-                <div class="animal-tabs__titles">
-                    <div class="animal-tabs__tab-title"
-                         :class="{'animal-tabs__tab-title--active': isAdoptionTabActive}"
-                         @click="setAdoptionTabActive">
-                        Zwierzak/i do adopcji
-                        <div class="animal-tabs__title-underline adoption-underline"></div>
-                    </div>
-                    <div class="animal-tabs__tab-title"
-                         :class="{'animal-tabs__tab-title--active': isWantedTabActive}"
-                         @click="setWantedTabActive">
-                        Zwierzak/i, które chciałbym przygarnąć
-                        <div class="animal-tabs__title-underline wanted-underline"></div>
-                    </div>
-                    <div class="animal-tabs__tab-title"
-                         :class="{'animal-tabs__tab-title--active': isLostTabActive}"
-                         @click="setLostTabActive">
-                        Zwierzak/i, które mi zaginęły
-                        <div class="animal-tabs__title-underline lost-underline"></div>
-                    </div>
-                    <div class="animal-tabs__tab-title"
-                         :class="{'animal-tabs__tab-title--active': isFoundTabActive}"
-                         @click="setFoundTabActive">
-                        Zwierzak/i, które znalazłem
-                        <div class="animal-tabs__title-underline found-underline"></div>
-                    </div>
-                </div>
-                <div class="animal-tabs__content animal-tabs__adoption" v-show="isAdoptionTabActive">
-                    <animal-card></animal-card>
-                </div>
-                <div class="animal-tabs__content animal-tabs__wanted" v-show="isWantedTabActive">
-                    <animal-card></animal-card>
-                </div>
-                <div class="animal-tabs__content animal-tabs__lost" v-show="isLostTabActive">
-                    <animal-card></animal-card>
-                </div>
-                <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
-                    <animal-card></animal-card>
-                </div>
-            </div>
+            <animal-tabs></animal-tabs>
         </div>
     </div>
 </template>
 
 <script>
-    import AnimalCard from "./AnimalCard";
+    import TextInput from "./TextInput";
+    import AnimalTabs from "./AnimalTabs";
     import axios from "axios";
     import ClipLoader from 'vue-spinner/src/ClipLoader';
 
     export default {
         name: "UserAnimals",
         components: {
-            AnimalCard,
+            TextInput,
+            AnimalTabs,
             ClipLoader
         },
         data() {
@@ -168,14 +131,17 @@
                 nameError: '',
                 speciesError: '',
                 categoryError: '',
-                addedAnimal: false,
-                isAdoptionTabActive: true,
-                isWantedTabActive: false,
-                isLostTabActive: false,
-                isFoundTabActive: false,
+                addedAnimal: false
             }
         },
         methods: {
+            nameUpdate: function(value) {
+                console.log('XDDDD');
+                this.name = value;
+            },
+            nameErrorDelete: function() {
+                this.nameError = '';
+            },
             toggleSpecies: function() {
                 this.areSpeciesDisplayed = !this.areSpeciesDisplayed;
                 if(this.selectedSpecies === this.speciesError) {
@@ -254,30 +220,6 @@
 
                     this.isLoading = false;
                 })
-            },
-            setAdoptionTabActive: function() {
-                this.isAdoptionTabActive = true;
-                this.isWantedTabActive = false;
-                this.isLostTabActive = false;
-                this.isFoundTabActive = false;
-            },
-            setWantedTabActive: function() {
-                this.isAdoptionTabActive = false;
-                this.isWantedTabActive = true;
-                this.isLostTabActive = false;
-                this.isFoundTabActive = false;
-            },
-            setLostTabActive: function() {
-                this.isAdoptionTabActive = false;
-                this.isWantedTabActive = false;
-                this.isLostTabActive = true;
-                this.isFoundTabActive = false;
-            },
-            setFoundTabActive: function() {
-                this.isAdoptionTabActive = false;
-                this.isWantedTabActive = false;
-                this.isLostTabActive = false;
-                this.isFoundTabActive = true;
             }
         },
         mounted() {
@@ -356,6 +298,10 @@
                     opacity: 0;
                     height: 0;
                     margin: 0;
+
+                    * {
+                        display: none;
+                    }
                 }
             }
 
@@ -403,12 +349,39 @@
                     font-weight: bold;
                 }
 
-                &__input-group {
+                &__input {
+                    display: block;
+                    width: 100%;
+                    margin: 5px 0 10px;
+                    padding: 5px;
+                    font-size: 18px;
+                    border: 2px solid #00A8E8;
+                    border-radius: 3px;
+                    box-sizing: border-box;
+                    box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+                    &:focus {
+                        outline: none;
+                        box-shadow: 0 0 5px 0 #00dce8;
+                    }
+
+                    &--error {
+                        border-color: #C82829;
+                        background-color: #eeaaaa;
+                        color: #C82829;
+
+                        &:focus {
+                            box-shadow: 0 0 5px 0 #eeaaaa;
+                        }
+                    }
+                }
+
+                &__dropdown-group {
                     display: flex;
                     margin: 5px 0 10px;
                 }
 
-                &__input, &__dropdown {
+                &__dropdown {
                     display: block;
                     width: 100%;
                     padding: 5px;
@@ -428,7 +401,7 @@
                         box-shadow: 0 0 5px 0 #00dce8;
                     }
 
-                    &--error, &--error:disabled {
+                    &--error:disabled {
                         border-color: #C82829;
                         background-color: #eeaaaa;
                         color: #C82829;
@@ -443,7 +416,7 @@
                     border-radius: 3px 0 0 3px;
                 }
 
-                &__input-arrow {
+                &__dropdown-arrow {
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -540,6 +513,10 @@
                     }
                 }
 
+                &__image-input {
+                    margin: 5px 0 10px;
+                }
+
                 &__submit {
                     display: block;
                     width: 50%;
@@ -554,72 +531,6 @@
                     border-radius: 3px;
                     cursor: pointer;
                     box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
-                }
-            }
-
-            .animal-tabs {
-                max-width: 650px;
-                margin: 0 auto;
-
-                &__titles {
-                    display: flex;
-                    border-radius: 5px 5px 0 0;
-                }
-
-                &__tab-title {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    text-align: center;
-                    border-radius: 5px 5px 0 0;
-                    border: 1px solid transparent;
-                    border-bottom: 1px solid #e0e0e0;
-                    padding: 5px 15px;
-                    cursor: pointer;
-                    transition: all 0.5s ease-out;
-
-                    &:hover {
-                        background-color: #e0e0e0;
-                    }
-
-                    &--active {
-                        background-color: #fff;
-                        border: 1px solid #e0e0e0;
-                        border-bottom-color: transparent;
-
-                        &:hover {
-                            background-color: #fff;
-                        }
-                    }
-                }
-
-                &__title-underline {
-                    height: 5px;
-                    width: 70px;
-                    margin: 5px auto 0;
-                }
-
-                .adoption-underline {
-                    background-color: #008c4b;
-                }
-
-                .wanted-underline {
-                    background-color: #00bb00;
-                }
-
-                .lost-underline {
-                    background-color: #192bc2;
-                }
-
-                .found-underline {
-                    background-color: #00a8e8;
-                }
-
-                &__content {
-                    background-color: #fff;
-                    padding-top: 15px;
-                    border: 1px solid #e0e0e0;
-                    border-top: 0;
                 }
             }
         }
