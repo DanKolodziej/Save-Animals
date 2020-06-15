@@ -15,6 +15,7 @@
 
 <style lang="scss" scoped>
     .sign-in-page {
-        padding-top: 30px;
+        display: flex;
+        align-items: center;
     }
 </style>

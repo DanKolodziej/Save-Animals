@@ -1,11 +1,15 @@
 <template>
     <div class="user-animals-page">
-        <div class="user-info">
-            <h2>Email</h2>
-            <h2>Name</h2>
-            <h3>User Type</h3>
+        <div class="users-animals">
+            <div class="user-info">
+                <h2 class="user-info__name">John Doe</h2>
+            </div>
+            <animal-tabs></animal-tabs>
         </div>
-        <div class="animals-section">
+        <div class="add-animal-form-column">
+            <div class="user-info">
+                <h2 class="user-info__name">John Doe</h2>
+            </div>
             <transition name="fade">
                 <div class="add-animal-success-message" v-show="addedAnimal">
                     Pomyślnie dodano nowego zwierzaka :)
@@ -27,28 +31,28 @@
                     </label>
                     <div class="add-animal-form__radio-group">
                         <div class="add-animal-form__radio-button-container">
-                            <label class="add-animal-form__radio-label" for="adoption">Zwierzak do adopcji</label>
                             <input class="add-animal-form__radio-button"
                                    type="radio" id="adoption" name="category"
                                    value="adoption" v-model="category">
+                            <label class="add-animal-form__radio-label" for="adoption">Zwierzak do adopcji</label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
-                            <label class="add-animal-form__radio-label" for="wanted">Zwierzak, który chciałbym adoptować</label>
                             <input class="add-animal-form__radio-button"
                                    type="radio" id="wanted" name="category"
                                    value="wanted" v-model="category">
+                            <label class="add-animal-form__radio-label" for="wanted">Zwierzak, który chciałbym adoptować</label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
-                            <label class="add-animal-form__radio-label" for="lost">Zagioniony zwierzak</label>
                             <input class="add-animal-form__radio-button"
                                    type="radio" id="lost" name="category"
                                    value="lost" v-model="category">
+                            <label class="add-animal-form__radio-label" for="lost">Zagioniony zwierzak</label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
-                            <label class="add-animal-form__radio-label" for="found">Znaleziony zwierzak</label>
                             <input class="add-animal-form__radio-button"
                                    type="radio" id="found" name="category"
                                    value="found" v-model="category">
+                            <label class="add-animal-form__radio-label" for="found">Znaleziony zwierzak</label>
                         </div>
                     </div>
                     <text-input
@@ -79,27 +83,20 @@
                     </div>
                     <label class="add-animal-form__label">
                         Opis:
-                        <textarea class="add-animal-form__input" rows="4" cols="20" v-model="description"></textarea>
+                        <textarea class="add-animal-form__input" rows="3" cols="20" v-model="description"></textarea>
                     </label>
-<!--                    <div class="add-animal-form__input-group">-->
-<!--                        <textarea class="add-animal-form__input" rows="4" cols="20" v-model="description"></textarea>-->
-<!--                    </div>-->
                     <label class="add-animal-form__label">
                         Zdjęcie:
                         <input class="add-animal-form__image-input" type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">
                     </label>
-<!--                    <div class="add-animal-form__input-group">-->
-<!--                        <input type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">-->
-<!--                    </div>-->
                     <input class="add-animal-form__submit"
                            type="submit"
                            value="Dodaj zwierzaka"
                            @click.prevent="addAnimal()"
                            v-show="!isLoading">
-                    <clip-loader :loading="isLoading" :color="'#00A8E8'" :size="'45px'"></clip-loader>
+                    <clip-loader :loading="isLoading" :color="'#fff'" :size="'45px'"></clip-loader>
                 </form>
             </transition>
-            <animal-tabs></animal-tabs>
         </div>
     </div>
 </template>
@@ -123,7 +120,7 @@
                 species: [],
                 selectedSpecies: '',
                 description: '',
-                category: '',
+                category: 'adoption',
                 image: '',
                 isFormDisplayed: false,
                 areSpeciesDisplayed: false,
@@ -231,40 +228,63 @@
 <style lang="scss" scoped>
     .user-animals-page {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        flex-direction: column-reverse;
+        justify-content: flex-end;
         max-width: 1000px;
-        padding: 30px 5% 0 5%;
+        padding: 30px 2%;
         margin: 0 auto;
         
         @media (min-width: 1024px) {
             flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .users-animals {
+            .user-info {
+                @media (min-width: 1024px) {
+                    display: block;
+                }
+            }
         }
 
         .user-info {
-            background-color: #00A8E8;
-            color: #fff;
+            display: none;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
             height: fit-content;
             width: fit-content;
-            margin: 0 auto 15px;
-            padding: 15px;
+            margin: 0 auto 30px;
+            padding: 10px 30px;
             border-radius: 5px;
-            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.75);
 
-            @media (min-width: 1024px) {
+            &__name {
                 margin: 0;
             }
         }
 
-        .animals-section {
+        .add-animal-form-column {
             display: flex;
             flex-direction: column;
+            width: 300px;
+            margin: 0 auto;
+
+            @media (min-width: 1024px) {
+                margin: 0;
+            }
 
             .fade-enter-active, .fade-leave-active {
                 transition: opacity .5s ease-in-out;
             }
             .fade-enter, .fade-leave-to {
                 opacity: 0;
+            }
+
+            .user-info {
+                display: block;
+
+                @media (min-width: 1024px) {
+                    display: none;
+                }
             }
 
             .add-animal-success-message {
@@ -281,7 +301,7 @@
 
             .add-animal-icon {
                 align-self: center;
-                color: #008c4b;
+                color: #00b84b;
                 margin-bottom: 15px;
                 padding: 0 3px;
                 border-radius: 5px;
@@ -290,7 +310,7 @@
                 opacity: 1;
 
                 &:hover {
-                    background-color: #008c4b;
+                    background-color: #00b84b;
                     color: #fff;
                 }
 
@@ -317,11 +337,12 @@
             }
 
             .add-animal-form {
+                align-self: center;
                 width: 250px;
                 height: fit-content;
                 margin: 0 auto 15px;
                 padding: 15px;
-                background-color: #008c4b;
+                background-color: #6495ed;
                 border-radius: 5px;
                 box-shadow: 0 0 20px 0 rgba(0,0,0,0.75);
 
@@ -340,7 +361,7 @@
 
                     &:hover {
                         background-color: #fff;
-                        color: #008c4b;
+                        color: #6495ED;
                     }
                 }
 
@@ -498,18 +519,66 @@
 
                 &__radio-button-container {
                     font-size: 13px;
-                    display: flex;
-                    justify-content: space-between;
+                    /*display: flex;*/
+                    /*justify-content: space-between;*/
                     margin: 3px 0;
                 }
 
                 &__radio-label {
                     color: #fff;
                     cursor: pointer;
-                    transition: all 0.5s ease-in-out;
+                }
 
-                    &:hover {
-                        color: #00a8e8;
+                &__radio-button {
+
+                    &:checked, &:not(:checked) {
+                        position: absolute;
+                        left: -9999px;
+                    }
+
+                    &:checked + label, &:not(:checked) + label {
+                        position: relative;
+                        padding-left: 28px;
+                        cursor: pointer;
+                        line-height: 20px;
+                        display: inline-block;
+                    }
+
+                    &:checked + label:before, &:not(:checked) + label:before {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 18px;
+                        height: 18px;
+                        border: 1px solid #ddd;
+                        border-radius: 100%;
+                        background: #fff;
+                    }
+
+                    &:checked + label:after, &:not(:checked) + label:after {
+                        content: '';
+                        width: 12px;
+                        height: 12px;
+                        background: #00A8E8;
+                        position: absolute;
+                        top: 4px;
+                        left: 4px;
+                        border-radius: 100%;
+                        -webkit-transition: all 0.2s ease;
+                        transition: all 0.2s ease;
+                    }
+
+                    &:not(:checked) + label:after {
+                        opacity: 0;
+                        -webkit-transform: scale(0);
+                        transform: scale(0);
+                    }
+
+                    &:checked + label:after {
+                        opacity: 1;
+                        -webkit-transform: scale(1);
+                        transform: scale(1);
                     }
                 }
 
@@ -531,6 +600,11 @@
                     border-radius: 3px;
                     cursor: pointer;
                     box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+                    &:focus {
+                        outline: none;
+                        box-shadow: 0 0 5px 0 #00dce8;
+                    }
                 }
             }
         }

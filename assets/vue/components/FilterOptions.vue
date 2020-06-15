@@ -91,12 +91,17 @@
     .filter-options {
         position: relative;
         height: fit-content;
-        background-color: #008c4b;
+        background-color: #6495ed;
+        margin: 0 auto 30px;
         padding: 15px;
         border-radius: 5px;
         color: #fff;
         width: 250px;
         box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
+
+        @media (min-width: 1024px) {
+            margin: 0;
+        }
 
         &__label {
             font-weight: bold;

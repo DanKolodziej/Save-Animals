@@ -134,7 +134,7 @@
         }
 
         .wanted-underline {
-            background-color: #00bb00;
+            background-color: #00b84b;
         }
 
         .lost-underline {

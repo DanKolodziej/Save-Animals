@@ -20,13 +20,16 @@
 
 <style lang="scss" scoped>
     .animal-card {
-        /*border: 2px solid #192BC2;*/
         background-color: #fff;
         box-shadow: 0 0 15px 0 rgba(0,0,0,0.75);
         border-radius: 5px;
         width: 60%;
         margin: 15px auto;
         max-width: none;
+
+        &:first-child {
+            margin-top: 0;
+        }
 
         @media (min-width: 768px) {
             width: auto;
