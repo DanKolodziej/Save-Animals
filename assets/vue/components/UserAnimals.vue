@@ -85,9 +85,14 @@
                         Opis:
                         <textarea class="add-animal-form__input" rows="3" cols="20" v-model="description"></textarea>
                     </label>
-                    <label class="add-animal-form__label">
-                        Zdjęcie:
-                        <input class="add-animal-form__image-input" type="file" accept="image/x-png,image/gif,image/jpeg" ref="image" @change="onFileChange">
+                    <input class="add-animal-form__image-input"
+                           id="animal-image" type="file"
+                           accept="image/x-png,image/gif,image/jpeg"
+                           ref="image"
+                           @change="onFileChange">
+                    <label class="add-animal-form__image-label" for="animal-image">
+                        <font-awesome-icon icon="file-image" size="lg"/>
+                        {{ imageInputlabel }}
                     </label>
                     <input class="add-animal-form__submit"
                            type="submit"
@@ -122,6 +127,7 @@
                 description: '',
                 category: 'adoption',
                 image: '',
+                ImageFileName: '',
                 isFormDisplayed: false,
                 areSpeciesDisplayed: false,
                 isLoading: false,
@@ -131,9 +137,13 @@
                 addedAnimal: false
             }
         },
+        computed: {
+            imageInputlabel: function () {
+                return this.ImageFileName.length > 0 ? this.ImageFileName : 'Wybierz zdjęcie zwierzaka';
+            }
+        },
         methods: {
             nameUpdate: function(value) {
-                console.log('XDDDD');
                 this.name = value;
             },
             nameErrorDelete: function() {
@@ -172,6 +182,7 @@
                 // this.createImage(files[0]);
 
                 this.image = this.$refs.image.files[0];
+                this.ImageFileName = this.image.name;
             },
             createImage(file) {
                 var image = new Image();
@@ -583,7 +594,31 @@
                 }
 
                 &__image-input {
-                    margin: 5px 0 10px;
+                    width: 0.1px;
+                    height: 0.1px;
+                    opacity: 0;
+                    overflow: hidden;
+                    position: absolute;
+                    z-index: -1;
+                }
+
+                &__image-label {
+                    display: block;
+                    width: calc(100% - 12px);
+                    padding: 7px 5px;
+                    margin: 15px 0;
+                    background-color: #00A8E8;
+                    color: #fff;
+                    text-align: center;
+                    font-size: 16px;
+                    font-weight: bold;
+                    border: 1px solid transparent;
+                    border-radius: 3px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    cursor: pointer;
+                    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
                 }
 
                 &__submit {
@@ -606,6 +641,11 @@
                         box-shadow: 0 0 5px 0 #00dce8;
                     }
                 }
+            }
+
+            .add-animal-form__image-input:focus + .add-animal-form__image-label {
+                outline: none;
+                box-shadow: 0 0 5px 0 #00dce8;
             }
         }
     }

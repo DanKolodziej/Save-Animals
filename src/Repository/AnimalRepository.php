@@ -12,11 +12,25 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Animal[]    findAll()
  * @method Animal[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnimalRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
+class AnimalRepository extends ServiceEntityRepository {
+
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Animal::class);
+    }
+
+    public function findByCategorySpeciesNameDescription($category, $species, $name, $description) {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.category LIKE :category')
+            ->setParameter('category', '%' . $category . '%')
+            ->andWhere('a.species LIKE :species')
+            ->setParameter('species', '%' . $species . '%')
+            ->andWhere('a.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->andWhere('a.description LIKE :description')
+            ->setParameter('description', '%' . $description . '%')
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

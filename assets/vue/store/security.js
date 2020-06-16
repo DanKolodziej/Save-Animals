@@ -30,6 +30,9 @@ export const store = new Vuex.Store( {
         isAuthenticated(state) {
             return state.isAuthenticated;
         },
+        userId(state) {
+            return state.user.user
+        },
         hasRole(state) {
             return role => {
                 return state.user.roles.indexOf(role) !== -1;

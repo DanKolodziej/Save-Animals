@@ -36,12 +36,16 @@
             <animal-card></animal-card>
         </div>
         <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
-            <animal-card></animal-card>
+            <animal-card v-for="animal in foundAnimals"
+                         :name="animal.name"
+                         :description="animal.description">
+            </animal-card>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
     import AnimalCard from "./AnimalCard";
 
     export default {
@@ -55,6 +59,11 @@
                 isWantedTabActive: false,
                 isLostTabActive: false,
                 isFoundTabActive: false,
+                adoptionAnimals: [],
+                wantedAnimals: [],
+                lostAnimals: [],
+                foundAnimals: [],
+                userId: null
             }
         },
         methods: {
@@ -81,7 +90,40 @@
                 this.isWantedTabActive = false;
                 this.isLostTabActive = false;
                 this.isFoundTabActive = true;
+            },
+            getUsersAdoptionAnimals: function () {
+                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=adoption')
+                    .then(response => {
+                        this.adoptionAnimals = response.data;
+                    })
+            },
+            getUsersWantedAnimals: function () {
+                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=wanted')
+                    .then(response => {
+                        this.wantedAnimals = response.data;
+                    })
+            },
+            getUsersLostAnimals: function () {
+                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=lost')
+                    .then(response => {
+                        this.lostAnimals = response.data;
+                    })
+            },
+            getUsersFoundAnimals: function () {
+                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=found')
+                    .then(response => {
+                        this.foundAnimals = response.data;
+                        console.log(JSON.parse(JSON.stringify(this.foundAnimals)));
+                    })
             }
+        },
+        mounted() {
+            this.userId = this.$store.getters.userId;
+
+            this.getUsersAdoptionAnimals();
+            this.getUsersWantedAnimals();
+            this.getUsersLostAnimals();
+            this.getUsersFoundAnimals();
         }
     }
 </script>

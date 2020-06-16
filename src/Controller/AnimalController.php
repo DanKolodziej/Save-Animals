@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Animal;
 use App\Entity\Species;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -67,5 +68,39 @@ class AnimalController extends AbstractController {
         $entityManager->flush();
 
         return new JsonResponse(['added animal id' => $animal->getId()]);
+    }
+
+    /**
+     * @Route("/animals-by-user-category", name="animalsByUserCategory", methods={"GET"})
+     */
+    public function getAnimalsByUserCategory(Request $request): JsonResponse {
+
+        $userId = $request->get('userId');
+        $category = $request->get('category');
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($userId);
+        $animals = $this->getDoctrine()
+            ->getRepository(Animal::class)
+            ->findBy(['owner' => $user, 'category' => $category]);
+
+        return new JsonResponse(['animals' => $animals]);
+    }
+
+    /**
+     * @Route("/animals-by-category-species-name-description",
+     *     name="animalsByCategorySpeciesNameDescription", methods={"GET"})
+     */
+    public function getAnimalsByCategorySpeciesNameDescription(Request $request): JsonResponse {
+
+        $category = $request->get('category');
+        $species = $request->get('species');
+        $name = $request->get('name');
+        $description = $request->get('description');
+        $animals = $this->getDoctrine()
+            ->getRepository(Animal::class)
+            ->findByCategorySpeciesNameDescription($category, $species, $name, $description);
+
+        return new JsonResponse(['animals' => $animals]);
     }
 }

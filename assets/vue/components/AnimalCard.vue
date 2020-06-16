@@ -15,6 +15,16 @@
 <script>
     export default {
         name: "AnimalCard",
+        props: {
+            name: {
+                type: String,
+                required: false
+            },
+            description: {
+                type: String,
+                required: false
+            }
+        }
     }
 </script>
 
