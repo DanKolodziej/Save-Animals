@@ -1,12 +1,11 @@
 <template>
     <div class="animal-card">
         <img class="animal-card__image"
-             src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTmAlZoXH7c35THjrLVaIsu5FcgpWVdpPprOl6xaXhvMviVVmwI&usqp=CAU">
+             :src="require(`../../../public/uploads/images/${imageName}`)">
         <div class="animal-card__text">
-            <h2 class="animal-card__name">Title</h2>
-            <p class="animal-card__description">
-                This is a placeholder This is a placeholder This is a placeholder
-                This is a placeholder
+            <h2 class="animal-card__name" v-show="name.length > 0">{{ name }}</h2>
+            <p class="animal-card__description" v-show="description.length > 0">
+                {{ description }}
             </p>
         </div>
     </div>
@@ -18,11 +17,26 @@
         props: {
             name: {
                 type: String,
-                required: false
+                required: false,
+                default: ''
             },
             description: {
                 type: String,
-                required: false
+                required: false,
+                default: ''
+            },
+            imageFileName: {
+                type: String,
+                required: false,
+                default: ''
+            }
+        },
+        computed: {
+            imageName: function() {
+                if(this.imageFileName.length === 0) {
+                    return 'placeholder.png'
+                }
+                return this.imageFileName;
             }
         }
     }

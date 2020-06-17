@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -75,7 +78,7 @@ class AnimalController extends AbstractController {
      */
     public function getAnimalsByUserCategory(Request $request): JsonResponse {
 
-        $userId = $request->get('userId');
+        $userId = $request->get('user-id');
         $category = $request->get('category');
         $user = $this->getDoctrine()
             ->getRepository(User::class)
@@ -84,7 +87,11 @@ class AnimalController extends AbstractController {
             ->getRepository(Animal::class)
             ->findBy(['owner' => $user, 'category' => $category]);
 
-        return new JsonResponse(['animals' => $animals]);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+
+        $data = $serializer->normalize($animals, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName']]);
+
+        return new JsonResponse(['animals' => $data]);
     }
 
     /**

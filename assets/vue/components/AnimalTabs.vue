@@ -37,8 +37,10 @@
         </div>
         <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
             <animal-card v-for="animal in foundAnimals"
+                         :key="animal.id"
                          :name="animal.name"
-                         :description="animal.description">
+                         :description="animal.description"
+                         :image-file-name="animal.imageFileName">
             </animal-card>
         </div>
     </div>
@@ -92,28 +94,27 @@
                 this.isFoundTabActive = true;
             },
             getUsersAdoptionAnimals: function () {
-                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=adoption')
+                axios.get('/animals-by-user-category?user-id=' + this.userId + '&category=adoption')
                     .then(response => {
-                        this.adoptionAnimals = response.data;
+                        this.adoptionAnimals = response.data['animals'];
                     })
             },
             getUsersWantedAnimals: function () {
-                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=wanted')
+                axios.get('/animals-by-user-category?user-id=' + this.userId + '&category=wanted')
                     .then(response => {
-                        this.wantedAnimals = response.data;
+                        this.wantedAnimals = response.data['animals'];
                     })
             },
             getUsersLostAnimals: function () {
-                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=lost')
+                axios.get('/animals-by-user-category?user-id=' + this.userId + '&category=lost')
                     .then(response => {
-                        this.lostAnimals = response.data;
+                        this.lostAnimals = response.data['animals'];
                     })
             },
             getUsersFoundAnimals: function () {
-                axios.get('/animals-by-user-category?userId=' + this.userId + '&category=found')
+                axios.get('/animals-by-user-category?user-id=' + this.userId + '&category=found')
                     .then(response => {
-                        this.foundAnimals = response.data;
-                        console.log(JSON.parse(JSON.stringify(this.foundAnimals)));
+                        this.foundAnimals = response.data['animals'];
                     })
             }
         },
