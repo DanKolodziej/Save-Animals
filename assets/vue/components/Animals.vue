@@ -1,25 +1,61 @@
 <template>
     <div class="adoption-page">
         <h1 class="page-title">Adopcja Zwierzaków</h1>
-        <div class="adoption-page__radio-group">
+        <div class="adoption-page__radio-group" v-if="category === 'adoption'">
             <div class="adoption-page__radio-button-container">
-                <input class="adoption-page__radio-button" type="radio" id="adoption" name="adoption-category" value="adoption">
+                <input class="adoption-page__radio-button"
+                       type="radio" id="adoption"
+                       name="adoption-category"
+                       value="adoption"
+                       v-model="selectedAdoptionCategory"
+                       @change="FilterAnimals">
                 <label class="adoption-page__label" for="adoption">Zwierzaki do adopcji</label>
             </div>
             <div class="adoption-page__radio-button-container">
-                <input class="adoption-page__radio-button" type="radio" id="wanted" name="adoption-category" value="wanted">
+                <input class="adoption-page__radio-button"
+                       type="radio"
+                       id="wanted"
+                       name="adoption-category"
+                       value="wanted"
+                       v-model="selectedAdoptionCategory"
+                       @change="FilterAnimals">
                 <label class="adoption-page__label" for="wanted">Zwierzaki poszukiwane do adopcji</label>
+            </div>
+        </div>
+        <div class="adoption-page__radio-group" v-else-if="category === 'lost'">
+            <div class="adoption-page__radio-button-container">
+                <input class="adoption-page__radio-button"
+                       type="radio" id="lost"
+                       ame="lost-category"
+                       value="lost"
+                       v-model="selectedLostCategory"
+                       @change="FilterAnimals">
+                <label class="adoption-page__label" for="lost">Zaginione Zwierzaki</label>
+            </div>
+            <div class="adoption-page__radio-button-container">
+                <input class="adoption-page__radio-button"
+                       type="radio"
+                       id="found"
+                       name="lost-category"
+                       value="found"
+                       v-model="selectedLostCategory"
+                       @change="FilterAnimals">
+                <label class="adoption-page__label" for="found">Znalezione Zwierzaki</label>
             </div>
         </div>
         <div class="adoption-content">
             <div class="animal-cards-container">
-                <animal-card></animal-card>
-                <animal-card></animal-card>
-                <animal-card></animal-card>
-                <animal-card></animal-card>
-                <animal-card></animal-card>
+                <animal-card v-for="animal in animals"
+                             :key="animal.id"
+                             :name="animal.name"
+                             :description="animal.description"
+                             :image-file-name="animal.imageFileName">
+                </animal-card>
             </div>
-            <FilterOptions></FilterOptions>
+            <FilterOptions @filterSpecies="speciesFilter"
+                           @filterName="namePhraseFilter"
+                           @filterDescription="descriptionFilter">
+            </FilterOptions>
         </div>
     </div>
 </template>
@@ -27,6 +63,7 @@
 <script>
     import AnimalCard from "./AnimalCard";
     import FilterOptions from "./FilterOptions";
+    import axios from 'axios';
 
     export default {
         name: "Animals",
@@ -34,10 +71,55 @@
             AnimalCard,
             FilterOptions
         },
+        data() {
+            return {
+                selectedAdoptionCategory: 'adoption',
+                selectedLostCategory: 'lost',
+                species: '',
+                namePhrase: '',
+                descriptionPhrase: '',
+                animals: []
+            }
+        },
         props: {
             category: {
                 type: String,
                 required: true
+            }
+        },
+        computed: {
+            selectedCategory: function() {
+                if(this.category === 'adoption'){
+                    return this.selectedAdoptionCategory;
+                } else if(this.category === 'lost') {
+                    return this.selectedLostCategory;
+                }
+            }
+        },
+        methods: {
+            FilterAnimals: function() {
+                var url = '/animals-by-category-species-name-description?category='
+                    + this.selectedCategory + '&species=' + this.species
+                    + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase;
+
+                url = encodeURI(url);
+
+                axios.get(url)
+                    .then(response => {
+                        this.animals = response.data['animals'];
+                    });
+            },
+            speciesFilter: function(newSpecies) {
+                this.species = newSpecies;
+                this.FilterAnimals();
+            },
+            namePhraseFilter: function(newNamePhrase) {
+                this.namePhrase = newNamePhrase;
+                this.FilterAnimals();
+            },
+            descriptionFilter: function(newDescription) {
+                this.description = newDescription;
+                this.FilterAnimals();
             }
         }
     }

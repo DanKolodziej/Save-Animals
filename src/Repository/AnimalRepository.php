@@ -20,10 +20,11 @@ class AnimalRepository extends ServiceEntityRepository {
 
     public function findByCategorySpeciesNameDescription($category, $species, $name, $description) {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.category LIKE :category')
-            ->setParameter('category', '%' . $category . '%')
-            ->andWhere('a.species LIKE :species')
-            ->setParameter('species', '%' . $species . '%')
+            ->join('a.species', 's')
+            ->andWhere('a.category = :category')
+            ->setParameter('category', $category)
+            ->andWhere('s.name LIKE :species')
+            ->setParameter('species', '%' . $species. '%')
             ->andWhere('a.name LIKE :name')
             ->setParameter('name', '%' . $name . '%')
             ->andWhere('a.description LIKE :description')

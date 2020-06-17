@@ -108,6 +108,10 @@ class AnimalController extends AbstractController {
             ->getRepository(Animal::class)
             ->findByCategorySpeciesNameDescription($category, $species, $name, $description);
 
-        return new JsonResponse(['animals' => $animals]);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+
+        $data = $serializer->normalize($animals, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName']]);
+
+        return new JsonResponse(['animals' => $data]);
     }
 }

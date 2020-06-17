@@ -22,11 +22,13 @@
         </div>
         <label for="animal-name" class="filter-options__label">
             Imię zwierzaka:
-            <input type="text" id="animal-name" class="filter-options__input">
+            <input class="filter-options__input" v-model="name" type="text" id="animal-name" @input="filterName">
         </label>
         <label for="animal-description" class="filter-options__label">
             Opis:
-            <textarea id="animal-description" class="filter-options__input filter-options__textarea" rows="4" cols="20"></textarea>
+            <textarea class="filter-options__input filter-options__textarea"
+                      v-model="description" id="animal-description" rows="4" cols="20" @input="filterDescription">
+            </textarea>
         </label>
     </div>
 </template>
@@ -41,7 +43,9 @@
                 areResultsDisplayed: false,
                 species: [],
                 filteredSpecies: [],
-                selectedSpecies: ''
+                selectedSpecies: '',
+                name: '',
+                description: ''
             }
         },
         methods: {
@@ -62,6 +66,8 @@
             setSpecies: function(speciesName) {
                 this.selectedSpecies  = speciesName;
                 this.areResultsDisplayed = false;
+
+                this.$emit('filterSpecies', this.selectedSpecies)
             },
             compareSpeciesIds: function(a, b) {
                 if(a.id > b.id) {
@@ -79,6 +85,12 @@
                 if (this.filteredSpecies.length === 0) {
                     this.filteredSpecies.push({name: 'Brak wyników'});
                 }
+            },
+            filterName: function() {
+                this.$emit('filterName', this.name);
+            },
+            filterDescription: function() {
+                this.$emit('filterDescription', this.description);
             }
         },
         mounted() {
