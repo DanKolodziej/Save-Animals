@@ -1,6 +1,6 @@
 <template>
     <div class="adoption-page">
-        <h1 class="page-title">Adopcja Zwierzaków</h1>
+        <h1 class="page-title">{{ pageTitle }}</h1>
         <div class="adoption-page__radio-group" v-if="category === 'adoption'">
             <div class="adoption-page__radio-button-container">
                 <input class="adoption-page__radio-button"
@@ -43,8 +43,9 @@
                 <label class="adoption-page__label" for="found">Znalezione Zwierzaki</label>
             </div>
         </div>
-        <div class="adoption-content">
-            <div class="animal-cards-container">
+        <div class="animal-content">
+            <clip-loader class="animal-content__loader" :loading="isLoading" :color="'#fff'" :size="'45px'"></clip-loader>
+            <div class="animal-cards-container" v-show="!isLoading && animals.length > 0">
                 <animal-card v-for="animal in animals"
                              :key="animal.id"
                              :name="animal.name"
@@ -52,9 +53,12 @@
                              :image-file-name="animal.imageFileName">
                 </animal-card>
             </div>
+            <div class="animal-content__no-animals-message" v-show="!isLoading && animals.length === 0">
+                Nie znaleziono żadnego zwierzaka
+            </div>
             <FilterOptions @filterSpecies="speciesFilter"
                            @filterName="namePhraseFilter"
-                           @filterDescription="descriptionFilter">
+                           @filterDescription="descriptionPhraseFilter">
             </FilterOptions>
         </div>
     </div>
@@ -64,12 +68,14 @@
     import AnimalCard from "./AnimalCard";
     import FilterOptions from "./FilterOptions";
     import axios from 'axios';
+    import ClipLoader from 'vue-spinner/src/ClipLoader';
 
     export default {
         name: "Animals",
         components: {
             AnimalCard,
-            FilterOptions
+            FilterOptions,
+            ClipLoader
         },
         data() {
             return {
@@ -78,7 +84,8 @@
                 species: '',
                 namePhrase: '',
                 descriptionPhrase: '',
-                animals: []
+                animals: [],
+                isLoading: false
             }
         },
         props: {
@@ -88,6 +95,13 @@
             }
         },
         computed: {
+            pageTitle: function() {
+                if(this.category === 'adoption'){
+                    return 'Adopcja Zwierzaków';
+                } else if(this.category === 'lost') {
+                    return 'Zaginione Zwierzaki';
+                }
+            },
             selectedCategory: function() {
                 if(this.category === 'adoption'){
                     return this.selectedAdoptionCategory;
@@ -101,13 +115,16 @@
                 var url = '/animals-by-category-species-name-description?category='
                     + this.selectedCategory + '&species=' + this.species
                     + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase;
-
                 url = encodeURI(url);
 
+                this.isLoading = true;
                 axios.get(url)
                     .then(response => {
                         this.animals = response.data['animals'];
-                    });
+                        this.isLoading = false;
+                    }).catch(errpr => {
+                        this.isLoading = false;
+                });
             },
             speciesFilter: function(newSpecies) {
                 this.species = newSpecies;
@@ -117,8 +134,8 @@
                 this.namePhrase = newNamePhrase;
                 this.FilterAnimals();
             },
-            descriptionFilter: function(newDescription) {
-                this.description = newDescription;
+            descriptionPhraseFilter: function(newDescription) {
+                this.descriptionPhrase = newDescription;
                 this.FilterAnimals();
             }
         }
@@ -132,11 +149,13 @@
         .page-title {
             text-align: center;
             text-transform: uppercase;
+            color: #fff;
             margin: 0 0 30px;
         }
 
         &__radio-group {
             width: fit-content;
+            width: -moz-fit-content;
             background-color: #6495ed;
             margin: 0 auto 30px;
             padding: 15px;
@@ -206,13 +225,31 @@
             }
         }
 
-        .adoption-content {
+        .animal-content {
             display: flex;
             justify-content: center;
             flex-direction: column-reverse;
 
             @media (min-width: 1024px) {
                 flex-direction: row;
+            }
+
+            &__loader, &__no-animals-message {
+                width: 55%;
+                align-self: center;
+
+                @media (min-width: 768px) {
+                    width: 702px;
+                    margin: 0 auto 30px;
+                }
+
+                @media (min-width: 1024px) {
+                    margin: unset;
+                    margin-bottom: 30px;
+                    width: 55%;
+                    max-width: 951px;
+                    min-width: 717px;
+                }
             }
 
             .animal-cards-container {
@@ -232,6 +269,14 @@
                     max-width: 951px;
                     min-width: 717px;
                 }
+            }
+
+            &__no-animals-message {
+                color: #fff;
+                font-size: 22px;
+                font-weight: bold;
+                text-align: center;
+                padding: 13.5px 0;
             }
         }
     }

@@ -264,6 +264,7 @@
             background-color: #fff;
             height: fit-content;
             width: fit-content;
+            width: -moz-fit-content;
             margin: 0 auto 30px;
             padding: 10px 30px;
             border-radius: 5px;
@@ -312,7 +313,7 @@
 
             .add-animal-icon {
                 align-self: center;
-                color: #00b84b;
+                color: #00ee4b;
                 margin-bottom: 15px;
                 padding: 0 3px;
                 border-radius: 5px;
@@ -321,8 +322,8 @@
                 opacity: 1;
 
                 &:hover {
-                    background-color: #00b84b;
-                    color: #fff;
+                    background-color: #00ee4b;
+                    color: #0096af;
                 }
 
                 &--hidden {

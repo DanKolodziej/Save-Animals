@@ -112,7 +112,7 @@
         box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
 
         @media (min-width: 1024px) {
-            margin: 0;
+            margin: 0 0 30px;
         }
 
         &__label {
