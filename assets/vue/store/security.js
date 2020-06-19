@@ -31,7 +31,7 @@ export const store = new Vuex.Store( {
             return state.isAuthenticated;
         },
         userId(state) {
-            return state.user.user
+            return state.user.id
         },
         hasRole(state) {
             return role => {

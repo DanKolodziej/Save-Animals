@@ -59,7 +59,8 @@
                             :label="'Imię zwierzaka:'"
                             :error="nameError"
                             @updateValue="nameUpdate"
-                            @deleteErrorMessage="nameErrorDelete">
+                            @deleteErrorMessage="nameErrorDelete"
+                            v-show="category !== 'wanted' && category !== 'found'">
                     </text-input>
                     <label class="add-animal-form__label">
                         Gatunek:
@@ -68,8 +69,10 @@
                         <input type="text" id="animal-species" class="add-animal-form__dropdown"
                                :class="{'add-animal-form__dropdown--error': speciesError.length > 0}"
                                v-model="selectedSpecies" disabled>
-                        <div class="add-animal-form__dropdown-arrow">
-                            <font-awesome-icon icon="chevron-down"/>
+                        <div class="add-animal-form__dropdown-arrow-container">
+                            <font-awesome-icon class="add-animal-form__dropdown-arrow"
+                                               icon="chevron-down"
+                                               :class="{'add-animal-form__dropdown-arrow--active': areSpeciesDisplayed}"/>
                         </div>
                     </div>
                     <div class="species-list-container">
@@ -83,7 +86,10 @@
                     </div>
                     <label class="add-animal-form__label">
                         Opis:
-                        <textarea class="add-animal-form__input" rows="3" cols="20" v-model="description"></textarea>
+                        <textarea class="add-animal-form__input"
+                                  :class="{'add-animal-form__input--error': descriptionError.length > 0}"
+                                  rows="3" cols="20" v-model="description" @click="descriptionErrorDelete">
+                        </textarea>
                     </label>
                     <input class="add-animal-form__image-input"
                            id="animal-image" type="file"
@@ -131,9 +137,10 @@
                 isFormDisplayed: false,
                 areSpeciesDisplayed: false,
                 isLoading: false,
+                categoryError: '',
                 nameError: '',
                 speciesError: '',
-                categoryError: '',
+                descriptionError: '',
                 addedAnimal: false
             }
         },
@@ -148,6 +155,9 @@
             },
             nameErrorDelete: function() {
                 this.nameError = '';
+            },
+            descriptionErrorDelete: function() {
+                this.descriptionError = '';
             },
             toggleSpecies: function() {
                 this.areSpeciesDisplayed = !this.areSpeciesDisplayed;
@@ -175,24 +185,9 @@
                 this.selectedSpecies  = speciesName;
                 this.areSpeciesDisplayed = false;
             },
-            onFileChange(e) {
-                // var files = e.target.files || e.dataTransfer.files;
-                // if (!files.length)
-                //     return;
-                // this.createImage(files[0]);
-
+            onFileChange() {
                 this.image = this.$refs.image.files[0];
                 this.ImageFileName = this.image.name;
-            },
-            createImage(file) {
-                var image = new Image();
-                var reader = new FileReader();
-                var vm = this;
-
-                reader.onload = (e) => {
-                    vm.image = e.target.result;
-                };
-                reader.readAsDataURL(file);
             },
             addAnimal: function() {
                 var formData = new FormData();
@@ -224,6 +219,10 @@
                     }
                     if(errorMessages.category) {
                         this.categoryError = errorMessages.category[0];
+                    }
+                    if(errorMessages.description) {
+                        this.descriptionError = errorMessages.description[0];
+                        this.description = this.descriptionError;
                     }
 
                     this.isLoading = false;
@@ -449,7 +448,7 @@
                     border-radius: 3px 0 0 3px;
                 }
 
-                &__dropdown-arrow {
+                &__dropdown-arrow-container {
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -458,6 +457,14 @@
                     color: #fff;
                     border-radius: 0 3px 3px 0;
                     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
+                }
+
+                &__dropdown-arrow {
+                    transition: all 0.5s ease-out;
+
+                    &--active {
+                        transform: rotate(180deg);
+                    }
                 }
 
                 .species-list-container {

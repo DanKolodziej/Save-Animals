@@ -2,11 +2,11 @@ import Vue from "vue";
 import App from "./App";
 import Index from "./components/Index";
 import Animals from "./components/Animals";
-import LostAnimals from "./components/LostAnimals";
 import EndangeredSpecies from "./components/EndangeredSpecies";
 import Blog from "./components/Blog";
 import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 import VueRouter from "vue-router";
 import { store } from "./store/security";
 import { library } from '@fortawesome/fontawesome-svg-core'

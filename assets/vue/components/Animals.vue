@@ -50,7 +50,7 @@
                              :key="animal.id"
                              :name="animal.name"
                              :description="animal.description"
-                             :image-file-name="animal.imageFileName">
+                             :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
                 </animal-card>
             </div>
             <div class="animal-content__no-animals-message" v-show="!isLoading && animals.length === 0">

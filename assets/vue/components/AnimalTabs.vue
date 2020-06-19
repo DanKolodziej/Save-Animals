@@ -27,20 +27,35 @@
             </div>
         </div>
         <div class="animal-tabs__content animal-tabs__adoption" v-show="isAdoptionTabActive">
-            <animal-card></animal-card>
+            <animal-card v-for="animal in adoptionAnimals"
+                         :key="animal.id"
+                         :name="animal.name"
+                         :description="animal.description"
+                         :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
+            </animal-card>
         </div>
         <div class="animal-tabs__content animal-tabs__wanted" v-show="isWantedTabActive">
-            <animal-card></animal-card>
+            <animal-card v-for="animal in wantedAnimals"
+                         :key="animal.id"
+                         :name="animal.name"
+                         :description="animal.description"
+                         :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
+            </animal-card>
         </div>
         <div class="animal-tabs__content animal-tabs__lost" v-show="isLostTabActive">
-            <animal-card></animal-card>
+            <animal-card v-for="animal in lostAnimals"
+                         :key="animal.id"
+                         :name="animal.name"
+                         :description="animal.description"
+                         :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
+            </animal-card>
         </div>
         <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
             <animal-card v-for="animal in foundAnimals"
                          :key="animal.id"
                          :name="animal.name"
                          :description="animal.description"
-                         :image-file-name="animal.imageFileName">
+                         :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
             </animal-card>
         </div>
     </div>

@@ -6,8 +6,10 @@
         <div class="filter-options__dropdown-group">
             <input type="text" id="animal-species" class="filter-options__dropdown"
                    v-model="selectedSpecies" @input="filterSpecies" @click="showResults">
-            <div class="filter-options__dropdown-arrow" @click="toggleResults">
-                <font-awesome-icon icon="chevron-down"/>
+            <div class="filter-options__dropdown-arrow-container" @click="toggleResults">
+                <font-awesome-icon class="filter-options__dropdown-arrow"
+                                   icon="chevron-down"
+                                   :class="{'filter-options__dropdown-arrow--active': areResultsDisplayed}"/>
             </div>
         </div>
         <div class="results-list-container">
@@ -155,7 +157,7 @@
             }
         }
 
-        &__dropdown-arrow {
+        &__dropdown-arrow-container {
             display: flex;
             align-items: center;
             padding: 0 10px;
@@ -163,6 +165,14 @@
             background-color: #00A8E8;
             border-radius: 0 3px 3px 0;
             box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
+        }
+
+        &__dropdown-arrow {
+            transition: all 0.5s ease-out;
+
+            &--active {
+                transform: rotate(180deg);
+            }
         }
 
         .results-list-container {

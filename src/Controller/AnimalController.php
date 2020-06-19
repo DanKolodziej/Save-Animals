@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Animal;
 use App\Entity\Species;
 use App\Entity\User;
+use App\Service\ImageUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AnimalController extends AbstractController {
@@ -21,7 +21,7 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/add-animal", name="addAnimal", methods={"POST"})
      */
-    public function addAnimal(Request $request, ValidatorInterface $validator, SluggerInterface $slugger): JsonResponse {
+    public function addAnimal(Request $request, ValidatorInterface $validator, ImageUploader $imageUploader): JsonResponse {
 
         $animal = new Animal();
         $name = $request->get('name');
@@ -51,19 +51,7 @@ class AnimalController extends AbstractController {
 
         $image = $request->files->get('image');
         if ($image) {
-            $originalImageFileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeImageFileName = $slugger->slug($originalImageFileName);
-            $newImageFileName = $safeImageFileName.'-'.uniqid().'.'.$image->guessExtension();
-
-            try {
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $newImageFileName
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
-
+            $newImageFileName = $imageUploader->upload($image);
             $animal->setImageFileName($newImageFileName);
         }
         $entityManager = $this->getDoctrine()->getManager();

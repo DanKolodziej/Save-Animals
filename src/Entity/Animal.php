@@ -17,8 +17,11 @@ class Animal {
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Zwierzak musi mieć imię")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Expression(
+     *     "this.getCategory() not in ['adoption', 'lost'] or value != null",
+     *     message="Zwierzak musi mieć imię"
+     *     )
      */
     private $name;
 
@@ -31,6 +34,10 @@ class Animal {
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Expression(
+     *     "this.getCategory() not in ['wanted', 'found'] or value != null",
+     *     message="Zwierzak musi mieć opis, gdy jest poszukiwany do adopcji lub został znaleziony"
+     *     )
      */
     private $description;
 

@@ -27,8 +27,7 @@
             },
             imageFileName: {
                 type: String,
-                required: false,
-                default: ''
+                required: true,
             }
         },
         computed: {
