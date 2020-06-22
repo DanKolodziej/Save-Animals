@@ -15,6 +15,7 @@ class MainController extends AbstractController
      * @Route("/zwierzaki-uzytkownika", name="userAnimals")
      * @Route("/blog", name="blog")
      * @Route("/logowanie", name="singIn")
+     * @Route("/rejestracja", name="singUp")
      */
     public function main() {
         return $this->render('main/main.html.twig');

@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class SecurityController extends AbstractController
 {
@@ -28,11 +29,13 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="app_register", methods={"POST"})
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+    public function register(Request $request,
+                             UserPasswordEncoderInterface $passwordEncoder,
+                             ValidatorInterface $validator): JsonResponse {
 
         $user = new User();
         $email = $request->get('email');
-        $role = $request->get('role');
+//        $role = $request->get('role');
         $password = $request->get('password');
         $name = $request->get('name');
         $city = $request->get('city');
@@ -40,7 +43,7 @@ class SecurityController extends AbstractController
         $postalCode = $request->get('postal-code');
 
         $user->setEmail($email);
-        $user->setRoles([$role]);
+        $user->setRoles(['ROLE_USER']);
         $user->setPassword($passwordEncoder->encodePassword(
             $user, $password
         ));
@@ -48,6 +51,23 @@ class SecurityController extends AbstractController
         $user->setCity($city);
         $user->setAddress($address);
         $user->setPostalCode($postalCode);
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+
+            $messages = [];
+            foreach ($errors as $violation) {
+                $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+            }
+            return new JsonResponse($messages, 400);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['added user id' => $user->getId()]);
     }
 
     /**
@@ -68,6 +88,8 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      */
     public function logout() {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+//        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+
+        return $this->redirectToRoute('index');
     }
 }

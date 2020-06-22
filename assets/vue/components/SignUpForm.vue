@@ -1,9 +1,6 @@
 <template>
     <form class="form" method="post">
         <h1 class="form__title">Rejestracja</h1>
-        <p v-if="error" class="form__error">
-            {{ errorMessage }}
-        </p>
         <label class="form__label" for="email">
             Email:
             <input class="form__input" type="email" id="email" name="email" v-model="email">
@@ -25,11 +22,11 @@
             <input class="form__input" type="text" id="city" name="city" v-model="city">
         </label>
         <label class="form__label" for="address">
-            Adres:
+            Ulica (opcjonalnie):
             <input class="form__input" type="text" id="address" name="address" v-model="address">
         </label>
         <label class="form__label" for="postal-code">
-            Kod pocztowy:
+            Kod pocztowy (opcjonalnie):
             <input class="form__input" type="text" id="postal-code" name="postal-code" v-model="postalCode">
         </label>
         <input class="form__submit" type="submit" value="Zatwierdź" @click.prevent="register">
@@ -37,9 +34,11 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "SignUpForm",
-        data () {
+        data() {
             return {
                 email: '',
                 password: '',
@@ -54,7 +53,22 @@
         },
         methods: {
             register: function() {
+                var formData = new FormData();
+                formData.append('email', this.email);
+                formData.append('password', this.password);
+                formData.append('repeat-password', this.repeatPassword);
+                formData.append('name', this.name);
+                formData.append('city', this.city);
+                formData.append('address', this.address);
+                formData.append('postal-code', this.postalCode);
 
+                axios.post('/register', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+
+                });
             }
         }
     }

@@ -35,7 +35,8 @@
             </router-link>
             <router-link to="/zwierzaki-uzytkownika"
                          class="navigation__item"
-                         :class="{'navigation__item--active': isUserAnimalsActive}">
+                         :class="{'navigation__item--active': isUserAnimalsActive}"
+                         v-show="isUserAuthenticated">
                 Moje zwierzaki
             </router-link>
         </div>
@@ -44,9 +45,21 @@
              @click="toggleMobileMenu">
             <router-link to="/logowanie"
                          class="navigation__item"
-                         :class="{'navigation__item--active': isSignInActive}">
+                         :class="{'navigation__item--active': isSignInActive}"
+                         v-show="!isUserAuthenticated">
                 Zaloguj się
             </router-link>
+            <router-link to="/rejestracja"
+                         class="navigation__item"
+                         :class="{'navigation__item--active': isSignUpActive}"
+                         v-show="!isUserAuthenticated">
+                Rejestracja
+            </router-link>
+            <a href="/logout"
+                         class="navigation__item"
+                         v-show="isUserAuthenticated">
+                Wyloguj się
+            </a>
         </div>
     </nav>
 </template>
@@ -60,27 +73,33 @@
             }
         },
         computed: {
-            isMainPageActive: function () {
+            isMainPageActive: function() {
                 return this.$route.path === '/';
             },
-            isAdoptionActive: function () {
+            isAdoptionActive: function() {
                 return this.$route.path === '/adopcja';
             },
-            isLostAnimalsActive: function () {
+            isLostAnimalsActive: function() {
                 return this.$route.path === '/zaginione-zwierzaki';
             },
-            isEndangeredSpeciesActive: function () {
+            isEndangeredSpeciesActive: function() {
                 return this.$route.path === '/zagrozone-gatunki';
             },
-            isBlogActive: function () {
+            isBlogActive: function() {
                 return this.$route.path === '/blog';
             },
-            isUserAnimalsActive: function () {
+            isUserAnimalsActive: function() {
                 return this.$route.path === '/zwierzaki-uzytkownika';
             },
-            isSignInActive: function () {
+            isSignInActive: function() {
                 return this.$route.path === '/logowanie';
             },
+            isSignUpActive: function() {
+                return this.$route.path === '/rejestracja';
+            },
+            isUserAuthenticated: function() {
+                return this.$store.getters.isAuthenticated;
+            }
         },
         methods: {
             toggleMobileMenu: function () {
@@ -201,7 +220,8 @@
         }
 
         &__sign-in {
-            display: block;
+            display: flex;
+            flex-direction: column;
             background-color: #00A8E8;
             position: relative;
             z-index: 99;
@@ -210,6 +230,7 @@
             transition: all 0.5s ease-out;
 
             @media (min-width: 768px) {
+                flex-direction: row;
                 max-width: none;
                 margin-left: 0;
             }
