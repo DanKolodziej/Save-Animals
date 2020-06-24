@@ -22,6 +22,7 @@ class UserFixtures extends Fixture
         $user->setEmail('Dank0l@o2.pl');
         $user->setRoles(['ROLE_USER']);
         $user->setName('Daniel');
+        $user->setProvince('Dolnośląskie');
         $user->setCity('Wrocław');
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user, 'asd123'

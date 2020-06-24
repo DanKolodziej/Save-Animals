@@ -40,17 +40,17 @@ class AnimalController extends AbstractController {
 
         $errors = $validator->validate($animal);
 
-        if (count($errors) > 0) {
+        if(count($errors) > 0) {
 
             $messages = [];
-            foreach ($errors as $violation) {
+            foreach($errors as $violation) {
                 $messages[$violation->getPropertyPath()][] = $violation->getMessage();
             }
             return new JsonResponse($messages, 400);
         }
 
         $image = $request->files->get('image');
-        if ($image) {
+        if($image) {
             $newImageFileName = $imageUploader->upload($image);
             $animal->setImageFileName($newImageFileName);
         }

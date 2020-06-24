@@ -35,29 +35,33 @@ class SecurityController extends AbstractController
 
         $user = new User();
         $email = $request->get('email');
-//        $role = $request->get('role');
+        $role = $request->get('role');
         $password = $request->get('password');
+        $passwordRepeat = $request->get('password-repeat');
         $name = $request->get('name');
+        $province = $request->get('province');
         $city = $request->get('city');
-        $address = $request->get('address');
-        $postalCode = $request->get('postal-code');
 
         $user->setEmail($email);
-        $user->setRoles(['ROLE_USER']);
-        $user->setPassword($passwordEncoder->encodePassword(
-            $user, $password
-        ));
+        $user->setRoles([$role]);
+        if($password !== '') {
+            $user->setPassword($passwordEncoder->encodePassword(
+                $user, $password
+            ));
+        }
         $user->setName($name);
+        $user->setProvince($province);
         $user->setCity($city);
-        $user->setAddress($address);
-        $user->setPostalCode($postalCode);
 
         $errors = $validator->validate($user);
 
-        if (count($errors) > 0) {
+        $messages = [];
+        if($password !== $passwordRepeat && $password !== '') {
+            $messages['repeatPassword'] = ['Hasła nie pasują'];
+        }
+        if(count($errors) > 0 || count($messages) > 0) {
 
-            $messages = [];
-            foreach ($errors as $violation) {
+            foreach($errors as $violation) {
                 $messages[$violation->getPropertyPath()][] = $violation->getMessage();
             }
             return new JsonResponse($messages, 400);

@@ -24,6 +24,11 @@ class Species
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $nameSingular;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Animal", mappedBy="species")
      */
     private $animals;
@@ -46,6 +51,18 @@ class Species
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getNameSingular(): ?string
+    {
+        return $this->nameSingular;
+    }
+
+    public function setNameSingular(string $nameSingular): self
+    {
+        $this->nameSingular = $nameSingular;
 
         return $this;
     }

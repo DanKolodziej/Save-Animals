@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -21,6 +22,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Email jest wymagane")
      */
     private $email;
 
@@ -32,28 +34,33 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Hasło jest wymagane")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Imię/nazwa jest wymagana")
      */
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=20)
+     * @Assert\Choice({"Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie",
+     *     "Lubuskie", "Łódzkie", "Małopolskie", "Mazowieckie",
+     *     "Opolskie", "Podkarpackie", "Podlaskie",
+     *     "Pomorskie", "Ślaskie", "Świętokrzyskie",
+     *     "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"},
+     *     message="Nie prawidłowe województwo")
+     * @Assert\NotBlank(message="Województwo jest wymagane")
+     */
+    private $province;
+
+    /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Miejscowość jest wymagana")
      */
     private $city;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $address;
-
-    /**
-     * @ORM\Column(type="string", length=6, nullable=true)
-     */
-    private $postalCode;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Animal", mappedBy="species")
@@ -155,6 +162,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getProvince(): ?string
+    {
+        return $this->province;
+    }
+
+    public function setProvince(?string $province): self
+    {
+        $this->province = $province;
+
+        return $this;
+    }
+
     public function getCity(): ?string
     {
         return $this->city;
@@ -163,30 +182,6 @@ class User implements UserInterface
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    public function getPostalCode(): ?string
-    {
-        return $this->postalCode;
-    }
-
-    public function setPostalCode(?string $postalCode): self
-    {
-        $this->postalCode = $postalCode;
 
         return $this;
     }

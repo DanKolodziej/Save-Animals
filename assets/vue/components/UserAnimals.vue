@@ -538,8 +538,6 @@
 
                 &__radio-button-container {
                     font-size: 13px;
-                    /*display: flex;*/
-                    /*justify-content: space-between;*/
                     margin: 3px 0;
                 }
 
