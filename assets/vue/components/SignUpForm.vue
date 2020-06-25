@@ -5,7 +5,9 @@
             Email:
             <input class="form__input"
                    :class="{'form__input--error': emailError.length > 0}"
-                   type="email" id="email" name="email" v-model="email" @click="emailErrorDelete">
+                   :placeholder="emailError" type="email"
+                   id="email" name="email"
+                   v-model="email" @click="emailErrorDelete">
         </label>
         <label class="form__label" for="password">
             Hasło:
@@ -168,7 +170,7 @@
                     var errorMessages = error.response.data;
                     if (errorMessages.email) {
                         this.emailError = errorMessages.email[0];
-                        this.email = this.emailError;
+                        this.email = '';
                     }
                     if (errorMessages.password) {
                         this.passwordError = errorMessages.password[0];
@@ -180,7 +182,7 @@
                     }
                     if (errorMessages.name) {
                         this.nameError = errorMessages.name[0];
-                        this.name = this.nameError;
+                        this.name = '';
                     }
                     if (errorMessages.province) {
                         this.provinceError = errorMessages.province[0];
@@ -188,7 +190,7 @@
                     }
                     if (errorMessages.city) {
                         this.cityError = errorMessages.city[0];
-                        this.city = this.cityError;
+                        this.city = '';
                     }
 
                     this.isLoading = false;

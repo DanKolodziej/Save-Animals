@@ -4,6 +4,7 @@
         <input class="text-input"
                :class="{'text-input--error': error.length > 0}"
                v-model="value"
+               :placeholder="error"
                @input="onInputChange"
                @click="onClick"
                type="text">
@@ -39,7 +40,7 @@
         watch: {
             error: function () {
                 if(this.error.length > 0) {
-                    this.value = this.error;
+                    this.value = '';
                 }
             }
         }
@@ -77,6 +78,10 @@
             &:focus {
                 box-shadow: 0 0 5px 0 #eeaaaa;
             }
+
+            &::placeholder {
+                    color: #C82829;
+                }
         }
     }
 

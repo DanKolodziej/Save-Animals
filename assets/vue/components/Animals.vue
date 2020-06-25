@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="animal-content">
-            <clip-loader class="animal-content__loader" :loading="isLoading" :color="'#fff'" :size="'45px'"></clip-loader>
+            <clip-loader class="animal-content__loader" :loading="isLoading" :color="'#192BC2'" :size="'45px'"></clip-loader>
             <div class="animal-cards-container" v-show="!isLoading && animals.length > 0">
                 <animal-card v-for="animal in animals"
                              :key="animal.id"
@@ -149,7 +149,6 @@
         .page-title {
             text-align: center;
             text-transform: uppercase;
-            color: #fff;
             margin: 0 0 30px;
         }
 
@@ -272,7 +271,7 @@
             }
 
             &__no-animals-message {
-                color: #fff;
+                color: #192BC2;
                 font-size: 22px;
                 font-weight: bold;
                 text-align: center;

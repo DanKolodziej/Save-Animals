@@ -88,7 +88,8 @@
                         Opis:
                         <textarea class="add-animal-form__input"
                                   :class="{'add-animal-form__input--error': descriptionError.length > 0}"
-                                  rows="3" cols="20" v-model="description" @click="descriptionErrorDelete">
+                                  rows="3" cols="20" v-model="description"
+                                  @click="descriptionErrorDelete" :placeholder="descriptionError">
                         </textarea>
                     </label>
                     <input class="add-animal-form__image-input"
@@ -211,7 +212,7 @@
                     var errorMessages = error.response.data;
                     if(errorMessages.name) {
                         this.nameError = errorMessages.name[0];
-                        this.name = this.nameError;
+                        this.name = '';
                     }
                     if(errorMessages.species) {
                         this.speciesError = errorMessages.species[0];
@@ -222,7 +223,7 @@
                     }
                     if(errorMessages.description) {
                         this.descriptionError = errorMessages.description[0];
-                        this.description = this.descriptionError;
+                        this.description = '';
                     }
 
                     this.isLoading = false;
@@ -404,6 +405,10 @@
 
                         &:focus {
                             box-shadow: 0 0 5px 0 #eeaaaa;
+                        }
+
+                        &::placeholder {
+                            color: #C82829;
                         }
                     }
                 }
