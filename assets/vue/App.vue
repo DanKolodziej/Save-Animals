@@ -15,6 +15,15 @@
         components: {
             NavigationBar,
             FooterBar
+        },
+        created() {
+            let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
+            user = JSON.parse(this.$parent.$el.attributes["data-user"].value);
+            console.log(isAuthenticated);
+            console.log(user);
+
+            let payload = { isAuthenticated: isAuthenticated, user: user };
+            this.$store.dispatch("onRefresh", payload);
         }
     }
 </script>

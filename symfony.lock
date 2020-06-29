@@ -105,6 +105,9 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "fabpot/goutte": {
+        "version": "v4.0.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

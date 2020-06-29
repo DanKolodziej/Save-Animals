@@ -4,7 +4,7 @@
         <div class="endangered-species-content">
             <div class="posts-container">
                 <post :title="'Title'"
-                    :description="'This is a placholder This is a placholder This is a placholder'"
+                    :description="'This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder'"
                     :image-file-name="''">
                     </post>
                 <post :title="'Title'"
@@ -27,83 +27,84 @@
             <div class="endangered-species-content__radio-group">
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio" id="adoption"
-                        name="endangered-species-type"
+                        type="checkbox"
+                        id="extinct"
+                        name="extinct"
                         value="extinct"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
-                    <label class="endangered-species-content__label" for="adoption">
+                        v-model="extinct"
+                        @change="filterPosts">
+                    <label class="endangered-species-content__label" for="extinct">
                         Gatunki wymarłe
                     </label>
                 </div>
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="to-disappear"
-                        name="endangered-species-type"
+                        name="to-disappear"
                         value="toDisappear"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="toDisappear"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="to-disappear">
                         Gatunki zanikłe
                     </label>
                 </div>
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="extremely-endangered"
-                        name="endangered-species-type"
+                        name="extremely-endangered"
                         value="extremelyEndangered"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="extremelyEndangered"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="extremely-endangered">
                         Gatunki skrajnie zagrożone
                     </label>
                 </div>
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="highly-endangered"
-                        name="endangered-species-type"
+                        name="highly-endangered"
                         value="highlyEndangered"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="highlyEndangered"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="highly-endangered">
                         Gatunki silnie zagrożone
                     </label>
                 </div>
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="at-endanger-risk"
-                        name="endangered-species-type"
+                        name="at-endanger-risk"
                         value="atEndangerRisk"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="atEndangerRisk"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="at-endanger-risk">
                         Gatunki narażone na wyginięcie
                     </label>
                 </div>
                 <div class="endangered-species-content__radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="close-to-danger"
-                        name="endangered-species-type"
+                        name="close-to-danger"
                         value="closeToDanger"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="closeToDanger"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="close-to-danger">
                         Gatunki bliskie zagrożenia
                     </label>
                 </div>
                 <div class="endangered-species-content_radio-button-container">
                     <input class="endangered-species-content__radio-button"
-                        type="radio"
+                        type="checkbox"
                         id="not-endangered"
-                        name="endangered-species-type"
+                        name="not-endangered"
                         value="notEndangered"
-                        v-model="selectedEndangeredSpeciesType"
-                        @change="FilterPosts">
+                        v-model="notEndangered"
+                        @change="filterPosts">
                     <label class="endangered-species-content__label" for="not-endangered">
                         Gatunki narazie nie zagrożone wymarciem
                     </label>
@@ -119,8 +120,18 @@
     export default {
         name: "EndangeredSpecies",
         components: {
-            Post,
-            selectedEndangeredSpeciesType: ''
+            Post
+        },
+        data() {
+            return {
+                extinct: '',
+                toDisappear: '',
+                extremelyEndangered: '',
+                highlyEndangered: '',
+                atEndangerRisk: '',
+                closeToDanger: '',
+                notEndangered: ''
+            }
         },
         methods: {
             filterPosts: function() {
@@ -209,19 +220,18 @@
                     width: 18px;
                     height: 18px;
                     border: 1px solid #ddd;
-                    border-radius: 100%;
                     background: #fff;
                 }
 
                 &:checked + label:after, &:not(:checked) + label:after {
                     content: '';
-                    width: 12px;
-                    height: 12px;
-                    background: #00A8E8;
+                    width: 5px;
+                    height: 10px;
                     position: absolute;
-                    top: 4px;
-                    left: 4px;
-                    border-radius: 100%;
+                    top: 3px;
+                    left: 6px;
+                    border: solid #00A8E8;
+                    border-width: 0 3px 3px 0;
                     -webkit-transition: all 0.2s ease;
                     transition: all 0.2s ease;
                 }
@@ -235,7 +245,7 @@
                 &:checked + label:after {
                     opacity: 1;
                     -webkit-transform: scale(1);
-                    transform: scale(1);
+                    transform: rotate(45deg) scale(1);
                 }
             }
         }
