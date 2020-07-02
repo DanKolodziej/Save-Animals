@@ -3,25 +3,40 @@
         <h1 class="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
         <div class="endangered-species-content">
             <div class="posts-container">
-                <post :title="'Title'"
-                    :description="'This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder This is a placeholder'"
-                    :image-file-name="''">
-                    </post>
-                <post :title="'Title'"
-                    :description="'This is a placholder This is a placholder This is a placholder'"
-                    :image-file-name="''">
+                <post v-show="showExtinct" v-for="endangeredSpecies in extinct"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post :title="'Title'"
-                    :description="'This is a placholder This is a placholder This is a placholder'"
-                    :image-file-name="''">
+                <post v-show="showToDisappear" v-for="endangeredSpecies in toDisappear"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post :title="'Title'"
-                    :description="'This is a placholder This is a placholder This is a placholder'"
-                    :image-file-name="''">
+                <post v-show="showExtremelyEndangered" v-for="endangeredSpecies in extremelyEndangered"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post :title="'Title'"
-                    :description="'This is a placholder This is a placholder This is a placholder'"
-                    :image-file-name="''">
+                <post v-show="showHighlyEndangered" v-for="endangeredSpecies in highlyEndangered"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
+                </post>
+                <post v-show="showAtEndangerRisk" v-for="endangeredSpecies in atEndangerRisk"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
+                </post>
+                <post v-show="showCloseToDanger" v-for="endangeredSpecies in closeToDanger"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
+                </post>
+                <post v-show="showNotEndangered" v-for="endangeredSpecies in notEndangered"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :image-file-name="endangeredSpecies.imageLink">
                 </post>
             </div>
             <div class="endangered-species-content__radio-group">
@@ -31,8 +46,7 @@
                         id="extinct"
                         name="extinct"
                         value="extinct"
-                        v-model="extinct"
-                        @change="filterPosts">
+                        v-model="showExtinct">
                     <label class="endangered-species-content__label" for="extinct">
                         Gatunki wymarłe
                     </label>
@@ -43,8 +57,7 @@
                         id="to-disappear"
                         name="to-disappear"
                         value="toDisappear"
-                        v-model="toDisappear"
-                        @change="filterPosts">
+                        v-model="showToDisappear">
                     <label class="endangered-species-content__label" for="to-disappear">
                         Gatunki zanikłe
                     </label>
@@ -55,8 +68,7 @@
                         id="extremely-endangered"
                         name="extremely-endangered"
                         value="extremelyEndangered"
-                        v-model="extremelyEndangered"
-                        @change="filterPosts">
+                        v-model="showExtremelyEndangered">
                     <label class="endangered-species-content__label" for="extremely-endangered">
                         Gatunki skrajnie zagrożone
                     </label>
@@ -67,8 +79,7 @@
                         id="highly-endangered"
                         name="highly-endangered"
                         value="highlyEndangered"
-                        v-model="highlyEndangered"
-                        @change="filterPosts">
+                        v-model="showHighlyEndangered">
                     <label class="endangered-species-content__label" for="highly-endangered">
                         Gatunki silnie zagrożone
                     </label>
@@ -79,8 +90,7 @@
                         id="at-endanger-risk"
                         name="at-endanger-risk"
                         value="atEndangerRisk"
-                        v-model="atEndangerRisk"
-                        @change="filterPosts">
+                        v-model="showAtEndangerRisk">
                     <label class="endangered-species-content__label" for="at-endanger-risk">
                         Gatunki narażone na wyginięcie
                     </label>
@@ -91,8 +101,7 @@
                         id="close-to-danger"
                         name="close-to-danger"
                         value="closeToDanger"
-                        v-model="closeToDanger"
-                        @change="filterPosts">
+                        v-model="showCloseToDanger">
                     <label class="endangered-species-content__label" for="close-to-danger">
                         Gatunki bliskie zagrożenia
                     </label>
@@ -103,8 +112,7 @@
                         id="not-endangered"
                         name="not-endangered"
                         value="notEndangered"
-                        v-model="notEndangered"
-                        @change="filterPosts">
+                        v-model="showNotEndangered">
                     <label class="endangered-species-content__label" for="not-endangered">
                         Gatunki narazie nie zagrożone wymarciem
                     </label>
@@ -116,6 +124,7 @@
 
 <script>
     import Post from './Post';
+    import axios from 'axios';
 
     export default {
         name: "EndangeredSpecies",
@@ -124,19 +133,38 @@
         },
         data() {
             return {
-                extinct: '',
-                toDisappear: '',
-                extremelyEndangered: '',
-                highlyEndangered: '',
-                atEndangerRisk: '',
-                closeToDanger: '',
-                notEndangered: ''
+                extinct: [],
+                toDisappear: [],
+                extremelyEndangered: [],
+                highlyEndangered: [],
+                atEndangerRisk: [],
+                closeToDanger: [],
+                notEndangered: [],
+                showExtinct: true,
+                showToDisappear: true,
+                showExtremelyEndangered: true,
+                showHighlyEndangered: true,
+                showAtEndangerRisk: true,
+                showCloseToDanger: true,
+                showNotEndangered: true
             }
         },
         methods: {
-            filterPosts: function() {
-
+            getEndangeredSpecies: function() {
+                axios.get('/endangered-species-data')
+                    .then(response => {
+                        this.extinct = response.data['EX'];
+                        this.toDisappear = response.data['EXP'];
+                        this.extremelyEndangered = response.data['CR'];
+                        this.highlyEndangered = response.data['EN'];
+                        this.atEndangerRisk = response.data['VU'];
+                        this.closeToDanger = response.data['NT'];
+                        this.notEndangered = response.data['LC'];
+                    });
             }
+        },
+        mounted() {
+            this.getEndangeredSpecies();
         }
     }
 </script>
@@ -161,9 +189,10 @@
 
             @media (min-width: 1024px) {
                 flex-direction: row;
+                padding: 0 15px
             }
 
-            .endangered-species-content__radio-group {
+            &__radio-group {
                 height: fit-content;
                 background-color: #6495ed;
                 margin: 0 auto 30px;
@@ -174,19 +203,10 @@
                 box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
 
                 @media (min-width: 1024px) {
-                    margin: 0 0 30px;
+                    margin: 0;
+                    position: sticky;
+                    top: 30px;
                 }
-            }
-
-            &__radio-group {
-                width: fit-content;
-                width: -moz-fit-content;
-                background-color: #6495ed;
-                margin: 0 auto 30px;
-                padding: 15px;
-                border-radius: 5px;
-                color: #fff;
-                box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
             }
 
             &__label {

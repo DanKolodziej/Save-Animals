@@ -3,17 +3,17 @@ import App from "./App";
 import Index from "./components/Index";
 import Animals from "./components/Animals";
 import EndangeredSpecies from "./components/EndangeredSpecies";
-import Blog from "./components/Blog";
+import PostPage from './components/PostPage';
 import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import VueRouter from "vue-router";
 import { store } from "./store/security";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronDown, faPlus, faMinus, faFileImage } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faPlus, faMinus, faFileImage, faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faChevronDown, faPlus, faMinus, faFileImage);
+library.add(faChevronDown, faPlus, faMinus, faFileImage, faLongArrowAltRight);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(VueRouter);
 
@@ -22,10 +22,10 @@ const routes = [
     { path: '/adopcja', component: Animals, props: {category: 'adoption'}},
     { path: '/zaginione-zwierzaki', component: Animals, props: {category: 'lost'}},
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
-    { path: '/blog', component: Blog},
+    { path: '/zagrozony-gatunek/:name', name: 'endangeredSpecies', component: PostPage, props: true },
     { path: '/zwierzaki-uzytkownika', component: UserAnimals, meta: { requiresAuth: true }},
-    { path: '/logowanie', component: SignIn, props: true },
-    { path: '/rejestracja', component: SignUp, props: true }
+    { path: '/logowanie', component: SignIn, props: true},
+    { path: '/rejestracja', component: SignUp, props: true}
 ];
 
 const router = new VueRouter({

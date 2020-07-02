@@ -1,13 +1,18 @@
 <template>
     <div class="post">
         <img class="post__image"
-             :src="require(`../../../public/uploads/images/${imageName}`)">
+             :src="imageName">
         <div class="post__text">
             <h2 class="post__name">{{ title }}</h2>
             <p class="post__description">
                 {{ description }}
             </p>
-            <a class="post__link" href="#">Czytaj więcej</a>
+            <router-link :to="{name: 'endangeredSpecies', params: {name: encodedName}}"
+                         class="post__link">
+                Czytaj więcej
+                <font-awesome-icon class="post__arrow-icon"
+                               icon="long-arrow-alt-right"/>
+            </router-link>
         </div>
         <div class="post__divider"></div>
     </div>
@@ -31,6 +36,9 @@
             },
         },
         computed: {
+            encodedName: function() {
+                return encodeURI(this.title);
+            },
             imageName: function() {
                 if(this.imageFileName.length === 0) {
                     return 'placeholder.png'
@@ -65,7 +73,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 10%;
+            padding: 0 10%;
 
             @media (min-width: 1024px) {
                 padding: 0;
@@ -88,12 +96,37 @@
             font-size: 20px;
             font-weight: bold;
             align-self: flex-end;
+
+            &:active {
+                color: #192BC2;
+            }
+
+            &:visited {
+                color: #6495ed;
+            }
+        }
+
+        &__arrow-icon {
+            position: relative;
+            top: 2px;
+            visibility: hidden;
+            opacity: 0;
+            transition: all .5s ease-in-out;
+        }
+
+        &__link:hover &__arrow-icon {
+            visibility: visible;
+            opacity: 1;
         }
 
         &__divider {
             border-bottom: 2px solid #192BC2;
             width: 90%;
             margin: 15px auto 30px;
+
+            @media (min-width: 1024px) {
+                width: 100%;
+            }
         }
     }
 </style>

@@ -23,6 +23,7 @@ class MainController extends AbstractController
      * @Route("/adopcja", name="adoption")
      * @Route("/zaginione-zwierzaki", name="lostAnimals")
      * @Route("/zagrozone-gatunki", name="endangeredSpecies")
+     * @Route("/zagrozony-gatunek/{name}", name="endangeredSpeciesPage")
      * @Route("/zwierzaki-uzytkownika", name="userAnimals")
      * @Route("/blog", name="blog")
      * @Route("/logowanie", name="singIn")

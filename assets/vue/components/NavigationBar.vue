@@ -28,11 +28,6 @@
                          :class="{'navigation__item--active': isEndangeredSpeciesActive}">
                 Informacje o zagrożonych gatunkach
             </router-link>
-            <router-link to="/blog"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isBlogActive}">
-                Blog
-            </router-link>
             <router-link to="/zwierzaki-uzytkownika"
                          class="navigation__item"
                          :class="{'navigation__item--active': isUserAnimalsActive}"
@@ -85,9 +80,6 @@
             isEndangeredSpeciesActive: function() {
                 return this.$route.path === '/zagrozone-gatunki';
             },
-            isBlogActive: function() {
-                return this.$route.path === '/blog';
-            },
             isUserAnimalsActive: function() {
                 return this.$route.path === '/zwierzaki-uzytkownika';
             },
@@ -127,9 +119,7 @@
             width: fit-content;
             height: fit-content;
             margin: 28.5px 0 28.5px 20px;
-            /*background-color: #e9ffff;*/
             padding: 2px 8px;
-            /*border: 1px solid #192BC2;*/
             border-radius: 3px;
             transition: 350ms ease-in-out;
 
