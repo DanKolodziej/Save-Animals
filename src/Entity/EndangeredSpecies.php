@@ -31,9 +31,10 @@ class EndangeredSpecies implements JsonSerializable {
      */
     private $imageLink;
 
-    public function __construct(string $name, string $description, string $imageLink) {
+    public function __construct(string $name, string $description, string $endangeredSpeciesType, string $imageLink) {
         $this->name = $name;
         $this->description = $description;
+        $this->endangeredSpeciesType = $endangeredSpeciesType;
         $this->imageLink = $imageLink;
     }
 
@@ -43,6 +44,10 @@ class EndangeredSpecies implements JsonSerializable {
 
     public function getDescription(): string {
         return $this->description;
+    }
+
+    public function getEndangeredSpeciesType(): string {
+        return $this->endangeredSpeciesType;
     }
 
     public function getImageLink(): string {

@@ -12,28 +12,40 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         name: "PostPage",
+        data() {
+            return {
+                description: '',
+                imageName: ''
+            }
+        },
         props: {
             name: {
                 type: String,
                 required: true
-            },
-            description: {
-                type: String,
-                required: true
-            },
-            imageName: {
-                type: String,
-                required: true
-            },
+            }
+        },
+        methods: {
+            getEndangeredSpecies: function() {
+                axios.get('/singular-endangered-species-data/' + this.name)
+                    .then(response => {
+                        this.description = response.data.description;
+                        this.imageName = response.data.imageLink;
+                    })
+            }
+        },
+        created() {
+            this.getEndangeredSpecies();
         }
     }
 </script>
 
 <style lang="scss" scoped>
     .post {
-        max-width: 450px;
+        max-width: 1450px;
         margin: 0 auto 30px;
         color: #192BC2;
 
@@ -44,11 +56,8 @@
         &__image {
             display: block;
             width: 80%;
-            margin: 0 auto;
-
-            @media (min-width: 1024px) {
-                margin: 0;
-            }
+            max-width: 450px;
+            margin: 30px auto 0;
         }
 
         &__text {
@@ -56,10 +65,6 @@
             flex-direction: column;
             justify-content: flex-start;
             padding: 0 10%;
-
-            @media (min-width: 1024px) {
-                padding: 0;
-            }
         }
 
         &__description {

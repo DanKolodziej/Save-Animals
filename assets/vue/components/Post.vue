@@ -7,6 +7,9 @@
             <p class="post__description">
                 {{ description }}
             </p>
+            <p>
+                Kategoria zagrożenia: {{ endangeredSpeciesType }}
+            </p>
             <router-link :to="{name: 'endangeredSpecies', params: {name: encodedName}}"
                          class="post__link">
                 Czytaj więcej
@@ -27,6 +30,10 @@
                 required: true
             },
             description: {
+                type: String,
+                required: true
+            },
+            endangeredSpeciesType: {
                 type: String,
                 required: true
             },

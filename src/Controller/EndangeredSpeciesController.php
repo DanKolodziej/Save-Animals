@@ -22,7 +22,22 @@ class EndangeredSpeciesController extends AbstractController {
 
         $serializer = new Serializer([new ObjectNormalizer()]);
 
-        $data = $serializer->normalize($endangeredSpeciesData, null, [AbstractNormalizer::ATTRIBUTES => ['name', 'description', 'imageLink']]);
+        $data = $serializer->normalize($endangeredSpeciesData, null, [AbstractNormalizer::ATTRIBUTES => ['name', 'description', 'endangeredSpeciesType', 'imageLink']]);
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/singular-endangered-species-data/{name}", name="endangeredSpeciesDataByName", methods={"GET"})
+     */
+    public function endangeredSpeciesByName(string $name, EndangeredSpeciesScraper $endangeredSpeciesScraper): JsonResponse
+    {
+        $endangeredSpeciesScraper->makeRequest();
+        $endangeredSpeciesData = $endangeredSpeciesScraper->extractEndangeredAnimalSpeciesByName($name);
+
+        $serializer = new Serializer([new ObjectNormalizer()]);
+
+        $data = $serializer->normalize($endangeredSpeciesData, null, [AbstractNormalizer::ATTRIBUTES => ['name', 'description', 'endangeredSpeciesType', 'imageLink']]);
 
         return new JsonResponse($data);
     }

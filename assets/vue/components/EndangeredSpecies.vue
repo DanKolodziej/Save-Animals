@@ -2,122 +2,152 @@
     <div class="endangered-species-page">
         <h1 class="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
         <div class="endangered-species-content">
-            <div class="posts-container">
-                <post v-show="showExtinct" v-for="endangeredSpecies in extinct"
+            <div class="posts-container" ref="posts-container">
+                <clip-loader class="endangered-species-content__loader" :loading="loadingEndangeredSpecies" :color="'#192BC2'" :size="'45px'"></clip-loader>
+                <div v-show="loadingEndangeredSpecies" class="endangered-species-content__loading-message">
+                    <span class="loading-text">Czekaj chwilę</span><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+                </div>
+                <!-- <post v-if="displayEndangeredSpecies(endangeredSpecies.endangeredSpeciesType)"
+                    v-for="(endangeredSpecies, index) in endangeredSpeciesArray"
+                    v-show="currentPageEndangeredSpecies(index)"
+                    :title="endangeredSpecies.name"
+                    :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                    :image-file-name="endangeredSpecies.imageLink">
+                </post> -->
+                <post v-if="showExtinct" v-for="endangeredSpecies in extinct"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showToDisappear" v-for="endangeredSpecies in toDisappear"
+                <post v-if="showToDisappear" v-for="endangeredSpecies in toDisappear"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showExtremelyEndangered" v-for="endangeredSpecies in extremelyEndangered"
+                <post v-if="showExtremelyEndangered" v-for="endangeredSpecies in extremelyEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showHighlyEndangered" v-for="endangeredSpecies in highlyEndangered"
+                <post v-if="showHighlyEndangered" v-for="endangeredSpecies in highlyEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showAtEndangerRisk" v-for="endangeredSpecies in atEndangerRisk"
+                <post v-if="showAtEndangerRisk" v-for="endangeredSpecies in atEndangerRisk"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showCloseToDanger" v-for="endangeredSpecies in closeToDanger"
+                <post v-if="showCloseToDanger" v-for="endangeredSpecies in closeToDanger"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
-                <post v-show="showNotEndangered" v-for="endangeredSpecies in notEndangered"
+                <post v-if="showNotEndangered" v-for="endangeredSpecies in notEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
             </div>
-            <div class="endangered-species-content__radio-group">
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+            <div class="endangered-species-content__checkbox-group">
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="extinct"
                         name="extinct"
                         value="extinct"
-                        v-model="showExtinct">
+                        v-model="showExtinct"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="extinct">
                         Gatunki wymarłe
                     </label>
                 </div>
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="to-disappear"
                         name="to-disappear"
                         value="toDisappear"
-                        v-model="showToDisappear">
+                        v-model="showToDisappear"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="to-disappear">
                         Gatunki zanikłe
                     </label>
                 </div>
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="extremely-endangered"
                         name="extremely-endangered"
                         value="extremelyEndangered"
-                        v-model="showExtremelyEndangered">
+                        v-model="showExtremelyEndangered"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="extremely-endangered">
                         Gatunki skrajnie zagrożone
                     </label>
                 </div>
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="highly-endangered"
                         name="highly-endangered"
                         value="highlyEndangered"
-                        v-model="showHighlyEndangered">
+                        v-model="showHighlyEndangered"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="highly-endangered">
                         Gatunki silnie zagrożone
                     </label>
                 </div>
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="at-endanger-risk"
                         name="at-endanger-risk"
                         value="atEndangerRisk"
-                        v-model="showAtEndangerRisk">
+                        v-model="showAtEndangerRisk"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="at-endanger-risk">
                         Gatunki narażone na wyginięcie
                     </label>
                 </div>
-                <div class="endangered-species-content__radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content__checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="close-to-danger"
                         name="close-to-danger"
                         value="closeToDanger"
-                        v-model="showCloseToDanger">
+                        v-model="showCloseToDanger"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="close-to-danger">
                         Gatunki bliskie zagrożenia
                     </label>
                 </div>
-                <div class="endangered-species-content_radio-button-container">
-                    <input class="endangered-species-content__radio-button"
+                <div class="endangered-species-content_checkbox-container">
+                    <input class="endangered-species-content__checkbox"
                         type="checkbox"
                         id="not-endangered"
                         name="not-endangered"
                         value="notEndangered"
-                        v-model="showNotEndangered">
+                        v-model="showNotEndangered"
+                        @change="resetCurrentPage()">
                     <label class="endangered-species-content__label" for="not-endangered">
                         Gatunki narazie nie zagrożone wymarciem
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="pagination" v-show="!loadingEndangeredSpecies && pageAmount > 0">
+            <font-awesome-icon class="pagination__arrow"
+                                   icon="chevron-left"
+                                   :class="{'pagination__arrow--hidden': currentPage === 1}"
+                                   @click="previousPage"/>
+            {{currentPage}}/{{ pageAmount }}
+            <font-awesome-icon class="pagination__arrow"
+                                   icon="chevron-right"
+                                   :class="{'pagination__arrow--hidden': currentPage === pageAmount}"
+                                   @click="nextPage"/>
         </div>
     </div>
 </template>
@@ -125,14 +155,17 @@
 <script>
     import Post from './Post';
     import axios from 'axios';
+    import ClipLoader from 'vue-spinner/src/ClipLoader';
 
     export default {
         name: "EndangeredSpecies",
         components: {
-            Post
+            Post,
+            ClipLoader
         },
         data() {
             return {
+                endangeredSpeciesArray: [],
                 extinct: [],
                 toDisappear: [],
                 extremelyEndangered: [],
@@ -140,31 +173,125 @@
                 atEndangerRisk: [],
                 closeToDanger: [],
                 notEndangered: [],
-                showExtinct: true,
-                showToDisappear: true,
-                showExtremelyEndangered: true,
-                showHighlyEndangered: true,
-                showAtEndangerRisk: true,
-                showCloseToDanger: true,
-                showNotEndangered: true
+                showExtinct: false,
+                showToDisappear: false,
+                showExtremelyEndangered: false,
+                showHighlyEndangered: false,
+                showAtEndangerRisk: false,
+                showCloseToDanger: false,
+                showNotEndangered: false,
+                loadingEndangeredSpecies: false,
+                currentPage: 1
+            }
+        },
+        computed: {
+            postsAmount: function() {
+                var postsAmount = 0;
+                postsAmount += this.showExtinct ? this.extinct.length : 0;
+                postsAmount += this.showToDisappear ? this.toDisappear.length : 0;
+                postsAmount += this.showExtremelyEndangered ? this.extremelyEndangered.length : 0;
+                postsAmount += this.showHighlyEndangered ? this.highlyEndangered.length : 0;
+                postsAmount += this.showAtEndangerRisk ? this.atEndangerRisk.length : 0;
+                postsAmount += this.showCloseToDanger ? this.closeToDanger.length : 0;
+                postsAmount += this.showNotEndangered ? this.notEndangered.length : 0;
+
+                return postsAmount;
+                // return this.endangeredSpeciesArray.length;
+            },
+            pageAmount: function() {
+                return Math.ceil(this.postsAmount / 10);
             }
         },
         methods: {
             getEndangeredSpecies: function() {
+                this.loadingEndangeredSpecies = true;
                 axios.get('/endangered-species-data')
                     .then(response => {
+                        // this.endangeredSpeciesArray.push(response.data['EX']);
+                        // this.endangeredSpeciesArray.push(response.data['EXP']);
+                        // this.endangeredSpeciesArray.push(response.data['CR']);
+                        // this.endangeredSpeciesArray.push(response.data['EN']);
+                        // this.endangeredSpeciesArray.push(response.data['VU']);
+                        // this.endangeredSpeciesArray.push(response.data['NT']);
+                        // this.endangeredSpeciesArray.push(response.data['LC']);
+                        // this.endangeredSpeciesArray = this.endangeredSpeciesArray.flat();
+
                         this.extinct = response.data['EX'];
+                        this.showExtinct = true;
                         this.toDisappear = response.data['EXP'];
+                        this.showToDisappear = true;
                         this.extremelyEndangered = response.data['CR'];
+                        this.showExtremelyEndangered = true;
                         this.highlyEndangered = response.data['EN'];
+                        this.showHighlyEndangered = true;
                         this.atEndangerRisk = response.data['VU'];
+                        this.showAtEndangerRisk = true;
                         this.closeToDanger = response.data['NT'];
+                        this.showCloseToDanger = true;
                         this.notEndangered = response.data['LC'];
+                        this.showNotEndangered = true;
+                        this.loadingEndangeredSpecies = false;
+                    }).catch(response => {
+                        this.loadingEndangeredSpecies = false;
                     });
+            },
+            resetCurrentPage: function() {
+                this.currentPage = 1;
+            },
+            displayEndangeredSpecies: function(endangeredSpeciesType) {
+                var displayEndangeredSpecies = false;
+                if('EX' === endangeredSpeciesType && this.showExtinct) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('EXP' === endangeredSpeciesType && this.showToDisappear) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('CR' === endangeredSpeciesType && this.showExtremelyEndangered) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('EN' === endangeredSpeciesType && this.showHighlyEndangered) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('VU' === endangeredSpeciesType && this.showAtEndangerRisk) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('NT' === endangeredSpeciesType && this.showCloseToDanger) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                if('LC' === endangeredSpeciesType && this.showNotEndangered) {
+                    displayEndangeredSpecies = true;
+                    return displayEndangeredSpecies;
+                }
+                return displayEndangeredSpecies;
+            },
+            currentPageEndangeredSpecies: function(index) {
+                return ((this.currentPage - 1) * 10) < index - 1 && index - 1 <= (this.currentPage * 10);
+            },
+            previousPage: function() {
+                this.currentPage--;
+            },
+            nextPage: function() {
+                this.currentPage++;
             }
         },
-        mounted() {
+        created() {
             this.getEndangeredSpecies();
+        },
+        updated() {
+            var postsContainerChildElements = this.$refs['posts-container'].children;
+            for(var i = 2; i < postsContainerChildElements.length; i++) {
+                if (!this.currentPageEndangeredSpecies(i)) {
+                    postsContainerChildElements[i].style.display = 'none';
+                } else {
+                    postsContainerChildElements[i].style.display = 'block';
+                }
+            }
         }
     }
 </script>
@@ -192,7 +319,42 @@
                 padding: 0 15px
             }
 
-            &__radio-group {
+            &__loading-message {
+                text-align: center;
+                color: #192BC2;
+                font-size: 22px;
+                font-weight: bold;
+                margin-bottom: 30px;
+
+                .loading-text {
+                    margin-left: 24px;
+                }
+
+                .dot {
+                    letter-spacing: 1.6px;
+                    animation-name: blink;
+                    animation-duration: 1.4s;
+                    animation-iteration-count: infinite;
+                    animation-fill-mode: both;
+                    animation-delay: .2s;
+                    
+                    &:first-child {
+                        animation-delay: 0;
+                    }
+
+                    &:last-child {
+                        animation-delay: .4s;
+                    }
+                }
+
+                @keyframes blink {
+                    0%   {opacity: 0;}
+                    20%   {opacity: 1;}
+                    100% {opacity: 0;}
+                }
+            }
+
+            &__checkbox-group {
                 height: fit-content;
                 background-color: #6495ed;
                 margin: 0 auto 30px;
@@ -213,11 +375,11 @@
                 cursor: pointer;
             }
 
-            &__radio-button-container {
+            &__checkbox-container {
                 margin: 3px 0;
             }
 
-            &__radio-button {
+            &__checkbox {
 
                 &:checked, &:not(:checked) {
                     position: absolute;
@@ -266,6 +428,34 @@
                     opacity: 1;
                     -webkit-transform: scale(1);
                     transform: rotate(45deg) scale(1);
+                }
+            }
+        }
+
+        .posts-container {
+            @media (min-width: 1024px) {
+                width: calc(100% - 330px);
+            }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            width: 250px;
+            margin: 30px auto;
+            font-size: 55px;
+            color: #192BC2;
+
+            &__arrow {
+                background-color: #192BC2;
+                color: #fff;
+                border-radius: 5px;
+                padding: 5px;
+                width: 55px;
+                cursor: pointer;
+
+                &--hidden {
+                    visibility: hidden;
                 }
             }
         }

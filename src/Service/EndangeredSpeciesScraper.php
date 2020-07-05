@@ -4,6 +4,8 @@ namespace App\Service;
 
 use Goutte\Client as GoutteClient;
 use App\Entity\EndangeredSpecies;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 class EndangeredSpeciesScraper {
 
@@ -30,14 +32,17 @@ class EndangeredSpeciesScraper {
             $this->endangeredSpeciesTypes[] = $endangeredSpeciesType;
             $endangeredSpecies = $this->endangeredAnimalSpecies;
             $this->endangeredAnimalSpecies = [];
-            $endangeredType->filter('dl > dd > a')->each(function($animal) {
+            $endangeredType->filter('dl > dd > a')->each(function($animal) use ($endangeredSpeciesType) {
                 $link = $this->crawler->selectLink($animal->text())->link();
                 $endangeredSpeciesPage = $this->client->click($link);
                 $this->endangeredAnimalSpecies[] = new EndangeredSpecies(
                     $animal->text(),
-                    preg_replace('/\[\d+\]/', '', implode(' ', $endangeredSpeciesPage->filter('.mw-parser-output > p')->each(function($paragraph) {
+                    preg_replace('/\[\d+\]/', '', implode(
+                        ' ',
+                        $endangeredSpeciesPage->filter('.mw-parser-output > p')->each(function($paragraph) {
                         return $paragraph->text();
                     }))),
+                    $endangeredSpeciesType,
                     $endangeredSpeciesPage->filter('.image:first-child > img')->eq(0)->attr('src'));
             });
             $endangeredSpecies[] = $this->endangeredAnimalSpecies;
@@ -45,5 +50,38 @@ class EndangeredSpeciesScraper {
         });
 
         return array_combine($this->endangeredSpeciesTypes, $this->endangeredAnimalSpecies);
+    }
+
+    public function extractEndangeredAnimalSpeciesByName(string $name) {
+        $this->endangeredSpeciesTypes = [];
+        $this->endangeredAnimalSpecies = [];
+        
+        $filteredEndangeredSpecies =  $this->crawler->filter('ol > li')->each(function($endangeredType) use ($name) {
+            $endangeredSpeciesType = $endangeredType->filter('b')->text();
+            $endangeredSpeciesType = explode(' – ', $endangeredSpeciesType)[0];
+            return $endangeredType->filter('dl > dd > a')->each(function($animal) use ($name, $endangeredSpeciesType) {
+                if($animal->text() === $name) {
+                    $link = $this->crawler->selectLink($animal->text())->link();
+                    $endangeredSpeciesPage = $this->client->click($link);
+                    return new EndangeredSpecies(
+                        $animal->text(),
+                        preg_replace('/\[\d+\]/', '', implode(' ', $endangeredSpeciesPage->filter('.mw-parser-output > p')->each(function($paragraph) {
+                            return $paragraph->text();
+                        }))),
+                        $endangeredSpeciesType,
+                        $endangeredSpeciesPage->filter('.image:first-child > img')->eq(0)->attr('src'));
+                }
+            });
+        });
+
+        foreach($filteredEndangeredSpecies as $endangeredSpeciesType) {
+            foreach($endangeredSpeciesType as $singularEndangeredSpecies) {
+                if(!is_null($singularEndangeredSpecies)) {
+                    return $singularEndangeredSpecies;
+                }
+            }
+        }
+
+        return null;
     }
 }
