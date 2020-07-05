@@ -18,36 +18,43 @@
                 <post v-if="showExtinct" v-for="endangeredSpecies in extinct"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showToDisappear" v-for="endangeredSpecies in toDisappear"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showExtremelyEndangered" v-for="endangeredSpecies in extremelyEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showHighlyEndangered" v-for="endangeredSpecies in highlyEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showAtEndangerRisk" v-for="endangeredSpecies in atEndangerRisk"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showCloseToDanger" v-for="endangeredSpecies in closeToDanger"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
                 <post v-if="showNotEndangered" v-for="endangeredSpecies in notEndangered"
                     :title="endangeredSpecies.name"
                     :description="endangeredSpecies.description"
+                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
                     :image-file-name="endangeredSpecies.imageLink">
                 </post>
             </div>
