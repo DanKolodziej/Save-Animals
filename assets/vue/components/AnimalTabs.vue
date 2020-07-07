@@ -33,6 +33,10 @@
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
             </animal-card>
+            <p v-show="adoptionAnimals.length === 0"
+               class="animal-tabs__no-animals-message">
+                Brak zwierzaków
+            </p>
         </div>
         <div class="animal-tabs__content animal-tabs__wanted" v-show="isWantedTabActive">
             <animal-card v-for="animal in wantedAnimals"
@@ -41,6 +45,10 @@
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
             </animal-card>
+            <p v-show="wantedAnimals.length === 0"
+               class="animal-tabs__no-animals-message">
+                Brak zwierzaków
+            </p>
         </div>
         <div class="animal-tabs__content animal-tabs__lost" v-show="isLostTabActive">
             <animal-card v-for="animal in lostAnimals"
@@ -49,6 +57,10 @@
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
             </animal-card>
+            <p v-show="lostAnimals.length === 0"
+               class="animal-tabs__no-animals-message">
+                Brak zwierzaków
+            </p>
         </div>
         <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
             <animal-card v-for="animal in foundAnimals"
@@ -57,6 +69,10 @@
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
             </animal-card>
+            <p v-show="foundAnimals.length === 0"
+               class="animal-tabs__no-animals-message">
+                Brak zwierzaków
+            </p>
         </div>
     </div>
 </template>
@@ -205,9 +221,15 @@
 
         &__content {
             background-color: #fff;
-            padding-top: 15px;
+            padding-top: 30px;
             border: 1px solid #e0e0e0;
             border-top: 0;
+        }
+
+        &__no-animals-message {
+            text-align: center;
+            font-style: italic;
+            margin: 0 0 30px;
         }
     }
 </style>

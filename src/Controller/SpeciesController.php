@@ -20,7 +20,7 @@ class SpeciesController extends AbstractController
 
         $serializer = new Serializer([new ObjectNormalizer()]);
 
-        $data = $serializer->normalize($species, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name']]);
+        $data = $serializer->normalize($species, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'nameSingular']]);
 
         return new JsonResponse($data);
     }

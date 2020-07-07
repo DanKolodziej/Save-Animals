@@ -110,6 +110,11 @@
                 }
             }
         },
+        watch: {
+            category: function() {
+                this.FilterAnimals();
+            }
+        },
         methods: {
             FilterAnimals: function() {
                 var url = '/animals-by-category-species-name-description?category='
@@ -138,6 +143,9 @@
                 this.descriptionPhrase = newDescription;
                 this.FilterAnimals();
             }
+        },
+        mounted() {
+            this.FilterAnimals();
         }
     }
 </script>
@@ -236,6 +244,7 @@
             &__loader, &__no-animals-message {
                 width: 55%;
                 align-self: center;
+                margin-bottom: 30px;
 
                 @media (min-width: 768px) {
                     width: 702px;
@@ -244,7 +253,6 @@
 
                 @media (min-width: 1024px) {
                     margin: unset;
-                    margin-bottom: 30px;
                     width: 55%;
                     max-width: 951px;
                     min-width: 717px;

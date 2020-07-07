@@ -2,13 +2,13 @@
     <div class="user-animals-page">
         <div class="users-animals">
             <div class="user-info">
-                <h2 class="user-info__name">John Doe</h2>
+                <h2 class="user-info__name">{{ userName }}</h2>
             </div>
-            <animal-tabs></animal-tabs>
+            <animal-tabs ref="tabs"></animal-tabs>
         </div>
         <div class="add-animal-form-column">
             <div class="user-info">
-                <h2 class="user-info__name">John Doe</h2>
+                <h2 class="user-info__name">{{ userName }}</h2>
             </div>
             <transition name="fade">
                 <div class="add-animal-success-message" v-show="addedAnimal">
@@ -79,8 +79,8 @@
                         <ul class="species-list" :class="{'species-list--displayed': areSpeciesDisplayed}">
                             <li class="species-list__item"
                                 v-for="speciesName in species"
-                                @click="setSpecies(speciesName.name)">
-                                {{ speciesName.name }}
+                                @click="setSpecies(speciesName.nameSingular)">
+                                {{ speciesName.nameSingular }}
                             </li>
                         </ul>
                     </div>
@@ -128,6 +128,7 @@
         },
         data() {
             return {
+                // userName: '',
                 name: '',
                 species: [],
                 selectedSpecies: '',
@@ -146,6 +147,9 @@
             }
         },
         computed: {
+            userName: function() {
+                return this.$store.getters.userName
+            },
             imageInputlabel: function () {
                 return this.ImageFileName.length > 0 ? this.ImageFileName : 'Wybierz zdjęcie zwierzaka';
             }
@@ -207,7 +211,16 @@
                     this.addedAnimal = true;
                     this.isLoading = false;
                     this.isFormDisplayed = false;
-                    setTimeout(() => this.addedAnimal = false, 2000);
+                    // if(this.category === 'adoption') {
+                    //     this.$refs.tabs.getUsersAdoptionAnimals();
+                    // } else if(this.category === 'wanted') {
+                    //     this.$refs.tabs.getUsersWantedAnimals();
+                    // } else if(this.category === 'lost') {
+                    //     this.$refs.tabs.getUsersLostAnimals();
+                    // } else if(this.category === 'found') {
+                    //     this.$refs.tabs.getUsersFoundAnimals();
+                    // } 
+                    setTimeout(() => this.addedAnimal = false, 3000);
                 }).catch(error => {
                     var errorMessages = error.response.data;
                     if(errorMessages.name) {
@@ -430,6 +443,7 @@
 
                     &:disabled {
                         background-color: #fff;
+                        color: #000;
                         cursor: pointer;
                     }
 

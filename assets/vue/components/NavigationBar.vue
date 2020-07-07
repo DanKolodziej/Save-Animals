@@ -117,6 +117,7 @@
             display: inline-block;
             cursor: pointer;
             width: fit-content;
+            width: -moz-fit-content;
             height: fit-content;
             margin: 28.5px 0 28.5px 20px;
             padding: 2px 8px;

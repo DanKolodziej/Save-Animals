@@ -4,8 +4,6 @@ namespace App\Service;
 
 use Goutte\Client as GoutteClient;
 use App\Entity\EndangeredSpecies;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
 
 class EndangeredSpeciesScraper {
 

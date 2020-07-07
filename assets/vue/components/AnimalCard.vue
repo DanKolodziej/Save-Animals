@@ -1,7 +1,12 @@
 <template>
     <div class="animal-card">
-        <img class="animal-card__image"
-             :src="require(`../../../public/uploads/images/${imageName}`)">
+        <div class="animal-card__image-container">
+            <img class="animal-card__image"
+                 :src="require(`../../../public/uploads/images/${imageName}`)">
+            <button class="animal-card__cta-button">
+                Sprawdź
+            </button>
+        </div>
         <div class="animal-card__text">
             <h2 class="animal-card__name" v-show="name.length > 0">{{ name }}</h2>
             <p class="animal-card__description" v-show="description.length > 0">
@@ -47,8 +52,10 @@
         box-shadow: 0 0 15px 0 rgba(0,0,0,0.75);
         border-radius: 5px;
         width: 60%;
+        height: fit-content;
         margin: 15px auto;
         max-width: none;
+        overflow:auto;
 
         &:first-child {
             margin-top: 0;
@@ -60,14 +67,60 @@
             margin: 0 15px 30px;
         }
 
+        &__image-container {
+            position: relative;
+        }
+
         &__image {
             width: 100%;
             object-fit: cover;
             border-radius: 5px 5px 0 0;
+            transition: all 0.5s ease;
+        }
+
+        &__cta-button {
+            height: 35px;
+            padding: 7px 14px;
+            background-color: #008c4b;
+            color: #fff;
+            text-transform: uppercase;
+            border: 2px solid #008c4b;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            opacity: 0;
+            // vis
         }
 
         &__text {
             padding: 0 15px;
         }
+
+        &__name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &__description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+        }
+    }
+
+    .animal-card:hover .animal-card__image {
+        filter: brightness(0.3);
+    }
+
+    .animal-card:hover .animal-card__cta-button {
+        opacity: 1;
     }
 </style>

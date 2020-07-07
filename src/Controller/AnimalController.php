@@ -28,7 +28,7 @@ class AnimalController extends AbstractController {
         $speciesName = $request->get('species');
         $species = $this->getDoctrine()
             ->getRepository(Species::class)
-            ->findOneByName($speciesName);
+            ->findOneByNameSingular($speciesName);
         $description = $request->get('description');
         $category = $request->get('category');
         $user = $this->getUser();
