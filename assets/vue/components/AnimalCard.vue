@@ -4,7 +4,10 @@
             <img class="animal-card__image"
                  :src="require(`../../../public/uploads/images/${imageName}`)">
             <button class="animal-card__cta-button">
-                Sprawdź
+                <router-link :to="{name: 'animal', params: {id: id}}"
+                             class="animal-card__link">
+                    Sprawdź
+                </router-link>
             </button>
         </div>
         <div class="animal-card__text">
@@ -20,6 +23,10 @@
     export default {
         name: "AnimalCard",
         props: {
+            id: {
+                type: Number,
+                required: true,
+            },
             name: {
                 type: String,
                 required: false,
@@ -95,7 +102,20 @@
             cursor: pointer;
             transition: all 0.5s ease;
             opacity: 0;
-            // vis
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 5px 0 #008c4b;
+            }
+        }
+
+        &__link {
+            color: #fff;
+            text-decoration: none;
+
+            &:active, &:visited {
+                color: #fff;
+            }
         }
 
         &__text {

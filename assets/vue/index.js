@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App";
 import Index from "./components/Index";
 import Animals from "./components/Animals";
+import Animal from "./components/Animal";
 import EndangeredSpecies from "./components/EndangeredSpecies";
 import PostPage from './components/PostPage';
 import UserAnimals from "./components/UserAnimals";
@@ -22,8 +23,10 @@ const routes = [
     { path: '/adopcja', component: Animals, props: {category: 'adoption'}},
     { path: '/zaginione-zwierzaki', component: Animals, props: {category: 'lost'}},
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
+    { path: '/zwierzak/:id', name: 'animal', component: Animal, props: true },
     { path: '/zagrozony-gatunek/:name', name: 'endangeredSpecies', component: PostPage, props: true },
     { path: '/zwierzaki-uzytkownika', component: UserAnimals, meta: { requiresAuth: true }},
+    { path: '/zwierzaki-uzytkownika/:id', name: 'userAnimals', component: UserAnimals, props: true},
     { path: '/logowanie', component: SignIn, props: true},
     { path: '/rejestracja', component: SignUp, props: true}
 ];

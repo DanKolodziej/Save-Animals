@@ -29,6 +29,7 @@
         <div class="animal-tabs__content animal-tabs__adoption" v-show="isAdoptionTabActive">
             <animal-card v-for="animal in adoptionAnimals"
                          :key="animal.id"
+                         :id="parseInt(animal.id)"
                          :name="animal.name"
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
@@ -41,6 +42,7 @@
         <div class="animal-tabs__content animal-tabs__wanted" v-show="isWantedTabActive">
             <animal-card v-for="animal in wantedAnimals"
                          :key="animal.id"
+                         :id="parseInt(animal.id)"
                          :name="animal.name"
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
@@ -53,6 +55,7 @@
         <div class="animal-tabs__content animal-tabs__lost" v-show="isLostTabActive">
             <animal-card v-for="animal in lostAnimals"
                          :key="animal.id"
+                         :id="parseInt(animal.id)"
                          :name="animal.name"
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
@@ -65,6 +68,7 @@
         <div class="animal-tabs__content animal-tabs__found" v-show="isFoundTabActive">
             <animal-card v-for="animal in foundAnimals"
                          :key="animal.id"
+                         :id="parseInt(animal.id)"
                          :name="animal.name"
                          :description="animal.description"
                          :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
@@ -97,6 +101,12 @@
                 lostAnimals: [],
                 foundAnimals: [],
                 userId: null
+            }
+        },
+        props: {
+            id: {
+                type: Number,
+                required: false
             }
         },
         methods: {
@@ -150,7 +160,11 @@
             }
         },
         mounted() {
-            this.userId = this.$store.getters.userId;
+            if(!isNaN(this.id)) {
+                this.userId = this.id;
+            } else {
+                this.userId = this.$store.getters.userId;
+            }
 
             this.getUsersAdoptionAnimals();
             this.getUsersWantedAnimals();

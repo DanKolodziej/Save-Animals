@@ -102,4 +102,36 @@ class AnimalController extends AbstractController {
 
         return new JsonResponse(['animals' => $data]);
     }
+
+    /**
+     * @Route("/animal/{id}", name="animal", methods={"GET"})
+     */
+    public function getAnimal(int $id): JsonResponse {
+
+        $animal = $this->getDoctrine()
+            ->getRepository(Animal::class)
+            ->find($id);
+
+        $serializer = new Serializer([new ObjectNormalizer()]);
+
+        $data = $serializer->normalize($animal, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName', 'owner']]);
+
+        return new JsonResponse(['animal' => $data]);
+    }
+
+    /**
+     * @Route("/owner/{id}", name="owner", methods={"GET"})
+     */
+    public function getAnimalOwner(int $id): JsonResponse {
+
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+
+        $serializer = new Serializer([new ObjectNormalizer()]);
+
+        $data = $serializer->normalize($user, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name']]);
+
+        return new JsonResponse(['owner' => $data]);
+    }
 }

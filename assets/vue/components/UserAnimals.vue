@@ -1,14 +1,14 @@
 <template>
-    <div class="user-animals-page">
+    <div class="user-animals-page" :class="{'user-animals-page--centered': owner !== null}">
         <div class="users-animals">
             <div class="user-info">
-                <h2 class="user-info__name">{{ userName }}</h2>
+                <h2 class="user-info__name">{{ ownerName }}</h2>
             </div>
-            <animal-tabs ref="tabs"></animal-tabs>
+            <animal-tabs :id="parseInt(id)"></animal-tabs>
         </div>
-        <div class="add-animal-form-column">
+        <div class="add-animal-form-column" :class="{'add-animal-form-column--hidden': owner !== null}">
             <div class="user-info">
-                <h2 class="user-info__name">{{ userName }}</h2>
+                <h2 class="user-info__name">{{ ownerName }}</h2>
             </div>
             <transition name="fade">
                 <div class="add-animal-success-message" v-show="addedAnimal">
@@ -128,7 +128,8 @@
         },
         data() {
             return {
-                // userName: '',
+                owner: null,
+                ownerName: '',
                 name: '',
                 species: [],
                 selectedSpecies: '',
@@ -146,6 +147,11 @@
                 addedAnimal: false
             }
         },
+        props: {
+            id: {
+                required: false
+            }
+        },
         computed: {
             userName: function() {
                 return this.$store.getters.userName
@@ -155,6 +161,13 @@
             }
         },
         methods: {
+            getOwner: function() {
+                axios.get('/owner/' + this.id)
+                    .then(response => {
+                        this.owner = response.data.owner;
+                        this.ownerName = this.owner.name;
+                    });
+            },
             nameUpdate: function(value) {
                 this.name = value;
             },
@@ -211,15 +224,6 @@
                     this.addedAnimal = true;
                     this.isLoading = false;
                     this.isFormDisplayed = false;
-                    // if(this.category === 'adoption') {
-                    //     this.$refs.tabs.getUsersAdoptionAnimals();
-                    // } else if(this.category === 'wanted') {
-                    //     this.$refs.tabs.getUsersWantedAnimals();
-                    // } else if(this.category === 'lost') {
-                    //     this.$refs.tabs.getUsersLostAnimals();
-                    // } else if(this.category === 'found') {
-                    //     this.$refs.tabs.getUsersFoundAnimals();
-                    // } 
                     setTimeout(() => this.addedAnimal = false, 3000);
                 }).catch(error => {
                     var errorMessages = error.response.data;
@@ -244,6 +248,11 @@
             }
         },
         mounted() {
+            if(!isNaN(parseInt(this.id))) {
+                this.getOwner();
+            } else {
+                this.ownerName = this.$store.getters.userName;
+            }
             this.getSpecies();
         }
     }
@@ -261,6 +270,12 @@
         @media (min-width: 1024px) {
             flex-direction: row;
             justify-content: space-between;
+        }
+
+        &--centered {
+            @media (min-width: 1024px) {
+                justify-content: center;
+            }
         }
 
         .users-animals {
@@ -295,6 +310,16 @@
 
             @media (min-width: 1024px) {
                 margin: 0;
+            }
+
+            &--hidden {
+                @media (min-width: 1024px) {
+                    display: none;
+                }
+            }
+
+            &--hidden > * {
+                display: none;
             }
 
             .fade-enter-active, .fade-leave-active {

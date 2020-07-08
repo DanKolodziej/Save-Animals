@@ -47,7 +47,6 @@
     .post {
         max-width: 1450px;
         margin: 0 auto 30px;
-        color: #192BC2;
 
         @media (min-width: 1024px) {
             margin-bottom: 30px;

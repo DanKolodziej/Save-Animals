@@ -48,6 +48,7 @@
             <div class="animal-cards-container" v-show="!isLoading && animals.length > 0">
                 <animal-card v-for="animal in animals"
                              :key="animal.id"
+                             :id="animal.id"
                              :name="animal.name"
                              :description="animal.description"
                              :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
