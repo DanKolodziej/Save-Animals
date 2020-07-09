@@ -6,10 +6,7 @@
             </div>
             <animal-tabs :id="parseInt(id)"></animal-tabs>
         </div>
-        <div class="add-animal-form-column" :class="{'add-animal-form-column--hidden': owner !== null}">
-            <div class="user-info">
-                <h2 class="user-info__name">{{ ownerName }}</h2>
-            </div>
+        <div v-if="owner === null" class="add-animal-form-column">
             <transition name="fade">
                 <div class="add-animal-success-message" v-show="addedAnimal">
                     Pomyślnie dodano nowego zwierzaka :)
@@ -128,7 +125,7 @@
         },
         data() {
             return {
-                owner: null,
+                owner: {},
                 ownerName: '',
                 name: '',
                 species: [],
@@ -251,6 +248,7 @@
             if(!isNaN(parseInt(this.id))) {
                 this.getOwner();
             } else {
+                this.owner = null;
                 this.ownerName = this.$store.getters.userName;
             }
             this.getSpecies();
@@ -261,8 +259,8 @@
 <style lang="scss" scoped>
     .user-animals-page {
         display: flex;
-        flex-direction: column-reverse;
-        justify-content: flex-end;
+        flex-direction: column;
+        justify-content: flex-start;
         max-width: 1000px;
         padding: 30px 2%;
         margin: 0 auto;
@@ -278,16 +276,8 @@
             }
         }
 
-        .users-animals {
-            .user-info {
-                @media (min-width: 1024px) {
-                    display: block;
-                }
-            }
-        }
-
         .user-info {
-            display: none;
+            display: block;
             border: 1px solid #e0e0e0;
             background-color: #fff;
             height: fit-content;
@@ -308,33 +298,11 @@
             width: 300px;
             margin: 0 auto;
 
-            @media (min-width: 1024px) {
-                margin: 0;
-            }
-
-            &--hidden {
-                @media (min-width: 1024px) {
-                    display: none;
-                }
-            }
-
-            &--hidden > * {
-                display: none;
-            }
-
             .fade-enter-active, .fade-leave-active {
                 transition: opacity .5s ease-in-out;
             }
             .fade-enter, .fade-leave-to {
                 opacity: 0;
-            }
-
-            .user-info {
-                display: block;
-
-                @media (min-width: 1024px) {
-                    display: none;
-                }
             }
 
             .add-animal-success-message {
@@ -352,12 +320,16 @@
             .add-animal-icon {
                 align-self: center;
                 color: #008c4b;
-                margin-bottom: 15px;
+                margin-top: 30px;
                 padding: 0 3px;
                 border-radius: 5px;
                 transition: all 0.5s ease-out;
                 cursor: pointer;
                 opacity: 1;
+
+                @media (min-width: 1024px) {
+                    margin-top: 0;
+                }
 
                 &:hover {
                     background-color: #008c4b;
@@ -390,11 +362,15 @@
                 align-self: center;
                 width: 250px;
                 height: fit-content;
-                margin: 0 auto 15px;
+                margin: 30px auto 15px;
                 padding: 15px;
                 background-color: #6495ed;
                 border-radius: 5px;
                 box-shadow: 0 0 20px 0 rgba(0,0,0,0.75);
+
+                @media (min-width: 1024px) {
+                    margin-top: 0;
+                }
 
                 &__minimize-icon-container {
                     display: flex;

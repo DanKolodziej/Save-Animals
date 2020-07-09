@@ -189,12 +189,18 @@
             flex-direction: column;
             justify-content: space-between;
             text-align: center;
+            font-size: 13px;
             border-radius: 5px 5px 0 0;
             border: 1px solid transparent;
             border-bottom: 1px solid #e0e0e0;
-            padding: 5px 15px;
+            padding: 5px 6px;
             cursor: pointer;
             transition: all 0.5s ease-out;
+
+            @media (min-width: 768px) {
+                padding: 5px 15px;
+                font-size: 16px;
+            }
 
             &:hover {
                 background-color: #e0e0e0;

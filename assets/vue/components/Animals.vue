@@ -111,11 +111,6 @@
                 }
             }
         },
-        watch: {
-            category: function() {
-                this.FilterAnimals();
-            }
-        },
         methods: {
             FilterAnimals: function() {
                 var url = '/animals-by-category-species-name-description?category='

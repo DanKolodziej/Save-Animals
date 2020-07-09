@@ -32,7 +32,6 @@
         },
         props: {
             id: {
-                type: Number,
                 required: true
             }
         },
