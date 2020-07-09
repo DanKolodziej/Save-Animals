@@ -10,11 +10,12 @@
                 </router-link>
             </button>
         </div>
-        <div class="animal-card__text">
+        <div class="animal-card__text" :class="{'animal-card__text--hover-hide': hasDeleteButton}">
             <h2 class="animal-card__name" v-show="name.length > 0">{{ name }}</h2>
             <p class="animal-card__description" v-show="description.length > 0">
                 {{ description }}
             </p>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -48,6 +49,9 @@
                     return 'placeholder.png'
                 }
                 return this.imageFileName;
+            },
+            hasDeleteButton() {
+                return !!this.$slots.default;
             }
         }
     }
@@ -119,7 +123,9 @@
         }
 
         &__text {
+            position: relative;
             padding: 0 15px;
+            transition: all 0.5s ease;
         }
 
         &__name {
@@ -142,5 +148,10 @@
 
     .animal-card:hover .animal-card__cta-button {
         opacity: 1;
+    }
+
+    .animal-card:hover .animal-card__text--hover-hide {
+        color: transparent;
+        user-select: none;
     }
 </style>

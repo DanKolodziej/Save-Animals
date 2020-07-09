@@ -134,4 +134,22 @@ class AnimalController extends AbstractController {
 
         return new JsonResponse(['owner' => $data]);
     }
+
+    /**
+     * @Route("/delete-animal/{id}", name="deleteAnimal", methods={"DELETE"})
+     */
+    public function deleteAnimal(int $id): JsonResponse {
+
+        $animal = $this->getDoctrine()
+            ->getRepository(Animal::class)
+            ->find($id);
+
+        $category = $animal->getCategory();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($animal);
+            $entityManager->flush();
+
+        return new JsonResponse(['deleted animal' => $id, 'category' => $category]);
+    }
 }

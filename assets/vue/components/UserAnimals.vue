@@ -312,9 +312,14 @@
                 color: #fff;
                 font-weight: bold;
                 padding: 20px;
-                margin-bottom: 15px;
+                margin-top: 30px;
                 border-radius: 5px;
                 box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.75);
+
+                @media (min-width: 1024px) {
+                    margin-top: 0;
+                    margin-bottom: 30px;
+                }
             }
 
             .add-animal-icon {
