@@ -18,9 +18,10 @@ class AnimalRepository extends ServiceEntityRepository {
         parent::__construct($registry, Animal::class);
     }
 
-    public function findByCategorySpeciesNameDescription($category, $species, $name, $description) {
+    public function filter($category, $species, $name, $description, $province, $city) {
         return $this->createQueryBuilder('a')
             ->join('a.species', 's')
+            ->join('a.owner', 'o')
             ->andWhere('a.category = :category')
             ->setParameter('category', $category)
             ->andWhere('s.name LIKE :species')
@@ -29,6 +30,10 @@ class AnimalRepository extends ServiceEntityRepository {
             ->setParameter('name', '%' . $name . '%')
             ->andWhere('a.description LIKE :description')
             ->setParameter('description', '%' . $description . '%')
+            ->andWhere('o.province = :province')
+            ->setParameter('province', $province)
+            ->andWhere('o.city LIKE :city')
+            ->setParameter('city', '%' . $city . '%')
             ->orderBy('a.id', 'ASC')
             ->getQuery()
             ->getResult();

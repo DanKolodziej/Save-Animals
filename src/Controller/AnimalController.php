@@ -92,9 +92,11 @@ class AnimalController extends AbstractController {
         $species = $request->get('species');
         $name = $request->get('name');
         $description = $request->get('description');
+        $province = $request->get('province');
+        $city = $request->get('city');
         $animals = $this->getDoctrine()
             ->getRepository(Animal::class)
-            ->findByCategorySpeciesNameDescription($category, $species, $name, $description);
+            ->filter($category, $species, $name, $description, $province, $city);
 
         $serializer = new Serializer([new ObjectNormalizer()]);
 

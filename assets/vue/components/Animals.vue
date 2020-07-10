@@ -59,7 +59,9 @@
             </div>
             <FilterOptions @filterSpecies="speciesFilter"
                            @filterName="namePhraseFilter"
-                           @filterDescription="descriptionPhraseFilter">
+                           @filterDescription="descriptionPhraseFilter"
+                           @filterProvince="provinceFilter"
+                           @filterCity=cityPhraseFilter>
             </FilterOptions>
         </div>
     </div>
@@ -85,6 +87,8 @@
                 species: '',
                 namePhrase: '',
                 descriptionPhrase: '',
+                province: '',
+                cityPhrase: '',
                 animals: [],
                 isLoading: false
             }
@@ -113,9 +117,11 @@
         },
         methods: {
             FilterAnimals: function() {
+                var provincePhrase = this.province !== 'Wszystkie' ? this.province : '';
                 var url = '/animals-by-category-species-name-description?category='
                     + this.selectedCategory + '&species=' + this.species
-                    + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase;
+                    + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase 
+                    + '&province=' + provincePhrase + '&city=' + this.cityPhrase;
                 url = encodeURI(url);
 
                 this.isLoading = true;
@@ -137,6 +143,14 @@
             },
             descriptionPhraseFilter: function(newDescription) {
                 this.descriptionPhrase = newDescription;
+                this.FilterAnimals();
+            },
+            provinceFilter: function(provincePhrase) {
+                this.province = provincePhrase;
+                this.FilterAnimals();
+            },
+            cityPhraseFilter: function(newCityPhrase) {
+                this.cityPhrase = newCityPhrase;
                 this.FilterAnimals();
             }
         },
