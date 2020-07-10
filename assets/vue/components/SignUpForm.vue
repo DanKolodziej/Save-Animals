@@ -2,7 +2,7 @@
     <form class="form" method="post">
         <h1 class="form__title">Rejestracja</h1>
         <label class="form__label" for="email">
-            Email:
+            Email
             <input class="form__input"
                    :class="{'form__input--error': emailError.length > 0}"
                    :placeholder="emailError" type="email"
@@ -10,7 +10,7 @@
                    v-model="email" @click="emailErrorDelete">
         </label>
         <label class="form__label" for="password">
-            Hasło:
+            Hasło
             <input class="form__input"
                    :class="{'form__input--error': passwordError.length > 0}"
                    :placeholder="passwordError" type="password"
@@ -18,7 +18,7 @@
                    v-model="password" @click="passwordErrorDelete">
         </label>
         <label class="form__label" for="repeat-password">
-            Powtórz hasło:
+            Powtórz hasło
             <input class="form__input"
                    :class="{'form__input--error': repeatPasswordError.length > 0}"
                    :placeholder="repeatPasswordError" type="password"
@@ -26,7 +26,7 @@
                    v-model="repeatPassword" @click="repeatPasswordErrorDelete">
         </label>
         <label class="form__label">
-            Rodzaj użytkownika:
+            Rodzaj użytkownika
         </label>
         <div class="form__radio-group">
             <div class="form__radio-button-container">
@@ -49,29 +49,31 @@
                 @deleteErrorMessage="nameErrorDelete">
         </text-input>
         <label class="form__label">
-            Województwo:
+            Województwo
         </label>
-        <div class="form__dropdown-group" @click="toggleProvinces">
-            <input type="text" id="province" class="form__dropdown"
-                   :class="{'add-animal-form__dropdown--error': provinceError.length > 0}"
-                   v-model="selectedProvince" disabled>
-            <div class="form__dropdown-arrow-container">
-                <font-awesome-icon class="form__dropdown-arrow"
-                                   icon="chevron-down"
-                                   :class="{'form__dropdown-arrow--active': areProvincesDisplayed}"/>
+        <div class="form__dropdown-container" @focusout="hideProvinces" tabindex="0">
+            <div class="form__dropdown-group" @click="toggleProvinces">
+                <input type="text" id="province" class="form__dropdown"
+                       :class="{'add-animal-form__dropdown--error': provinceError.length > 0}"
+                       v-model="selectedProvince" disabled>
+                <div class="form__dropdown-arrow-container">
+                    <font-awesome-icon class="form__dropdown-arrow"
+                                       icon="chevron-down"
+                                       :class="{'form__dropdown-arrow--active': areProvincesDisplayed}"/>
+                </div>
+            </div>
+            <div class="provinces-list-container">
+                <ul class="provinces-list" :class="{'provinces-list--displayed': areProvincesDisplayed}">
+                    <li class="provinces-list__item"
+                        v-for="province in provinces"
+                        @click="setProvince(province)">
+                        {{ province }}
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="provinces-list-container">
-            <ul class="provinces-list" :class="{'provinces-list--displayed': areProvincesDisplayed}">
-                <li class="provinces-list__item"
-                    v-for="province in provinces"
-                    @click="setProvince(province)">
-                    {{ province }}
-                </li>
-            </ul>
-        </div>
         <text-input
-                :label="'Miejscowość:'"
+                :label="'Miejscowość'"
                 :error="cityError"
                 @updateValue="cityUpdate"
                 @deleteErrorMessage="cityErrorDelete">
@@ -123,6 +125,9 @@
                     this.selectedProvince = '';
                     this.provinceError = ''
                 }
+            },
+            hideProvinces() {
+                this.areProvincesDisplayed = false;
             },
             setProvince: function(province) {
                 this.selectedProvince  = province;
@@ -199,7 +204,7 @@
         },
         computed: {
             nameLabel: function() {
-                return this.role === 'PERSON' ? 'Imię (+ opcjonalnie nazwisko):' : 'Nazwa:'
+                return this.role === 'PERSON' ? 'Imię (+ opcjonalnie nazwisko)' : 'Nazwa'
             }
         }
     }
@@ -323,6 +328,17 @@
                 transform: scale(1);
             }
         }
+        
+        &__dropdown-container {
+            &:focus {
+                outline: none;
+
+                .form__dropdown,
+                .form__dropdown-arrow-container {
+                    box-shadow: 0 0 5px 0 #00dce8;
+                }
+            }
+        }
 
         &__dropdown-group {
             display: flex;
@@ -335,12 +351,13 @@
             padding: 5px;
             font-size: 18px;
             border: 2px solid #00A8E8;
-            border-radius: 3px;
+            border-radius: 3px 0 0 3px;
             box-sizing: border-box;
             box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
 
             &:disabled {
                 background-color: #fff;
+                color: #000;
                 cursor: pointer;
             }
 
@@ -358,10 +375,6 @@
                     box-shadow: 0 0 5px 0 #eeaaaa;
                 }
             }
-        }
-
-        &__dropdown {
-            border-radius: 3px 0 0 3px;
         }
 
         &__dropdown-arrow-container {

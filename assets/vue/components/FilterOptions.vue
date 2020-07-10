@@ -1,9 +1,9 @@
 <template>
     <div class="filter-options">
         <label for="animal-species" class="filter-options__label">
-            Gatunek zwierzaka:
+            Gatunek zwierzaka
         </label>
-        <div @focusout="hideResults" tabindex="0">
+        <div class="filter-options__dropdown-container" @focusout.self="hideResults" tabindex="0">
             <div class="filter-options__dropdown-group">
                 <input type="text" id="animal-species" class="filter-options__dropdown"
                        v-model="selectedSpecies" @input="filterSpecies" @click="showResults">
@@ -25,29 +25,29 @@
             </div>
         </div>
         <label for="animal-name" class="filter-options__label">
-            Imię zwierzaka:
+            Imię zwierzaka
             <input class="filter-options__input" v-model="name" type="text" id="animal-name" @input="filterName">
         </label>
         <label for="animal-description" class="filter-options__label">
-            Opis:
+            Opis
             <textarea class="filter-options__input filter-options__textarea"
                       v-model="description" id="animal-description" rows="4" cols="20" @input="filterDescription">
             </textarea>
         </label>
         <label for="animal-province" class="filter-options__label">
-            Województwo:
+            Województwo
         </label>
-        <div @focusout="hideProvinces" tabindex="0">
+        <div class="filter-options__dropdown-container" @focusout="hideProvinces" tabindex="0">
             <div class="filter-options__dropdown-group" @click="toggleProvinces">
                 <input type="text" id="animal-province" class="filter-options__dropdown"
-                       v-model="selectedProvince" @click="showProvinces" disabled>
+                       v-model="selectedProvince" disabled>
                 <div class="filter-options__dropdown-arrow-container">
                     <font-awesome-icon class="filter-options__dropdown-arrow"
                                        icon="chevron-down"
                                        :class="{'filter-options__dropdown-arrow--active': areProvincesDisplayed}"/>
                 </div>
             </div>
-            <div class="results-list-container" ref="provinces-list">
+            <div class="results-list-container">
                 <ul class="results-list" :class="{'results-list--displayed': areProvincesDisplayed}">
                     <li class="results-list__item"
                         v-for="province in provinces"
@@ -58,7 +58,7 @@
             </div>
         </div>
         <label for="animal-city" class="filter-options__label">
-            Miejscowość:
+            Miejscowość
             <input class="filter-options__input" v-model="city" type="text" id="animal-city" @input="filterCity">
         </label>
     </div>
@@ -94,14 +94,11 @@
             showResults: function() {
                 this.areResultsDisplayed = true;
             },
-            hideResults() {
+            hideResults: function() {
                 this.areResultsDisplayed = false;
             },
             toggleProvinces: function() {
                 this.areProvincesDisplayed = !this.areProvincesDisplayed;
-            },
-            showProvinces: function() {
-                this.areProvincesDisplayed = true;
             },
             hideProvinces() {
                 this.areProvincesDisplayed = false;
@@ -198,14 +195,20 @@
             }
         }
 
+        &__dropdown-container {
+            &:focus {
+                outline: none;
+
+                .filter-options__dropdown,
+                .filter-options__dropdown-arrow-container {
+                    box-shadow: 0 0 5px 0 #00dce8;
+                }
+            }
+        }
+
         &__dropdown-group {
             display: flex;
             margin: 5px 0 10px;
-
-            &:focus {
-                outline: none;
-                box-shadow: 0 0 5px 0 #00dce8;
-            }
         }
 
         &__dropdown {

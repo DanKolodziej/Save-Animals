@@ -24,7 +24,7 @@
                                            @click="isFormDisplayed = false"/>
                     </div>
                     <label class="add-animal-form__label">
-                        Kategoria:
+                        Kategoria
                     </label>
                     <div class="add-animal-form__radio-group">
                         <div class="add-animal-form__radio-button-container">
@@ -53,42 +53,50 @@
                         </div>
                     </div>
                     <text-input
-                            :label="'Imię zwierzaka:'"
+                            :label="'Imię zwierzaka'"
                             :error="nameError"
                             @updateValue="nameUpdate"
                             @deleteErrorMessage="nameErrorDelete"
                             v-show="category !== 'wanted' && category !== 'found'">
                     </text-input>
                     <label class="add-animal-form__label">
-                        Gatunek:
+                        Gatunek
                     </label>
-                    <div class="add-animal-form__dropdown-group" @click="toggleSpecies">
-                        <input type="text" id="animal-species" class="add-animal-form__dropdown"
-                               :class="{'add-animal-form__dropdown--error': speciesError.length > 0}"
-                               v-model="selectedSpecies" disabled>
-                        <div class="add-animal-form__dropdown-arrow-container">
-                            <font-awesome-icon class="add-animal-form__dropdown-arrow"
-                                               icon="chevron-down"
-                                               :class="{'add-animal-form__dropdown-arrow--active': areSpeciesDisplayed}"/>
+                    <div class="add-animal-form__dropdown-container" @focusout="hideSpecies" tabindex="0">
+                        <div class="add-animal-form__dropdown-group" @click="toggleSpecies">
+                            <input type="text" id="animal-species" class="add-animal-form__dropdown"
+                                   :class="{'add-animal-form__dropdown--error': speciesError.length > 0}"
+                                   v-model="selectedSpecies" disabled>
+                            <div class="add-animal-form__dropdown-arrow-container">
+                                <font-awesome-icon class="add-animal-form__dropdown-arrow"
+                                                   icon="chevron-down"
+                                                   :class="{'add-animal-form__dropdown-arrow--active': areSpeciesDisplayed}"/>
+                            </div>
+                        </div>
+                        <div class="species-list-container">
+                            <ul class="species-list" :class="{'species-list--displayed': areSpeciesDisplayed}">
+                                <li class="species-list__item"
+                                 v-for="speciesName in species"
+                                    @click="setSpecies(speciesName.nameSingular)">
+                                    {{ speciesName.nameSingular }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="species-list-container">
-                        <ul class="species-list" :class="{'species-list--displayed': areSpeciesDisplayed}">
-                            <li class="species-list__item"
-                                v-for="speciesName in species"
-                                @click="setSpecies(speciesName.nameSingular)">
-                                {{ speciesName.nameSingular }}
-                            </li>
-                        </ul>
-                    </div>
                     <label class="add-animal-form__label">
-                        Opis:
+                        Opis
                         <textarea class="add-animal-form__input"
                                   :class="{'add-animal-form__input--error': descriptionError.length > 0}"
                                   rows="3" cols="20" v-model="description"
                                   @click="descriptionErrorDelete" :placeholder="descriptionError">
                         </textarea>
                     </label>
+                    <text-input
+                            :label="'Kontakt (email/tel./facebook/inne)'"
+                            :error="contactError"
+                            @updateValue="contactUpdate"
+                            @deleteErrorMessage="contactErrorDelete">
+                    </text-input>
                     <input class="add-animal-form__image-input"
                            id="animal-image" type="file"
                            accept="image/x-png,image/gif,image/jpeg"
@@ -132,6 +140,7 @@
                 selectedSpecies: '',
                 description: '',
                 category: 'adoption',
+                contact: '',
                 image: '',
                 ImageFileName: '',
                 isFormDisplayed: false,
@@ -141,6 +150,7 @@
                 nameError: '',
                 speciesError: '',
                 descriptionError: '',
+                contactError: '',
                 addedAnimal: false
             }
         },
@@ -181,6 +191,9 @@
                     this.speciesError = ''
                 }
             },
+            hideSpecies: function() {
+                 this.areSpeciesDisplayed = false;
+            },
             getSpecies: function() {
                 axios.get('/species')
                     .then(response => {
@@ -200,6 +213,12 @@
                 this.selectedSpecies  = speciesName;
                 this.areSpeciesDisplayed = false;
             },
+            contactUpdate: function(value) {
+                this.contact = value;
+            },
+            contactErrorDelete: function() {
+                this.contactError = '';
+            },
             onFileChange() {
                 this.image = this.$refs.image.files[0];
                 this.ImageFileName = this.image.name;
@@ -210,6 +229,7 @@
                 formData.append('species', this.selectedSpecies);
                 formData.append('description', this.description);
                 formData.append('category', this.category);
+                formData.append('contact', this.contact);
                 formData.append('image', this.image);
 
                 this.isLoading = true;
@@ -238,6 +258,10 @@
                     if(errorMessages.description) {
                         this.descriptionError = errorMessages.description[0];
                         this.description = '';
+                    }
+                    if(errorMessages.contact) {
+                        this.contactError = errorMessages.contact[0];
+                        this.contact = '';
                     }
 
                     this.isLoading = false;
@@ -428,6 +452,17 @@
 
                         &::placeholder {
                             color: #C82829;
+                        }
+                    }
+                }
+
+                &__dropdown-container {
+                    &:focus {
+                        outline: none;
+
+                        .add-animal-form__dropdown,
+                        .add-animal-form__dropdown-arrow-container {
+                            box-shadow: 0 0 5px 0 #00dce8;
                         }
                     }
                 }

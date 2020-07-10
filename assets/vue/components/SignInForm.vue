@@ -5,12 +5,12 @@
             {{ errorMessage }}
         </p>
         <label class="form__label" for="email">
-            Email:
+            Email
             <input class="form__input" type="email" id="email" name="email" v-model="email">
         </label>
 
         <label class="form__label" for="password">
-            Hasło:
+            Hasło
             <input class="form__input" type="password" id="password" name="password" v-model="password">
         </label>
         <label class="form__remember" for="remember">

@@ -60,6 +60,12 @@ class Animal {
      */
     private $imageFileName;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Kontakt jest wymagany")
+     */
+    private $contact;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,6 +139,18 @@ class Animal {
     public function setImageFileName($imageFileName)
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
 
         return $this;
     }

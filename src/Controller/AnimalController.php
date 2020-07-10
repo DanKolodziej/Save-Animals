@@ -31,12 +31,14 @@ class AnimalController extends AbstractController {
             ->findOneByNameSingular($speciesName);
         $description = $request->get('description');
         $category = $request->get('category');
+        $contact = $request->get('contact');
         $user = $this->getUser();
         $animal->setName($name);
         $animal->setSpecies($species);
         $animal->setDescription($description);
         $animal->setCategory($category);
         $animal->setOwner($user);
+        $animal->setContact($contact);
 
         $errors = $validator->validate($animal);
 
