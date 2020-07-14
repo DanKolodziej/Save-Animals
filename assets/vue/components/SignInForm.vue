@@ -1,17 +1,30 @@
 <template>
     <form class="form" method="post">
         <h1 class="form__title">Zaloguj się</h1>
-        <p v-if="error" class="form__error">
-            {{ errorMessage }}
+        <p v-if="hasError" class="form__error">
         </p>
         <label class="form__label" for="email">
             Email
-            <input class="form__input" type="email" id="email" name="email" v-model="email">
+            <input class="form__input"
+                   :class="{'form__input--error': emailError.length > 0}"
+                   type="email"
+                   id="email"
+                   name="email"
+                   v-model="email"
+                   :placeholder="emailError"
+                   @click="emailErrorDelete">
         </label>
 
         <label class="form__label" for="password">
             Hasło
-            <input class="form__input" type="password" id="password" name="password" v-model="password">
+            <input class="form__input"
+                   :class="{'form__input--error': credentialsError.length > 0}"
+                   type="password"
+                   id="password"
+                   name="password"
+                   v-model="password"
+                   :placeholder="credentialsError"
+                   @click="credentialsErrorDelete">
         </label>
         <label class="form__remember" for="remember">
             Zapamiętaj mnie
@@ -29,11 +42,12 @@
 <script>
     export default {
         name: "SignInForm",
-        data () {
+        data() {
             return {
                 email: '',
                 password: '',
-                errorMessage: ''
+                emailError: '',
+                credentialsError: ''
             }
         },
         computed: {
@@ -43,8 +57,8 @@
             hasError() {
                 return this.$store.getters.hasError;
             },
-            error() {
-                return this.$store.getters.error;
+            errorMessage() {
+                return this.$store.getters.errorMessage;
             }
         },
         created() {
@@ -59,6 +73,12 @@
             }
         },
         methods: {
+            emailErrorDelete: function() {
+                this.emailError = '';
+            },
+            credentialsErrorDelete: function() {
+                this.credentialsError = '';
+            },
             async performLogin() {
                 let payload = {email: this.$data.email, password: this.$data.password},
                     redirect = this.$route.query.redirect;
@@ -71,7 +91,15 @@
                         this.$router.push({path: "/"});
                     }
                 } else {
-                    this.errorMessage = 'Nieprawidłowe dane logowania'
+                    if (this.errorMessage === 'Username could not be found.') {
+                        this.emailError = this.errorMessage;
+                        this.email = '';
+                        this.credentialsError = '';
+                    } else {
+
+                        this.credentialsError = this.errorMessage;
+                        this.password = '';
+                    }
                 }
             }
         }
@@ -174,6 +202,20 @@
             &:focus {
                 outline: none;
                 box-shadow: 0 0 5px 0 #00dce8;
+            }
+
+            &--error {
+                border-color: #C82829;
+                background-color: #eeaaaa;
+                color: #C82829;
+
+                &:focus {
+                    box-shadow: 0 0 5px 0 #eeaaaa;
+                }
+
+                &::placeholder {
+                    color: #C82829;
+                }
             }
         }
 

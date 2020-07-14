@@ -14,6 +14,7 @@ export const store = new Vuex.Store( {
     state: {
         isLoading: false,
         error: null,
+        errorMessage: '',
         isAuthenticated: false,
         user: null
     },
@@ -26,6 +27,9 @@ export const store = new Vuex.Store( {
         },
         error(state) {
             return state.error;
+        },
+        errorMessage(state) {
+            return state.errorMessage;
         },
         isAuthenticated(state) {
             return state.isAuthenticated;
@@ -66,6 +70,9 @@ export const store = new Vuex.Store( {
             state.error = null;
             state.isAuthenticated = payload.isAuthenticated;
             state.user = payload.user;
+        },
+        authenticationErrorMessage(state, errorMessage) {
+            state.errorMessage = errorMessage;
         }
     },
     actions: {
@@ -74,9 +81,11 @@ export const store = new Vuex.Store( {
             try {
                 let response = await login(payload.email, payload.password);
                 commit(AUTHENTICATING_SUCCESS, response.data);
+                commit('authenticationErrorMessage', '');
                 return response.data;
             } catch (error) {
                 commit(AUTHENTICATING_ERROR, error);
+                commit('authenticationErrorMessage', error.response.data['error']);
                 return null;
             }
         },

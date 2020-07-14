@@ -1,5 +1,6 @@
 <template>
     <div class="app-content">
+        <slider></slider>
         <navigation-bar></navigation-bar>
         <router-view class="main-content" :key="$route.path"></router-view>
         <footer-bar></footer-bar>
@@ -7,12 +8,14 @@
 </template>
 
 <script>
+    import Slider from "./components/slider";
     import NavigationBar from './components/NavigationBar';
     import FooterBar from "./components/FooterBar";
 
     export default {
         name: "App",
         components: {
+            Slider,
             NavigationBar,
             FooterBar
         },
