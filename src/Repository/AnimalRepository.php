@@ -39,6 +39,20 @@ class AnimalRepository extends ServiceEntityRepository {
             ->getResult();
     }
 
+    public function findThreeRandomAnimals() {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT id, name, description, image_file_name
+                FROM animal 
+                ORDER BY RAND()
+                LIMIT 3';
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
     // /**
     //  * @return Animal[] Returns an array of Animal objects
     //  */

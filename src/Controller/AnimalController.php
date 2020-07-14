@@ -108,6 +108,18 @@ class AnimalController extends AbstractController {
     }
 
     /**
+     * @Route("/three-random-animals", name="threeRandomAnimals", methods={"GET"})
+     */
+    public function getThreeRandomAnimals(): JsonResponse {
+
+        $animals = $this->getDoctrine()
+            ->getRepository(Animal::class)
+            ->findThreeRandomAnimals();
+
+        return new JsonResponse(['animals' => $animals]);
+    }
+
+    /**
      * @Route("/animal/{id}", name="animal", methods={"GET"})
      */
     public function getAnimal(int $id): JsonResponse {
