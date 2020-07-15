@@ -1,18 +1,23 @@
 <template>
     <div class="slider">
-        <carousel :per-page="1" :autoplay="true" :loop="true" :paginationPosition="'bottom-overlay'" :mouse-drag="false">
+        <carousel :per-page="1" :autoplay="true" :loop="true" :paginationPadding="6" :paginationPosition="'bottom-overlay'" :mouse-drag="false">
             <slide class="slider__slide" v-for="animal in animals" :style="{'background-image': 'url(' + require(`../../../public/uploads/images/${animal['image_file_name']}`) + ')'}">
                 <div class="slider__slide-text">
-                    <h2 v-show="animal.name !== undefined"
-                        class="slider__slide-title"
-                        :class="{'slider__slide-title--no-description': animal.description !== undefined}">
+                    <h2 v-show="animal.name.length > 0"
+                        class="slider__slide-title">
                         {{ animal.name }}
                     </h2>
-                    <p v-show="animal.description !== undefined"
-                       class="slider__slide-description"
-                       :class="{'slider__slide-description--no-title': animal.name !== undefined}">
+                    <p v-show="animal.description.length > 0"
+                       class="slider__slide-description">
                         {{ animal.description }}
                     </p>
+                    <p class="slider__slide-category">
+                        <span class="slider__slide-category-name">{{ category(animal.category) }}</span>
+                    </p>
+                    <router-link :to="{name: 'animal', params: {id: animal.id}}"
+                                 class="slider__slide-link">
+                        Sprawdź
+                    </router-link>
                 </div>
             </slide>
         </carousel>
@@ -33,6 +38,19 @@
           return {
               animals: []
           }
+        },
+        methods: {
+            category: function(category) {
+                if(category === 'adoption') {
+                    return 'adopcja';
+                } else if(category === 'wanted') {
+                    return 'poszukiwany';
+                } else if(category === 'lost') {
+                    return 'zaginiony';
+                } else if(category === 'found') {
+                    return 'znaleziony';
+                }
+            }
         },
         created() {
             axios.get('/three-random-animals')
@@ -60,7 +78,7 @@
             align-self: flex-end;
             background-color: #fff;
             padding: 2%;
-            margin: 2% 2% 40px;
+            margin: 2% 2% 25px;
             border: 1px solid #e0e0e0;
             border-radius: 5px;
 
@@ -75,10 +93,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             margin-top: 0;
-
-            &--no-description {
-                margin-bottom: 0;
-            }
+            margin-bottom: 5px;
         }
 
         &__slide-description {
@@ -86,10 +101,23 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 3;
             overflow: hidden;
+            margin-top: 0;
             margin-bottom: 0;
+        }
 
-            &--no-title {
-                margin-top: 0;
+        &__slide-category {
+            margin-top: 0;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        &__slide-link {
+            color: #192BC2;
+            text-decoration: none;
+
+            &:active, &:visited {
+                color: #6495ed;
             }
         }
     }

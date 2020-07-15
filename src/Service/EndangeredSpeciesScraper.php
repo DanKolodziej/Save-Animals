@@ -51,9 +51,7 @@ class EndangeredSpeciesScraper {
     }
 
     public function extractEndangeredAnimalSpeciesByName(string $name) {
-        $this->endangeredSpeciesTypes = [];
-        $this->endangeredAnimalSpecies = [];
-        
+
         $filteredEndangeredSpecies =  $this->crawler->filter('ol > li')->each(function($endangeredType) use ($name) {
             $endangeredSpeciesType = $endangeredType->filter('b')->text();
             $endangeredSpeciesType = explode(' – ', $endangeredSpeciesType)[0];
@@ -81,5 +79,13 @@ class EndangeredSpeciesScraper {
         }
 
         return null;
+    }
+
+    public function extractThreeRandomEndangeredAnimalSpecies() {
+        $endangeredSpecies = $this->crawler->filter('ol > li > dl > dd > a')->each(function($endangeredType) {
+
+        });
+
+        return count($endangeredSpecies);
     }
 }

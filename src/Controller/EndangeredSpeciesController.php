@@ -41,4 +41,19 @@ class EndangeredSpeciesController extends AbstractController {
 
         return new JsonResponse($data);
     }
+
+    /**
+     * @Route("/three-random-endangered-species-data", name="threeRandomEndangeredSpeciesData", methods={"GET"})
+     */
+    public function threeRandomEndangeredSpecies(EndangeredSpeciesScraper $endangeredSpeciesScraper): JsonResponse
+    {
+        $endangeredSpeciesScraper->makeRequest();
+        $endangeredSpeciesData = $endangeredSpeciesScraper->extractThreeRandomEndangeredAnimalSpecies();
+
+//        $serializer = new Serializer([new ObjectNormalizer()]);
+
+//        $data = $serializer->normalize($endangeredSpeciesData, null, [AbstractNormalizer::ATTRIBUTES => ['name', 'description', 'endangeredSpeciesType', 'imageLink']]);
+
+        return new JsonResponse($endangeredSpeciesData);
+    }
 }
