@@ -9,7 +9,7 @@ import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import VueRouter from "vue-router";
-import { store } from "./store/security";
+import { store } from "./store/store";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChevronDown, faChevronLeft, faChevronRight, faPlus, faMinus, faFileImage, faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

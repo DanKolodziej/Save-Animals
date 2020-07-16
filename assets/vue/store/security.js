@@ -9,8 +9,8 @@ const AUTHENTICATING = "AUTHENTICATING",
 
 Vue.use(Vuex);
 
-export const store = new Vuex.Store( {
-    namespaced: true,
+export default {
+    // namespaced: true,
     state: {
         isLoading: false,
         error: null,
@@ -93,7 +93,7 @@ export const store = new Vuex.Store( {
             commit(PROVIDING_DATA_ON_REFRESH_SUCCESS, payload);
         }
     }
-})
+};
 
 function login(email, password) {
     return axios.post("/login", {

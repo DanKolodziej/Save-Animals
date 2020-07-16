@@ -11,6 +11,7 @@
     import Slider from "./components/slider";
     import NavigationBar from './components/NavigationBar';
     import FooterBar from "./components/FooterBar";
+    import axios from 'axios';
 
     export default {
         name: "App",
@@ -19,12 +20,32 @@
             NavigationBar,
             FooterBar
         },
+        methods: {
+            getEndangeredSpecies: function() {
+                this.$store.commit('setLoadingEndangeredSpecies', true);
+                axios.get('/endangered-species-data')
+                    .then(response => {
+                        this.$store.commit('setExtinct', response.data['EX']);
+                        this.$store.commit('setToDisappear', response.data['EXP']);
+                        this.$store.commit('setExtremelyEndangered', response.data['CR']);
+                        this.$store.commit('setHighlyEndangered', response.data['EN']);
+                        this.$store.commit('setAtEndangerRisk', response.data['VU']);
+                        this.$store.commit('setCloseToDanger', response.data['NT']);
+                        this.$store.commit('setNotEndangered', response.data['LC']);
+                        this.$store.commit('setLoadingEndangeredSpecies', false);
+                    }).catch(response => {
+                    this.$store.commit('setLoadingEndangeredSpecies', false);
+                });
+            }
+        },
         created() {
             let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
             user = JSON.parse(this.$parent.$el.attributes["data-user"].value);
 
             let payload = { isAuthenticated: isAuthenticated, user: user };
             this.$store.dispatch("onRefresh", payload);
+
+            this.getEndangeredSpecies();
         }
     }
 </script>

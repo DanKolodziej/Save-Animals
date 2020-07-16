@@ -70,7 +70,7 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            height: 50vh;
+            height: 60vh;
         }
 
         &__slide-text {
