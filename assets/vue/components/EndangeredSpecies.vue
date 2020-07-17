@@ -3,8 +3,8 @@
         <h1 class="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
         <div class="endangered-species-content">
             <div class="posts-container" ref="posts-container">
-                <clip-loader class="endangered-species-content__loader" :loading="loadingEndangeredSpecies" :color="'#192BC2'" :size="'45px'"></clip-loader>
-                <div v-show="loadingEndangeredSpecies" class="endangered-species-content__loading-message">
+                <clip-loader class="endangered-species-content__loader" :loading="isLoadingEndangeredSpecies" :color="'#192BC2'" :size="'45px'"></clip-loader>
+                <div v-show="isLoadingEndangeredSpecies" class="endangered-species-content__loading-message">
                     <span class="loading-text">Czekaj chwilę</span><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
                 </div>
                 <post v-if="showExtinct" v-for="endangeredSpecies in extinct"
@@ -153,7 +153,6 @@
 
 <script>
     import Post from './Post';
-    import axios from 'axios';
     import ClipLoader from 'vue-spinner/src/ClipLoader';
 
     export default {
@@ -164,14 +163,6 @@
         },
         data() {
             return {
-                endangeredSpeciesArray: [],
-                extinct: [],
-                toDisappear: [],
-                extremelyEndangered: [],
-                highlyEndangered: [],
-                atEndangerRisk: [],
-                closeToDanger: [],
-                notEndangered: [],
                 showExtinct: false,
                 showToDisappear: false,
                 showExtremelyEndangered: false,
@@ -184,27 +175,30 @@
             }
         },
         computed: {
-            // extinct: function() {
-            //     return this.$store.getters.extinct;
-            // },
-            // toDisappear: function() {
-            //     return this.$store.getters.toDisappear;
-            // },
-            // extremelyEndangered: function() {
-            //     return this.$store.getters.extremelyEndangered;
-            // },
-            // highlyEndangered: function() {
-            //     return this.$store.getters.highlyEndangered;
-            // },
-            // atEndangerRisk: function() {
-            //     return this.$store.getters.atEndangerRisk;
-            // },
-            // closeToDanger: function() {
-            //     return this.$store.getters.closeToDanger;
-            // },
-            // notEndangered: function() {
-            //     return this.$store.getters.notEndangered;
-            // },
+            isLoadingEndangeredSpecies: function() {
+                return this.$store.getters.isLoadingEndangeredSpecies;
+            },
+            extinct: function() {
+                return this.$store.getters.extinct;
+            },
+            toDisappear: function() {
+                return this.$store.getters.toDisappear;
+            },
+            extremelyEndangered: function() {
+                return this.$store.getters.extremelyEndangered;
+            },
+            highlyEndangered: function() {
+                return this.$store.getters.highlyEndangered;
+            },
+            atEndangerRisk: function() {
+                return this.$store.getters.atEndangerRisk;
+            },
+            closeToDanger: function() {
+                return this.$store.getters.closeToDanger;
+            },
+            notEndangered: function() {
+                return this.$store.getters.notEndangered;
+            },
             postsAmount: function() {
                 var postsAmount = 0;
                 postsAmount += this.showExtinct ? this.extinct.length : 0;
@@ -221,53 +215,20 @@
                 return Math.ceil(this.postsAmount / 10);
             }
         },
-        // watch: {
-        //     extinct: function(newExtinct, oldExtinct) {
-        //         this.showExtinct = newExtinct.length > 0 && oldExtinct.length === 0;
-        //     },
-        //     toDisappear: function(newToDisappear, oldToDisappear) {
-        //         this.showToDisappear = newToDisappear.length > 0  && oldToDisappear.length === 0;
-        //     },
-        //     extremelyEndangered: function(newExtremelyEndangered, oldExtremelyEndangered) {
-        //         this.showExtremelyEndangered = newExtremelyEndangered.length > 0  && oldExtremelyEndangered.length === 0;
-        //     },
-        //     highlyEndangered: function(newHighlyEndangered, oldHighlyEndangered) {
-        //         this.showHighlyEndangered = newHighlyEndangered.length > 0  && oldHighlyEndangered.length === 0;
-        //     },
-        //     atEndangerRisk: function(newAtEndangerRisk, oldAtEndangerRisk) {
-        //         this.showAtEndangerRisk = newAtEndangerRisk.length > 0  && oldAtEndangerRisk.length === 0;
-        //     },
-        //     closeToDanger: function(newCloseToDanger, oldCloseToDanger) {
-        //         this.showCloseToDanger = newCloseToDanger.length > 0  && oldCloseToDanger.length === 0;
-        //     },
-        //     notEndangered: function(newNotEndangered, oldNotEndangered) {
-        //         this.showNotEndangered = newNotEndangered.length > 0  && oldNotEndangered.length === 0;
-        //     }
-        // },
+        watch: {
+            isLoadingEndangeredSpecies: function(newIsLoadingEndangeredSpecies, oldIsLoadingEndangeredSpecies) {
+                if(!newIsLoadingEndangeredSpecies && oldIsLoadingEndangeredSpecies) {
+                    this.showExtinct = this.extinct.length > 0;
+                    this.showToDisappear = this.toDisappear.length > 0;
+                    this.showExtremelyEndangered = this.extremelyEndangered.length > 0;
+                    this.showHighlyEndangered = this.highlyEndangered.length > 0;
+                    this.showAtEndangerRisk = this.atEndangerRisk.length > 0;
+                    this.showCloseToDanger = this.closeToDanger.length > 0;
+                    this.showNotEndangered = this.notEndangered.length > 0;
+                }
+            }
+        },
         methods: {
-            getEndangeredSpecies: function() {
-                this.loadingEndangeredSpecies = true;
-                axios.get('/endangered-species-data')
-                    .then(response => {
-                        this.extinct = response.data['EX'];
-                        this.showExtinct = true;
-                        this.toDisappear = response.data['EXP'];
-                        this.showToDisappear = true;
-                        this.extremelyEndangered = response.data['CR'];
-                        this.showExtremelyEndangered = true;
-                        this.highlyEndangered = response.data['EN'];
-                        this.showHighlyEndangered = true;
-                        this.atEndangerRisk = response.data['VU'];
-                        this.showAtEndangerRisk = true;
-                        this.closeToDanger = response.data['NT'];
-                        this.showCloseToDanger = true;
-                        this.notEndangered = response.data['LC'];
-                        this.showNotEndangered = true;
-                        this.loadingEndangeredSpecies = false;
-                    }).catch(response => {
-                        this.loadingEndangeredSpecies = false;
-                    });
-            },
             resetCurrentPage: function() {
                 this.currentPage = 1;
             },
@@ -281,8 +242,14 @@
                 this.currentPage++;
             }
         },
-        created() {
-            this.getEndangeredSpecies();
+        mounted() {
+            this.showExtinct = this.extinct.length > 0;
+            this.showToDisappear = this.toDisappear.length > 0;
+            this.showExtremelyEndangered = this.extremelyEndangered.length > 0;
+            this.showHighlyEndangered = this.highlyEndangered.length > 0;
+            this.showAtEndangerRisk = this.atEndangerRisk.length > 0;
+            this.showCloseToDanger = this.closeToDanger.length > 0;
+            this.showNotEndangered = this.notEndangered.length > 0;
         },
         updated() {
             var postsContainerChildElements = this.$refs['posts-container'].children;

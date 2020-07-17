@@ -15,6 +15,9 @@ export default {
         notEndangered: [],
     },
     getters: {
+        isLoadingEndangeredSpecies(state) {
+            return state.loadingEndangeredSpecies;
+        },
         extinct(state) {
             return state.extinct;
         },

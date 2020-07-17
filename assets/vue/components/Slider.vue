@@ -1,7 +1,9 @@
 <template>
     <div class="slider">
         <carousel :per-page="1" :autoplay="true" :loop="true" :paginationPadding="6" :paginationPosition="'bottom-overlay'" :mouse-drag="false">
-            <slide class="slider__slide" v-for="animal in animals" :style="{'background-image': 'url(' + require(`../../../public/uploads/images/${animal['image_file_name']}`) + ')'}">
+            <slide class="slider__slide"
+                   v-for="animal in animals"
+                   :style="{'background-image': 'url(' + getImage(animal.imageSrc) + ')'}">
                 <div class="slider__slide-text">
                     <h2 v-show="animal.name.length > 0"
                         class="slider__slide-title">
@@ -14,7 +16,13 @@
                     <p class="slider__slide-category">
                         <span class="slider__slide-category-name">{{ category(animal.category) }}</span>
                     </p>
-                    <router-link :to="{name: 'animal', params: {id: animal.id}}"
+                    <router-link v-if="animal.type === 'animal'"
+                                 :to="{name: 'animal', params: {id: animal.id}}"
+                                 class="slider__slide-link">
+                        Sprawdź
+                    </router-link>
+                    <router-link v-else-if="animal.type === 'endangeredSpecies'"
+                                 :to="{name: 'endangeredSpecies', params: {name: encodeName(animal.name)}}"
                                  class="slider__slide-link">
                         Sprawdź
                     </router-link>
@@ -39,6 +47,29 @@
               animals: []
           }
         },
+        computed: {
+            threeRandomEndangeredSpecies: function() {
+                return this.$store.getters.threeRandomEndangeredSpecies;
+            }
+        },
+        watch: {
+            threeRandomEndangeredSpecies: function(newThreeRandomEndangeredSpecies) {
+                if(newThreeRandomEndangeredSpecies.length > 0) {
+                    var threeRandomEndangeredSpecies = newThreeRandomEndangeredSpecies
+                        .map(endangeredSpecies => {
+                            return {
+                                name: endangeredSpecies.name,
+                                description: endangeredSpecies.description,
+                                category: endangeredSpecies.endangeredSpeciesType,
+                                imageSrc: endangeredSpecies.imageLink,
+                                type: 'endangeredSpecies'
+                            }
+                        });
+                    this.animals = this.animals.concat(threeRandomEndangeredSpecies);
+                    this.animals = this.animals.sort(() => 0.5 - Math.random());
+                }
+            }
+        },
         methods: {
             category: function(category) {
                 if(category === 'adoption') {
@@ -50,12 +81,34 @@
                 } else if(category === 'found') {
                     return 'znaleziony';
                 }
-            }
+                return category;
+            },
+            getImage: function(imageSrc) {
+                if(imageSrc.includes('upload.wikimedia.org')) {
+                    return imageSrc;
+                } else {
+                    return require(`../../../public/uploads/images/${imageSrc}`)
+                }
+            },
+            encodeName: function(name) {
+                return encodeURI(name);
+            },
         },
         created() {
             axios.get('/three-random-animals')
                 .then(response => {
-                    this.animals = response.data.animals;
+                    var randomAnimals = response.data.animals.map(animal => {
+                        return {
+                            id: animal.id,
+                            name: animal.name,
+                            description: animal.description,
+                            category: animal.category,
+                            imageSrc: animal.image_file_name,
+                            type: 'animal'
+                        }
+                    });;
+                    this.animals = this.animals.concat(randomAnimals);
+                    this.animals = this.animals.sort(() => 0.5 - Math.random());
                 });
         }
     }
@@ -71,6 +124,39 @@
             background-repeat: no-repeat;
             background-position: center;
             height: 60vh;
+
+            @media (min-width: 768px) {
+                background-size: contain;
+                height: 50vh;
+            }
+
+            @media (min-width: 1024px) {
+                height: 40vh;
+            }
+
+            &:first-child {
+                background-color: #008ee8;
+            }
+
+            &:nth-child(2) {
+                background-color: #0096AF;
+            }
+
+            &:nth-child(3) {
+                background-color: #00A64B;
+            }
+
+            &:nth-child(4) {
+                background-color: #6495ed;
+            }
+
+            &:nth-child(5) {
+                background-color: #008C65;
+            }
+
+            &:last-child {
+                background-color: #007CAF;
+            }
         }
 
         &__slide-text {
@@ -84,7 +170,7 @@
 
             @media (min-width: 768px) {
                 padding: 15px;
-                margin-bottom: 2%;
+                margin: 4%;
             }
         }
 
@@ -102,7 +188,7 @@
             -webkit-line-clamp: 3;
             overflow: hidden;
             margin-top: 0;
-            margin-bottom: 0;
+            margin-bottom: 5px;
         }
 
         &__slide-category {
