@@ -3,7 +3,7 @@
         <img class="post__image"
              :src="imageName">
         <div class="post__text">
-            <h2 class="post__name">{{ name }}</h2>
+            <h2 class="post__name">{{ decodedName }}</h2>
             <p class="post__description">
                 {{ description }}
             </p>
@@ -28,13 +28,24 @@
                 required: true
             }
         },
+        computed: {
+            decodedName: function() {
+                return decodeURI(this.name);
+            }
+        },
         methods: {
             getEndangeredSpecies: function() {
-                axios.get('/singular-endangered-species-data/' + this.name)
-                    .then(response => {
-                        this.description = response.data.description;
-                        this.imageName = response.data.imageLink;
-                    })
+                var endangeredSpecies = this.$store.getters.endangeredSpeciesByName(this.decodedName)[0];
+                if(endangeredSpecies !== undefined) {
+                    this.description = endangeredSpecies.description;
+                    this.imageName = endangeredSpecies.imageLink;
+                } else {
+                    axios.get('/singular-endangered-species-data/' + this.name)
+                        .then(response => {
+                            this.description = response.data.description;
+                            this.imageName = response.data.imageLink;
+                        });
+                }
             }
         },
         created() {

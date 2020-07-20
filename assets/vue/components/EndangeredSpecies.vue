@@ -1,6 +1,6 @@
 <template>
     <div class="endangered-species-page">
-        <h1 class="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
+        <h1 class="page-title" ref="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
         <div class="endangered-species-content">
             <div class="posts-container" ref="posts-container">
                 <clip-loader class="endangered-species-content__loader" :loading="isLoadingEndangeredSpecies" :color="'#192BC2'" :size="'45px'"></clip-loader>
@@ -237,9 +237,17 @@
             },
             previousPage: function() {
                 this.currentPage--;
+                this.scrollUp();
             },
             nextPage: function() {
                 this.currentPage++;
+                this.scrollUp();
+            },
+            scrollUp: function() {
+                var postsContainer = this.$refs['posts-container'];
+                postsContainer.scrollIntoView(true);
+                let postsContainerTop = postsContainer.offsetTop;
+                window.scrollTo(window.scrollX, postsContainerTop - 15);
             }
         },
         mounted() {
@@ -324,6 +332,7 @@
 
             &__checkbox-group {
                 height: fit-content;
+                height: -moz-fit-content;
                 background-color: #6495ed;
                 margin: 0 auto 30px;
                 padding: 15px;

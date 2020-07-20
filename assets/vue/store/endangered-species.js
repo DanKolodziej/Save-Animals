@@ -39,6 +39,20 @@ export default {
         notEndangered(state) {
             return state.notEndangered;
         },
+        endangeredSpeciesByName(state) {
+            var endangeredSpecies = [];
+            endangeredSpecies = endangeredSpecies.concat(state.extinct);
+            endangeredSpecies = endangeredSpecies.concat(state.toDisappear);
+            endangeredSpecies = endangeredSpecies.concat(state.extremelyEndangered);
+            endangeredSpecies = endangeredSpecies.concat(state.highlyEndangered);
+            endangeredSpecies = endangeredSpecies.concat(state.atEndangerRisk);
+            endangeredSpecies = endangeredSpecies.concat(state.closeToDanger);
+            endangeredSpecies = endangeredSpecies.concat(state.notEndangered);
+            return name =>
+                endangeredSpecies.filter(endangeredSpecies => {
+                    return endangeredSpecies.name === name;
+                });
+        },
         threeRandomEndangeredSpecies(state) {
             var endangeredSpecies = [];
             endangeredSpecies = endangeredSpecies.concat(state.extinct);

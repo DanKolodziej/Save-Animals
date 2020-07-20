@@ -64,6 +64,7 @@
         border-radius: 5px;
         width: 60%;
         height: fit-content;
+        height: -moz-fit-content;
         margin: 15px auto;
         max-width: none;
         overflow:auto;

@@ -191,6 +191,10 @@
             text-overflow: ellipsis;
             margin-top: 0;
             margin-bottom: 5px;
+
+            &--endangered-species {
+                text-transform: capitalize;
+            }
         }
 
         &__slide-description {
