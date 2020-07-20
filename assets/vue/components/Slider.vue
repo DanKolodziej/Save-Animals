@@ -4,6 +4,9 @@
             <slide class="slider__slide"
                    v-for="animal in animals"
                    :style="{'background-image': 'url(' + getImage(animal.imageSrc) + ')'}">
+                <div v-if="animal.imageSrc === null" class="slider__no-image-info">
+                    Brak zdjęcia
+                </div>
                 <div class="slider__slide-text">
                     <h2 v-show="animal.name.length > 0"
                         class="slider__slide-title">
@@ -14,7 +17,7 @@
                         {{ animal.description }}
                     </p>
                     <p class="slider__slide-category">
-                        <span class="slider__slide-category-name">{{ category(animal.category) }}</span>
+                        <span v-if="animal.type === 'endangeredSpecies'">Kategoria zagrożenia: </span>{{ category(animal.category) }}
                     </p>
                     <router-link v-if="animal.type === 'animal'"
                                  :to="{name: 'animal', params: {id: animal.id}}"
@@ -84,10 +87,12 @@
                 return category;
             },
             getImage: function(imageSrc) {
-                if(imageSrc.includes('upload.wikimedia.org')) {
-                    return imageSrc;
-                } else {
-                    return require(`../../../public/uploads/images/${imageSrc}`)
+                if(imageSrc !== null) {
+                    if(imageSrc.includes('upload.wikimedia.org')) {
+                        return imageSrc;
+                    } else {
+                        return require(`../../../public/uploads/images/${imageSrc}`)
+                    }
                 }
             },
             encodeName: function(name) {
@@ -125,15 +130,6 @@
             background-position: center;
             height: 60vh;
 
-            @media (min-width: 768px) {
-                background-size: contain;
-                height: 50vh;
-            }
-
-            @media (min-width: 1024px) {
-                height: 40vh;
-            }
-
             &:first-child {
                 background-color: #008ee8;
             }
@@ -159,8 +155,23 @@
             }
         }
 
+        &__no-image-info {
+            align-self: center;
+            background-color: #fff;
+            padding: 2%;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-style: italic;
+            font-weight: bold;
+
+            @media (min-width: 1024px) {
+                padding: 1%;
+            }
+        }
+
         &__slide-text {
-            max-width: 150px;
+            max-width: 170px;
             align-self: flex-end;
             background-color: #fff;
             padding: 2%;

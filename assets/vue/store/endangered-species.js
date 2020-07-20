@@ -50,7 +50,10 @@ export default {
             endangeredSpecies = endangeredSpecies.concat(state.notEndangered);
 
             var shuffled = endangeredSpecies.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, 3);
+            return shuffled.slice(0, 3).map(endangeredSpecies => {
+                endangeredSpecies.imageLink = endangeredSpecies.imageLink.replace(/\d+px/g, '1000px');
+                return endangeredSpecies;
+            });
         }
     },
     mutations: {
