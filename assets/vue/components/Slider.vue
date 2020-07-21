@@ -175,7 +175,7 @@
             align-self: flex-end;
             background-color: #fff;
             padding: 2%;
-            margin: 2% 2% 25px;
+            margin: 2% 2% 35px;
             border: 1px solid #e0e0e0;
             border-radius: 5px;
 

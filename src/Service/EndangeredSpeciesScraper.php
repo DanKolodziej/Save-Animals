@@ -37,7 +37,9 @@ class EndangeredSpeciesScraper {
                     $animal->text(),
                     preg_replace('/\[\d+\]/', '', implode(
                         ' ',
-                        $endangeredSpeciesPage->filter('.mw-parser-output > p')->each(function($paragraph) {
+                        $endangeredSpeciesPage->filter('.mw-parser-output > p,
+                            .mw-parser-output > dl > dd,
+                            .mw-parser-output > ul > li')->each(function($paragraph) {
                         return $paragraph->text();
                     }))),
                     $endangeredSpeciesType,
@@ -61,7 +63,10 @@ class EndangeredSpeciesScraper {
                     $endangeredSpeciesPage = $this->client->click($link);
                     return new EndangeredSpecies(
                         $animal->text(),
-                        preg_replace('/\[\d+\]/', '', implode(' ', $endangeredSpeciesPage->filter('.mw-parser-output > p')->each(function($paragraph) {
+                        preg_replace('/\[\d+\]/', '', implode(' ',
+                            $endangeredSpeciesPage->filter('.mw-parser-output > p,
+                                .mw-parser-output > dl > dd,
+                                .mw-parser-output > ul > li')->each(function($paragraph) {
                             return $paragraph->text();
                         }))),
                         $endangeredSpeciesType,
@@ -79,14 +84,5 @@ class EndangeredSpeciesScraper {
         }
 
         return null;
-    }
-
-    public function extractThreeRandomEndangeredAnimalSpecies() {
-        $endangeredSpeciesAmount = $this->crawler->filter('ol > li > dl > dd > a')->count();
-        $randomIndexes = [rand(0, $endangeredSpeciesAmount - 1),
-            rand(0, $endangeredSpeciesAmount - 1),
-            rand(0, $endangeredSpeciesAmount - 1)];
-
-        return $randomIndexes;
     }
 }
