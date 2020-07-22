@@ -1,15 +1,24 @@
 <template>
     <div class="adoption-page">
-        <h1 class="page-title">{{ pageTitle }}</h1>
-        <div class="adoption-page__radio-group" v-if="category === 'adoption'">
+        <h1 class="page-title">
+            {{ pageTitle }}
+        </h1>
+        <div class="adoption-page__radio-group"
+             v-if="category === 'adoption'"
+        >
             <div class="adoption-page__radio-button-container">
                 <input class="adoption-page__radio-button"
                        type="radio" id="adoption"
                        name="adoption-category"
                        value="adoption"
                        v-model="selectedAdoptionCategory"
-                       @change="FilterAnimals">
-                <label class="adoption-page__label" for="adoption">Zwierzaki do adopcji</label>
+                       @change="filterAnimals"
+                >
+                <label class="adoption-page__label"
+                       for="adoption"
+                >
+                    Zwierzaki do adopcji
+                </label>
             </div>
             <div class="adoption-page__radio-button-container">
                 <input class="adoption-page__radio-button"
@@ -18,19 +27,30 @@
                        name="adoption-category"
                        value="wanted"
                        v-model="selectedAdoptionCategory"
-                       @change="FilterAnimals">
-                <label class="adoption-page__label" for="wanted">Zwierzaki poszukiwane do adopcji</label>
+                       @change="filterAnimals"
+                >
+                <label class="adoption-page__label"
+                       for="wanted"
+                >
+                    Zwierzaki poszukiwane do adopcji
+                </label>
             </div>
         </div>
-        <div class="adoption-page__radio-group" v-else-if="category === 'lost'">
+        <div class="adoption-page__radio-group"
+             v-else-if="category === 'lost'"
+        >
             <div class="adoption-page__radio-button-container">
                 <input class="adoption-page__radio-button"
                        type="radio" id="lost"
                        ame="lost-category"
                        value="lost"
                        v-model="selectedLostCategory"
-                       @change="FilterAnimals">
-                <label class="adoption-page__label" for="lost">Zaginione Zwierzaki</label>
+                       @change="filterAnimals"
+                >
+                <label class="adoption-page__label"
+                       for="lost">
+                    Zaginione Zwierzaki
+                </label>
             </div>
             <div class="adoption-page__radio-button-container">
                 <input class="adoption-page__radio-button"
@@ -39,29 +59,46 @@
                        name="lost-category"
                        value="found"
                        v-model="selectedLostCategory"
-                       @change="FilterAnimals">
-                <label class="adoption-page__label" for="found">Znalezione Zwierzaki</label>
+                       @change="filterAnimals"
+                >
+                <label class="adoption-page__label"
+                       for="found"
+                >
+                    Znalezione Zwierzaki
+                </label>
             </div>
         </div>
         <div class="animal-content">
-            <clip-loader class="animal-content__loader" :loading="isLoading" :color="'#192BC2'" :size="'45px'"></clip-loader>
-            <div class="animal-cards-container" v-show="!isLoading && animals.length > 0">
-                <animal-card v-for="animal in animals"
-                             :key="animal.id"
-                             :id="animal.id"
-                             :name="animal.name"
-                             :description="animal.description"
-                             :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName">
-                </animal-card>
+            <ClipLoader class="animal-content__loader"
+                        :loading="isLoading"
+                        :color="'#192BC2'"
+                        :size="'45px'"
+            />
+            <div class="animal-cards-container"
+                 v-show="!isLoading && animals.length > 0"
+            >
+                <AnimalCard
+                        v-for="animal in animals"
+                        :key="animal.id"
+                        :id="animal.id"
+                        :name="animal.name"
+                        :description="animal.description"
+                        :image-file-name="animal.imageFileName == null ? '' : animal.imageFileName"
+                >
+                </AnimalCard>
             </div>
-            <div class="animal-content__no-animals-message" v-show="!isLoading && animals.length === 0">
+            <div class="animal-content__no-animals-message"
+                 v-show="!isLoading && animals.length === 0"
+            >
                 Nie znaleziono żadnego zwierzaka
             </div>
-            <FilterOptions @filterSpecies="speciesFilter"
-                           @filterName="namePhraseFilter"
-                           @filterDescription="descriptionPhraseFilter"
-                           @filterProvince="provinceFilter"
-                           @filterCity=cityPhraseFilter>
+            <FilterOptions
+                    @filterSpecies="speciesFilter"
+                    @filterName="namePhraseFilter"
+                    @filterDescription="descriptionPhraseFilter"
+                    @filterProvince="provinceFilter"
+                    @filterCity=cityPhraseFilter
+            >
             </FilterOptions>
         </div>
     </div>
@@ -80,6 +117,12 @@
             FilterOptions,
             ClipLoader
         },
+        props: {
+            category: {
+                type: String,
+                required: true
+            }
+        },
         data() {
             return {
                 selectedAdoptionCategory: 'adoption',
@@ -91,12 +134,6 @@
                 cityPhrase: '',
                 animals: [],
                 isLoading: false
-            }
-        },
-        props: {
-            category: {
-                type: String,
-                required: true
             }
         },
         computed: {
@@ -115,12 +152,15 @@
                 }
             }
         },
+        mounted() {
+            this.filterAnimals();
+        },
         methods: {
-            FilterAnimals: function() {
+            filterAnimals: function() {
                 var provincePhrase = this.province !== 'Wszystkie' ? this.province : '';
                 var url = '/animals-by-category-species-name-description?category='
                     + this.selectedCategory + '&species=' + this.species
-                    + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase 
+                    + '&name=' + this.namePhrase + '&description=' + this.descriptionPhrase
                     + '&province=' + provincePhrase + '&city=' + this.cityPhrase;
                 url = encodeURI(url);
 
@@ -129,33 +169,30 @@
                     .then(response => {
                         this.animals = response.data['animals'];
                         this.isLoading = false;
-                    }).catch(errpr => {
-                        this.isLoading = false;
+                    }).catch(() => {
+                    this.isLoading = false;
                 });
             },
             speciesFilter: function(newSpecies) {
                 this.species = newSpecies;
-                this.FilterAnimals();
+                this.filterAnimals();
             },
             namePhraseFilter: function(newNamePhrase) {
                 this.namePhrase = newNamePhrase;
-                this.FilterAnimals();
+                this.filterAnimals();
             },
             descriptionPhraseFilter: function(newDescription) {
                 this.descriptionPhrase = newDescription;
-                this.FilterAnimals();
+                this.filterAnimals();
             },
             provinceFilter: function(provincePhrase) {
                 this.province = provincePhrase;
-                this.FilterAnimals();
+                this.filterAnimals();
             },
             cityPhraseFilter: function(newCityPhrase) {
                 this.cityPhrase = newCityPhrase;
-                this.FilterAnimals();
+                this.filterAnimals();
             }
-        },
-        mounted() {
-            this.FilterAnimals();
         }
     }
 </script>

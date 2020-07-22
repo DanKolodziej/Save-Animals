@@ -1,65 +1,116 @@
 <template>
     <div class="filter-options">
-        <label for="animal-species" class="filter-options__label">
+        <label for="animal-species"
+               class="filter-options__label"
+        >
             Gatunek zwierzaka
         </label>
-        <div class="filter-options__dropdown-container" @focusout.self="hideResults" tabindex="0">
+        <div class="filter-options__dropdown-container"
+             @focusout.self="hideResults"
+             tabindex="0"
+        >
             <div class="filter-options__dropdown-group">
-                <input type="text" id="animal-species" class="filter-options__dropdown"
-                       v-model="selectedSpecies" @input="filterSpecies" @click="showResults">
-                <div class="filter-options__dropdown-arrow-container" @click="toggleResults">
+                <input type="text"
+                       id="animal-species"
+                       class="filter-options__dropdown"
+                       v-model="selectedSpecies"
+                       @input="filterSpecies"
+                       @click="showResults"
+                >
+                <div class="filter-options__dropdown-arrow-container"
+                     @click="toggleResults"
+                >
                     <font-awesome-icon class="filter-options__dropdown-arrow"
                                        icon="chevron-down"
-                                       :class="{'filter-options__dropdown-arrow--active': areResultsDisplayed}"/>
+                                       :class="{'filter-options__dropdown-arrow--active': areResultsDisplayed}"
+                    />
                 </div>
             </div>
             <div class="results-list-container">
-                <ul class="results-list" :class="{'results-list--displayed': areResultsDisplayed}">
+                <ul class="results-list"
+                    :class="{'results-list--displayed': areResultsDisplayed}"
+                >
                     <li class="results-list__item"
                         v-for="speciesName in filteredSpecies"
                         @click="setSpecies(speciesName.name)"
-                        :class="{'results-list__item--disabled': speciesName.name === 'Brak wyników'}">
+                        :class="{'results-list__item--disabled': speciesName.name === 'Brak wyników'}"
+                    >
                         {{ speciesName.name }}
                     </li>
                 </ul>
             </div>
         </div>
-        <label for="animal-name" class="filter-options__label">
+        <label for="animal-name"
+               class="filter-options__label"
+        >
             Imię zwierzaka
-            <input class="filter-options__input" v-model="name" type="text" id="animal-name" @input="filterName">
+            <input class="filter-options__input"
+                   v-model="name"
+                   type="text"
+                   id="animal-name"
+                   @input="filterName"
+            >
         </label>
-        <label for="animal-description" class="filter-options__label">
+        <label for="animal-description"
+               class="filter-options__label"
+        >
             Opis
             <textarea class="filter-options__input filter-options__textarea"
-                      v-model="description" id="animal-description" rows="4" cols="20" @input="filterDescription">
+                      v-model="description"
+                      id="animal-description"
+                      rows="4" cols="20"
+                      @input="filterDescription"
+            >
             </textarea>
         </label>
-        <label for="animal-province" class="filter-options__label">
+        <label for="animal-province"
+               class="filter-options__label"
+        >
             Województwo
         </label>
-        <div class="filter-options__dropdown-container" @focusout="hideProvinces" tabindex="0">
-            <div class="filter-options__dropdown-group" @click="toggleProvinces">
-                <input type="text" id="animal-province" class="filter-options__dropdown"
-                       v-model="selectedProvince" disabled>
+        <div class="filter-options__dropdown-container"
+             @focusout="hideProvinces"
+             tabindex="0"
+        >
+            <div class="filter-options__dropdown-group"
+                 @click="toggleProvinces"
+            >
+                <input type="text"
+                       id="animal-province"
+                       class="filter-options__dropdown"
+                       v-model="selectedProvince"
+                       disabled
+                >
                 <div class="filter-options__dropdown-arrow-container">
                     <font-awesome-icon class="filter-options__dropdown-arrow"
                                        icon="chevron-down"
-                                       :class="{'filter-options__dropdown-arrow--active': areProvincesDisplayed}"/>
+                                       :class="{'filter-options__dropdown-arrow--active': areProvincesDisplayed}"
+                    />
                 </div>
             </div>
             <div class="results-list-container">
-                <ul class="results-list" :class="{'results-list--displayed': areProvincesDisplayed}">
+                <ul class="results-list"
+                    :class="{'results-list--displayed': areProvincesDisplayed}"
+                >
                     <li class="results-list__item"
                         v-for="province in provinces"
-                        @click="setProvince(province)">
+                        @click="setProvince(province)"
+                    >
                         {{ province }}
                     </li>
                 </ul>
             </div>
         </div>
-        <label for="animal-city" class="filter-options__label">
+        <label for="animal-city"
+               class="filter-options__label"
+        >
             Miejscowość
-            <input class="filter-options__input" v-model="city" type="text" id="animal-city" @input="filterCity">
+            <input class="filter-options__input"
+                   v-model="city"
+                   type="text"
+                   id="animal-city"
+                   @input="filterCity"
+            >
         </label>
     </div>
 </template>
@@ -86,6 +137,9 @@
                 areProvincesDisplayed: false,
                 city: ''
             }
+        },
+        mounted() {
+            this.getSpecies();
         },
         methods: {
             toggleResults: function() {
@@ -152,9 +206,6 @@
             filterCity: function() {
                 this.$emit('filterCity', this.city);
             },
-        },
-        mounted() {
-            this.getSpecies();
         }
     }
 </script>

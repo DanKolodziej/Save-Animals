@@ -1,9 +1,12 @@
 <template>
     <div class="app-content">
-        <slider></slider>
-        <navigation-bar></navigation-bar>
-        <router-view class="main-content" :key="$route.path"></router-view>
-        <footer-bar></footer-bar>
+        <Slider/>
+        <NavigationBar/>
+        <RouterView class="main-content"
+                    :key="$route.path"
+        >
+        </RouterView>
+        <FooterBar/>
     </div>
 </template>
 
@@ -20,24 +23,6 @@
             NavigationBar,
             FooterBar
         },
-        methods: {
-            getEndangeredSpecies: function() {
-                this.$store.commit('setLoadingEndangeredSpecies', true);
-                axios.get('/endangered-species-data')
-                    .then(response => {
-                        this.$store.commit('setExtinct', response.data['EX']);
-                        this.$store.commit('setToDisappear', response.data['EXP']);
-                        this.$store.commit('setExtremelyEndangered', response.data['CR']);
-                        this.$store.commit('setHighlyEndangered', response.data['EN']);
-                        this.$store.commit('setAtEndangerRisk', response.data['VU']);
-                        this.$store.commit('setCloseToDanger', response.data['NT']);
-                        this.$store.commit('setNotEndangered', response.data['LC']);
-                        this.$store.commit('setLoadingEndangeredSpecies', false);
-                    }).catch(response => {
-                    this.$store.commit('setLoadingEndangeredSpecies', false);
-                });
-            }
-        },
         created() {
             let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
             user = JSON.parse(this.$parent.$el.attributes["data-user"].value);
@@ -46,6 +31,26 @@
             this.$store.dispatch("onRefresh", payload);
 
             this.getEndangeredSpecies();
+        },
+        methods: {
+            getEndangeredSpecies: function() {
+                this.$store.commit('setLoadingEndangeredSpecies', true);
+                axios.get('/endangered-species-data')
+                    .then(response => {
+                        this.$store.commit('setEndangeredSpecies', {
+                            extinct: response.data['EX'],
+                            toDisappear: response.data['EXP'],
+                            extremelyEndangered: response.data['CR'],
+                            highlyEndangered: response.data['EN'],
+                            atEndangerRisk: response.data['VU'],
+                            closeToDanger: response.data['NT'],
+                            notEndangered: response.data['LC']
+                        });
+                        this.$store.commit('setLoadingEndangeredSpecies', false);
+                    }).catch(() => {
+                    this.$store.commit('setLoadingEndangeredSpecies', false);
+                });
+            }
         }
     }
 </script>

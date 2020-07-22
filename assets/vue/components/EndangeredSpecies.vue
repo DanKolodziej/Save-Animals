@@ -1,54 +1,73 @@
 <template>
     <div class="endangered-species-page">
-        <h1 class="page-title" ref="page-title">Zagrożone gatunki zwierząt w Polsce</h1>
+        <h1 class="page-title"
+            ref="page-title"
+        >
+            Zagrożone gatunki zwierząt w Polsce
+        </h1>
         <div class="endangered-species-content">
-            <div class="posts-container" ref="posts-container">
-                <clip-loader class="endangered-species-content__loader" :loading="isLoadingEndangeredSpecies" :color="'#192BC2'" :size="'45px'"></clip-loader>
-                <div v-show="isLoadingEndangeredSpecies" class="endangered-species-content__loading-message">
+            <div class="posts-container"
+                 ref="posts-container"
+            >
+                <ClipLoader class="endangered-species-content__loader"
+                            :loading="isLoadingEndangeredSpecies"
+                            :color="'#192BC2'"
+                            :size="'45px'"
+                />
+                <div class="endangered-species-content__loading-message"
+                     v-show="isLoadingEndangeredSpecies"
+                >
                     <span class="loading-text">Czekaj chwilę</span><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
                 </div>
-                <post v-if="showExtinct" v-for="endangeredSpecies in extinct"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showToDisappear" v-for="endangeredSpecies in toDisappear"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showExtremelyEndangered" v-for="endangeredSpecies in extremelyEndangered"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showHighlyEndangered" v-for="endangeredSpecies in highlyEndangered"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showAtEndangerRisk" v-for="endangeredSpecies in atEndangerRisk"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showCloseToDanger" v-for="endangeredSpecies in closeToDanger"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
-                <post v-if="showNotEndangered" v-for="endangeredSpecies in notEndangered"
-                    :title="endangeredSpecies.name"
-                    :description="endangeredSpecies.description"
-                    :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
-                    :image-file-name="endangeredSpecies.imageLink">
-                </post>
+                <Post v-if="showExtinct"
+                      v-for="endangeredSpecies in extinct"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <Post v-if="showToDisappear"
+                      v-for="endangeredSpecies in toDisappear"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <Post v-if="showExtremelyEndangered"
+                      v-for="endangeredSpecies in extremelyEndangered"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <Post v-if="showHighlyEndangered"
+                      v-for="endangeredSpecies in highlyEndangered"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <post v-if="showAtEndangerRisk"
+                      v-for="endangeredSpecies in atEndangerRisk"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <Post v-if="showCloseToDanger"
+                      v-for="endangeredSpecies in closeToDanger"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
+                <Post v-if="showNotEndangered"
+                      v-for="endangeredSpecies in notEndangered"
+                      :title="endangeredSpecies.name"
+                      :description="endangeredSpecies.description"
+                      :endangered-species-type="endangeredSpecies.endangeredSpeciesType"
+                      :image-file-name="endangeredSpecies.imageLink"
+                />
             </div>
             <div class="endangered-species-content__checkbox-group">
                 <div class="endangered-species-content__checkbox-container">
@@ -58,8 +77,11 @@
                         name="extinct"
                         value="extinct"
                         v-model="showExtinct"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="extinct">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="extinct"
+                    >
                         Gatunki wymarłe
                     </label>
                 </div>
@@ -70,8 +92,11 @@
                         name="to-disappear"
                         value="toDisappear"
                         v-model="showToDisappear"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="to-disappear">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="to-disappear"
+                    >
                         Gatunki zanikłe
                     </label>
                 </div>
@@ -82,8 +107,11 @@
                         name="extremely-endangered"
                         value="extremelyEndangered"
                         v-model="showExtremelyEndangered"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="extremely-endangered">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="extremely-endangered"
+                    >
                         Gatunki skrajnie zagrożone
                     </label>
                 </div>
@@ -94,8 +122,11 @@
                         name="highly-endangered"
                         value="highlyEndangered"
                         v-model="showHighlyEndangered"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="highly-endangered">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="highly-endangered"
+                    >
                         Gatunki silnie zagrożone
                     </label>
                 </div>
@@ -106,8 +137,11 @@
                         name="at-endanger-risk"
                         value="atEndangerRisk"
                         v-model="showAtEndangerRisk"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="at-endanger-risk">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="at-endanger-risk"
+                    >
                         Gatunki narażone na wyginięcie
                     </label>
                 </div>
@@ -118,8 +152,11 @@
                         name="close-to-danger"
                         value="closeToDanger"
                         v-model="showCloseToDanger"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="close-to-danger">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="close-to-danger"
+                    >
                         Gatunki bliskie zagrożenia
                     </label>
                 </div>
@@ -130,23 +167,30 @@
                         name="not-endangered"
                         value="notEndangered"
                         v-model="showNotEndangered"
-                        @change="resetCurrentPage()">
-                    <label class="endangered-species-content__label" for="not-endangered">
+                        @change="resetCurrentPage()"
+                    >
+                    <label class="endangered-species-content__label"
+                           for="not-endangered"
+                    >
                         Gatunki narazie nie zagrożone wymarciem
                     </label>
                 </div>
             </div>
         </div>
-        <div class="pagination" v-show="!loadingEndangeredSpecies && pageAmount > 0">
+        <div class="pagination"
+             v-show="!loadingEndangeredSpecies && pageAmount > 0"
+        >
             <font-awesome-icon class="pagination__arrow"
-                                   icon="chevron-left"
-                                   :class="{'pagination__arrow--hidden': currentPage === 1}"
-                                   @click="previousPage"/>
+                               icon="chevron-left"
+                               :class="{'pagination__arrow--hidden': currentPage === 1}"
+                               @click="previousPage"
+            />
             {{currentPage}}/{{ pageAmount }}
             <font-awesome-icon class="pagination__arrow"
-                                   icon="chevron-right"
-                                   :class="{'pagination__arrow--hidden': currentPage === pageAmount}"
-                                   @click="nextPage"/>
+                               icon="chevron-right"
+                               :class="{'pagination__arrow--hidden': currentPage === pageAmount}"
+                               @click="nextPage"
+            />
         </div>
     </div>
 </template>
@@ -228,6 +272,25 @@
                 }
             }
         },
+        mounted() {
+            this.showExtinct = this.extinct.length > 0;
+            this.showToDisappear = this.toDisappear.length > 0;
+            this.showExtremelyEndangered = this.extremelyEndangered.length > 0;
+            this.showHighlyEndangered = this.highlyEndangered.length > 0;
+            this.showAtEndangerRisk = this.atEndangerRisk.length > 0;
+            this.showCloseToDanger = this.closeToDanger.length > 0;
+            this.showNotEndangered = this.notEndangered.length > 0;
+        },
+        updated() {
+            var postsContainerChildElements = this.$refs['posts-container'].children;
+            for(var i = 2; i < postsContainerChildElements.length; i++) {
+                if (!this.currentPageEndangeredSpecies(i)) {
+                    postsContainerChildElements[i].style.display = 'none';
+                } else {
+                    postsContainerChildElements[i].style.display = 'block';
+                }
+            }
+        },
         methods: {
             resetCurrentPage: function() {
                 this.currentPage = 1;
@@ -248,25 +311,6 @@
                 postsContainer.scrollIntoView(true);
                 let postsContainerTop = postsContainer.offsetTop;
                 window.scrollTo(window.scrollX, postsContainerTop - 15);
-            }
-        },
-        mounted() {
-            this.showExtinct = this.extinct.length > 0;
-            this.showToDisappear = this.toDisappear.length > 0;
-            this.showExtremelyEndangered = this.extremelyEndangered.length > 0;
-            this.showHighlyEndangered = this.highlyEndangered.length > 0;
-            this.showAtEndangerRisk = this.atEndangerRisk.length > 0;
-            this.showCloseToDanger = this.closeToDanger.length > 0;
-            this.showNotEndangered = this.notEndangered.length > 0;
-        },
-        updated() {
-            var postsContainerChildElements = this.$refs['posts-container'].children;
-            for(var i = 2; i < postsContainerChildElements.length; i++) {
-                if (!this.currentPageEndangeredSpecies(i)) {
-                    postsContainerChildElements[i].style.display = 'none';
-                } else {
-                    postsContainerChildElements[i].style.display = 'block';
-                }
             }
         }
     }

@@ -1,18 +1,23 @@
 <template>
     <div class="animal">
         <img class="animal__image"
-             :src="require(`../../../public/uploads/images/${imageName}`)">
+             :src="require(`../../../public/uploads/images/${imageName}`)"
+        >
         <div class="animal__text">
-            <h2 class="animal__name">{{ name }}</h2>
+            <h2 class="animal__name">
+                {{ name }}
+            </h2>
             <p class="animal__description">
                 {{ description }}
             </p>
-            <router-link :to="{name: 'userAnimals', params: {id: ownerId}}"
-                         class="animal__owner-link">
+            <RouterLink class="animal__owner-link"
+                         :to="{name: 'userAnimals', params: {id: ownerId}}"
+            >
                 Inne zwierzaki tego samego właściciela
                 <font-awesome-icon class="animal__arrow-icon"
-                               icon="long-arrow-alt-right"/>
-            </router-link>
+                                   icon="long-arrow-alt-right"
+                />
+            </RouterLink>
         </div>
     </div>
 </template>
@@ -22,17 +27,17 @@
 
     export default {
         name: "Animal",
+        props: {
+            id: {
+                required: true
+            }
+        },
         data() {
             return {
                 name: '',
                 description: '',
                 imageFileName: '',
                 ownerId: ''
-            }
-        },
-        props: {
-            id: {
-                required: true
             }
         },
         computed: {
@@ -42,6 +47,9 @@
                 }
                 return this.imageFileName;
             }
+        },
+        created() {
+            this.getAnimal();
         },
         methods: {
             getAnimal: function() {
@@ -53,9 +61,6 @@
                         this.ownerId = response.data['animal'].owner.id;
                     })
             }
-        },
-        created() {
-            this.getAnimal();
         }
     }
 </script>

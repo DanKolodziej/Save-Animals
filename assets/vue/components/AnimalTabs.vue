@@ -140,6 +140,12 @@
             AnimalCard,
             ClipLoader
         },
+        props: {
+            id: {
+                type: Number,
+                required: false
+            }
+        },
         data() {
             return {
                 isAdoptionTabActive: true,
@@ -157,11 +163,17 @@
                 isFoundLoading: false
             }
         },
-        props: {
-            id: {
-                type: Number,
-                required: false
+        mounted() {
+            if(!isNaN(this.id)) {
+                this.userId = this.id;
+            } else {
+                this.userId = this.$store.getters.userId;
             }
+
+            this.getUsersAdoptionAnimals();
+            this.getUsersWantedAnimals();
+            this.getUsersLostAnimals();
+            this.getUsersFoundAnimals();
         },
         methods: {
             setAdoptionTabActive: function() {
@@ -235,23 +247,11 @@
                                 this.getUsersLostAnimals();
                                 break;
                             case 'found':
-                                this.getUsersFOundAnimals();
+                                this.getUsersFoundAnimals();
                                 break;
                         }
                     });
             }
-        },
-        mounted() {
-            if(!isNaN(this.id)) {
-                this.userId = this.id;
-            } else {
-                this.userId = this.$store.getters.userId;
-            }
-
-            this.getUsersAdoptionAnimals();
-            this.getUsersWantedAnimals();
-            this.getUsersLostAnimals();
-            this.getUsersFoundAnimals();
         }
     }
 </script>

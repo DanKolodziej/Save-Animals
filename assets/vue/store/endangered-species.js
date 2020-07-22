@@ -40,28 +40,30 @@ export default {
             return state.notEndangered;
         },
         endangeredSpeciesByName(state) {
-            var endangeredSpecies = [];
-            endangeredSpecies = endangeredSpecies.concat(state.extinct);
-            endangeredSpecies = endangeredSpecies.concat(state.toDisappear);
-            endangeredSpecies = endangeredSpecies.concat(state.extremelyEndangered);
-            endangeredSpecies = endangeredSpecies.concat(state.highlyEndangered);
-            endangeredSpecies = endangeredSpecies.concat(state.atEndangerRisk);
-            endangeredSpecies = endangeredSpecies.concat(state.closeToDanger);
-            endangeredSpecies = endangeredSpecies.concat(state.notEndangered);
+            var endangeredSpecies = flattenEndangeredSpecies([
+                state.extinct,
+                state.toDisappear,
+                state.extremelyEndangered,
+                state.highlyEndangered,
+                state.atEndangerRisk,
+                state.closeToDanger,
+                state.notEndangered
+            ]);
             return name =>
                 endangeredSpecies.filter(endangeredSpecies => {
                     return endangeredSpecies.name === name;
                 });
         },
         threeRandomEndangeredSpecies(state) {
-            var endangeredSpecies = [];
-            endangeredSpecies = endangeredSpecies.concat(state.extinct);
-            endangeredSpecies = endangeredSpecies.concat(state.toDisappear);
-            endangeredSpecies = endangeredSpecies.concat(state.extremelyEndangered);
-            endangeredSpecies = endangeredSpecies.concat(state.highlyEndangered);
-            endangeredSpecies = endangeredSpecies.concat(state.atEndangerRisk);
-            endangeredSpecies = endangeredSpecies.concat(state.closeToDanger);
-            endangeredSpecies = endangeredSpecies.concat(state.notEndangered);
+            var endangeredSpecies = flattenEndangeredSpecies([
+                state.extinct,
+                state.toDisappear,
+                state.extremelyEndangered,
+                state.highlyEndangered,
+                state.atEndangerRisk,
+                state.closeToDanger,
+                state.notEndangered
+            ]);
 
             var shuffled = endangeredSpecies.sort(() => 0.5 - Math.random());
             return shuffled.slice(0, 3).map(endangeredSpecies => {
@@ -74,26 +76,18 @@ export default {
         setLoadingEndangeredSpecies(state, isLoading) {
             state.loadingEndangeredSpecies = isLoading;
         },
-        setExtinct(state, extinct) {
-            state.extinct = extinct;
-        },
-        setToDisappear(state, toDisappear) {
-            state.toDisappear = toDisappear;
-        },
-        setExtremelyEndangered(state, extremelyEndangered) {
-            state.extremelyEndangered = extremelyEndangered;
-        },
-        setHighlyEndangered(state, highlyEndangered) {
-            state.highlyEndangered = highlyEndangered;
-        },
-        setAtEndangerRisk(state, atEndangerRisk) {
-            state.atEndangerRisk = atEndangerRisk;
-        },
-        setCloseToDanger(state, closeToDanger) {
-            state.closeToDanger = closeToDanger;
-        },
-        setNotEndangered(state, notEndangered) {
-            state.notEndangered = notEndangered;
+        setEndangeredSpecies(state, payload) {
+            state.extinct = payload.extinct;
+            state.toDisappear = payload.toDisappear;
+            state.extremelyEndangered = payload.extremelyEndangered;
+            state.highlyEndangered = payload.highlyEndangered;
+            state.atEndangerRisk = payload.atEndangerRisk;
+            state.closeToDanger = payload.closeToDanger;
+            state.notEndangered = payload.notEndangered;
         }
     }
 };
+
+function flattenEndangeredSpecies(endangeredSpecies) {
+    return endangeredSpecies.flat();
+}

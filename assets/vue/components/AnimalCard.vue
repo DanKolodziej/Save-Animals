@@ -2,20 +2,30 @@
     <div class="animal-card">
         <div class="animal-card__image-container">
             <img class="animal-card__image"
-                 :src="require(`../../../public/uploads/images/${imageName}`)">
+                 :src="require(`../../../public/uploads/images/${imageName}`)"
+            >
             <button class="animal-card__cta-button">
-                <router-link :to="{name: 'animal', params: {id: id}}"
-                             class="animal-card__link">
+                <RouterLink class="animal-card__link"
+                             :to="{name: 'animal', params: {id: id}}"
+                >
                     Sprawdź
-                </router-link>
+                </RouterLink>
             </button>
         </div>
-        <div class="animal-card__text" :class="{'animal-card__text--hover-hide': hasDeleteButton}">
-            <h2 class="animal-card__name" v-show="name.length > 0">{{ name }}</h2>
-            <p class="animal-card__description" v-show="description.length > 0">
+        <div class="animal-card__text"
+             :class="{'animal-card__text--hover-hide': hasDeleteButton}"
+        >
+            <h2 class="animal-card__name"
+                v-show="name.length > 0"
+            >
+                {{ name }}
+            </h2>
+            <p class="animal-card__description"
+               v-show="description.length > 0"
+            >
                 {{ description }}
             </p>
-            <slot></slot>
+            <slot/>
         </div>
     </div>
 </template>

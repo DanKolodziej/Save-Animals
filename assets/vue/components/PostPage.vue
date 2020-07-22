@@ -1,9 +1,12 @@
 <template>
     <div class="post">
         <img class="post__image"
-             :src="imageName">
+             :src="imageName"
+        >
         <div class="post__text">
-            <h2 class="post__name">{{ decodedName }}</h2>
+            <h2 class="post__name">
+                {{ decodedName }}
+            </h2>
             <p class="post__description">
                 {{ description }}
             </p>
@@ -16,22 +19,25 @@
 
     export default {
         name: "PostPage",
-        data() {
-            return {
-                description: '',
-                imageName: ''
-            }
-        },
         props: {
             name: {
                 type: String,
                 required: true
             }
         },
+        data() {
+            return {
+                description: '',
+                imageName: ''
+            }
+        },
         computed: {
             decodedName: function() {
                 return decodeURI(this.name);
             }
+        },
+        created() {
+            this.getEndangeredSpecies();
         },
         methods: {
             getEndangeredSpecies: function() {
@@ -47,9 +53,6 @@
                         });
                 }
             }
-        },
-        created() {
-            this.getEndangeredSpecies();
         }
     }
 </script>

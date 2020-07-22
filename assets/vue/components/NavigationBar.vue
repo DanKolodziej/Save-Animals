@@ -2,57 +2,70 @@
     <nav class="navigation">
         <div class="navigation__hamburger-icon"
              :class="{'navigation__hamburger-icon--active': isMobileMenuActive}"
-             @click="toggleMobileMenu">
+             @click="toggleMobileMenu"
+        >
             <div class="navigation__hamburger-icon-bar"></div>
             <div class="navigation__hamburger-icon-bar"></div>
             <div class="navigation__hamburger-icon-bar"></div>
         </div>
-        <div class="navigation__items" :class="{'navigation__items--mobile': isMobileMenuActive}" @click="toggleMobileMenu">
-            <router-link to="/"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isMainPageActive}">
+        <div class="navigation__items"
+             :class="{'navigation__items--mobile': isMobileMenuActive}"
+             @click="toggleMobileMenu"
+        >
+            <RouterLink to="/"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isMainPageActive}"
+            >
                 Strona główna
-            </router-link>
-            <router-link to="/adopcja"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isAdoptionActive}">
+            </RouterLink>
+            <RouterLink to="/adopcja"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isAdoptionActive}"
+            >
                 Adopcja zwierzaka
-            </router-link>
-            <router-link to="/zaginione-zwierzaki"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isLostAnimalsActive}">
+            </RouterLink>
+            <RouterLink to="/zaginione-zwierzaki"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isLostAnimalsActive}"
+            >
                 Zaginione zwierzaki
-            </router-link>
-            <router-link to="/zagrozone-gatunki"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isEndangeredSpeciesActive}">
+            </RouterLink>
+            <RouterLink to="/zagrozone-gatunki"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isEndangeredSpeciesActive}"
+            >
                 Informacje o zagrożonych gatunkach
-            </router-link>
-            <router-link to="/zwierzaki-uzytkownika"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isUserAnimalsActive}"
-                         v-show="isUserAuthenticated">
+            </RouterLink>
+            <RouterLink to="/zwierzaki-uzytkownika"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isUserAnimalsActive}"
+                        v-show="isUserAuthenticated"
+            >
                 Moje zwierzaki
-            </router-link>
+            </RouterLink>
         </div>
         <div class="navigation__sign-in"
              :class="{'navigation__sign-in--mobile': isMobileMenuActive}"
-             @click="toggleMobileMenu">
-            <router-link to="/logowanie"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isSignInActive}"
-                         v-show="!isUserAuthenticated">
+             @click="toggleMobileMenu"
+        >
+            <RouterLink to="/logowanie"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isSignInActive}"
+                        v-show="!isUserAuthenticated"
+            >
                 Zaloguj się
-            </router-link>
-            <router-link to="/rejestracja"
-                         class="navigation__item"
-                         :class="{'navigation__item--active': isSignUpActive}"
-                         v-show="!isUserAuthenticated">
+            </RouterLink>
+            <RouterLink to="/rejestracja"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isSignUpActive}"
+                        v-show="!isUserAuthenticated"
+            >
                 Rejestracja
-            </router-link>
+            </RouterLink>
             <a href="/logout"
-                         class="navigation__item"
-                         v-show="isUserAuthenticated">
+               class="navigation__item"
+               v-show="isUserAuthenticated"
+            >
                 Wyloguj się
             </a>
         </div>

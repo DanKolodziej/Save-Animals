@@ -1,27 +1,39 @@
 <template>
-    <div class="user-animals-page" :class="{'user-animals-page--centered': owner !== null}">
+    <div class="user-animals-page"
+         :class="{'user-animals-page--centered': owner !== null}"
+    >
         <div class="users-animals">
             <div class="user-info">
-                <h2 class="user-info__name">{{ ownerName }}</h2>
+                <h2 class="user-info__name">
+                    {{ ownerName }}
+                </h2>
             </div>
-            <animal-tabs :id="parseInt(id)"></animal-tabs>
+            <AnimalTabs :id="parseInt(id)"/>
         </div>
-        <div v-if="owner === null" class="add-animal-form-column">
+        <div class="add-animal-form-column"
+             v-if="owner === null"
+        >
             <transition name="fade">
-                <div class="add-animal-success-message" v-show="addedAnimal">
+                <div class="add-animal-success-message"
+                     v-show="addedAnimal"
+                >
                     Pomyślnie dodano nowego zwierzaka :)
                 </div>
             </transition>
             <font-awesome-icon class="add-animal-icon"
+                               :class="{'add-animal-icon--hidden': isFormDisplayed}"
                                icon="plus" size="3x"
                                @click="isFormDisplayed = true"
-                               :class="{'add-animal-icon--hidden': isFormDisplayed}"/>
+            />
             <transition name="slide-fade">
-                <form class="add-animal-form" v-show="isFormDisplayed">
+                <form class="add-animal-form"
+                      v-show="isFormDisplayed"
+                >
                     <div class="add-animal-form__minimize-icon-container">
                         <font-awesome-icon class="add-animal-form__minimize-icon"
                                            icon="minus" size="3x"
-                                           @click="isFormDisplayed = false"/>
+                                           @click="isFormDisplayed = false"
+                        />
                     </div>
                     <label class="add-animal-form__label">
                         Kategoria
@@ -29,55 +41,100 @@
                     <div class="add-animal-form__radio-group">
                         <div class="add-animal-form__radio-button-container">
                             <input class="add-animal-form__radio-button"
-                                   type="radio" id="adoption" name="category"
-                                   value="adoption" v-model="category">
-                            <label class="add-animal-form__radio-label" for="adoption">Zwierzak do adopcji</label>
+                                   type="radio"
+                                   id="adoption"
+                                   name="category"
+                                   value="adoption"
+                                   v-model="category"
+                            >
+                            <label class="add-animal-form__radio-label"
+                                   for="adoption"
+                            >
+                                Zwierzak do adopcji
+                            </label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
                             <input class="add-animal-form__radio-button"
-                                   type="radio" id="wanted" name="category"
-                                   value="wanted" v-model="category">
-                            <label class="add-animal-form__radio-label" for="wanted">Zwierzak, który chciałbym adoptować</label>
+                                   type="radio"
+                                   id="wanted"
+                                   name="category"
+                                   value="wanted"
+                                   v-model="category"
+                            >
+                            <label class="add-animal-form__radio-label"
+                                   for="wanted"
+                            >
+                                Zwierzak, który chciałbym adoptować
+                            </label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
                             <input class="add-animal-form__radio-button"
-                                   type="radio" id="lost" name="category"
-                                   value="lost" v-model="category">
-                            <label class="add-animal-form__radio-label" for="lost">Zagioniony zwierzak</label>
+                                   type="radio"
+                                   id="lost"
+                                   name="category"
+                                   value="lost"
+                                   v-model="category"
+                            >
+                            <label class="add-animal-form__radio-label"
+                                   for="lost"
+                            >
+                                Zagioniony zwierzak
+                            </label>
                         </div>
                         <div class="add-animal-form__radio-button-container">
                             <input class="add-animal-form__radio-button"
-                                   type="radio" id="found" name="category"
-                                   value="found" v-model="category">
-                            <label class="add-animal-form__radio-label" for="found">Znaleziony zwierzak</label>
+                                   type="radio"
+                                   id="found"
+                                   name="category"
+                                   value="found"
+                                   v-model="category"
+                            >
+                            <label class="add-animal-form__radio-label"
+                                   for="found">
+                                Znaleziony zwierzak
+                            </label>
                         </div>
                     </div>
-                    <text-input
+                    <TextInput
                             :label="'Imię zwierzaka'"
                             :error="nameError"
                             @updateValue="nameUpdate"
                             @deleteErrorMessage="nameErrorDelete"
-                            v-show="category !== 'wanted' && category !== 'found'">
-                    </text-input>
+                            v-show="category !== 'wanted' && category !== 'found'"
+                    >
+                    </TextInput>
                     <label class="add-animal-form__label">
                         Gatunek
                     </label>
-                    <div class="add-animal-form__dropdown-container" @focusout="hideSpecies" tabindex="0">
-                        <div class="add-animal-form__dropdown-group" @click="toggleSpecies">
-                            <input type="text" id="animal-species" class="add-animal-form__dropdown"
+                    <div class="add-animal-form__dropdown-container"
+                         @focusout="hideSpecies"
+                         tabindex="0"
+                    >
+                        <div class="add-animal-form__dropdown-group"
+                             @click="toggleSpecies"
+                        >
+                            <input type="text"
+                                   id="animal-species"
+                                   class="add-animal-form__dropdown"
                                    :class="{'add-animal-form__dropdown--error': speciesError.length > 0}"
-                                   v-model="selectedSpecies" disabled>
+                                   v-model="selectedSpecies"
+                                   disabled
+                            >
                             <div class="add-animal-form__dropdown-arrow-container">
                                 <font-awesome-icon class="add-animal-form__dropdown-arrow"
                                                    icon="chevron-down"
-                                                   :class="{'add-animal-form__dropdown-arrow--active': areSpeciesDisplayed}"/>
+                                                   :class="{'add-animal-form__dropdown-arrow--active': areSpeciesDisplayed}"
+                                />
                             </div>
                         </div>
                         <div class="species-list-container">
-                            <ul class="species-list" :class="{'species-list--displayed': areSpeciesDisplayed}">
+                            <ul class="species-list"
+                                :class="{'species-list--displayed': areSpeciesDisplayed}"
+                            >
                                 <li class="species-list__item"
-                                 v-for="speciesName in species"
-                                    @click="setSpecies(speciesName.nameSingular)">
+                                    v-for="speciesName in species"
+                                    @click="setSpecies(speciesName.nameSingular)"
+                                >
                                     {{ speciesName.nameSingular }}
                                 </li>
                             </ul>
@@ -87,31 +144,46 @@
                         Opis
                         <textarea class="add-animal-form__input"
                                   :class="{'add-animal-form__input--error': descriptionError.length > 0}"
-                                  rows="3" cols="20" v-model="description"
-                                  @click="descriptionErrorDelete" :placeholder="descriptionError">
+                                  rows="3" cols="20"
+                                  v-model="description"
+                                  @click="descriptionErrorDelete"
+                                  :placeholder="descriptionError"
+                        >
                         </textarea>
                     </label>
-                    <text-input
+                    <TextInput
                             :label="'Kontakt (email/tel./facebook/inne)'"
                             :error="contactError"
                             @updateValue="contactUpdate"
-                            @deleteErrorMessage="contactErrorDelete">
-                    </text-input>
+                            @deleteErrorMessage="contactErrorDelete"
+                    >
+                    </TextInput>
                     <input class="add-animal-form__image-input"
                            id="animal-image" type="file"
                            accept="image/x-png,image/gif,image/jpeg"
                            ref="image"
-                           @change="onFileChange">
-                    <label class="add-animal-form__image-label" for="animal-image">
-                        <font-awesome-icon icon="file-image" size="lg"/>
+                           @change="onFileChange"
+                    >
+                    <label class="add-animal-form__image-label"
+                           for="animal-image"
+                    >
+                        <font-awesome-icon
+                                icon="file-image"
+                                size="lg"
+                        />
                         {{ imageInputlabel }}
                     </label>
                     <input class="add-animal-form__submit"
                            type="submit"
                            value="Dodaj zwierzaka"
                            @click.prevent="addAnimal()"
-                           v-show="!isLoading">
-                    <clip-loader :loading="isLoading" :color="'#fff'" :size="'45px'"></clip-loader>
+                           v-show="!isLoading"
+                    >
+                    <ClipLoader
+                            :loading="isLoading"
+                            :color="'#fff'"
+                            :size="'45px'"
+                    />
                 </form>
             </transition>
         </div>
@@ -130,6 +202,11 @@
             TextInput,
             AnimalTabs,
             ClipLoader
+        },
+        props: {
+            id: {
+                required: false
+            }
         },
         data() {
             return {
@@ -154,11 +231,6 @@
                 addedAnimal: false
             }
         },
-        props: {
-            id: {
-                required: false
-            }
-        },
         computed: {
             userName: function() {
                 return this.$store.getters.userName
@@ -166,6 +238,15 @@
             imageInputlabel: function () {
                 return this.ImageFileName.length > 0 ? this.ImageFileName : 'Wybierz zdjęcie zwierzaka';
             }
+        },
+        mounted() {
+            if(!isNaN(parseInt(this.id))) {
+                this.getOwner();
+            } else {
+                this.owner = null;
+                this.ownerName = this.$store.getters.userName;
+            }
+            this.getSpecies();
         },
         methods: {
             getOwner: function() {
@@ -192,7 +273,7 @@
                 }
             },
             hideSpecies: function() {
-                 this.areSpeciesDisplayed = false;
+                this.areSpeciesDisplayed = false;
             },
             getSpecies: function() {
                 axios.get('/species')
@@ -237,7 +318,7 @@
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then(response => {
+                }).then(() => {
                     this.addedAnimal = true;
                     this.isLoading = false;
                     this.isFormDisplayed = false;
@@ -267,15 +348,6 @@
                     this.isLoading = false;
                 })
             }
-        },
-        mounted() {
-            if(!isNaN(parseInt(this.id))) {
-                this.getOwner();
-            } else {
-                this.owner = null;
-                this.ownerName = this.$store.getters.userName;
-            }
-            this.getSpecies();
         }
     }
 </script>

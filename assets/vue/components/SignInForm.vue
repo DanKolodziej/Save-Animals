@@ -1,9 +1,11 @@
 <template>
     <form class="form" method="post">
-        <h1 class="form__title">Zaloguj się</h1>
-        <p v-if="hasError" class="form__error">
-        </p>
-        <label class="form__label" for="email">
+        <h1 class="form__title">
+            Zaloguj się
+        </h1>
+        <label class="form__label"
+               for="email"
+        >
             Email
             <input class="form__input"
                    :class="{'form__input--error': emailError.length > 0}"
@@ -12,10 +14,12 @@
                    name="email"
                    v-model="email"
                    :placeholder="emailError"
-                   @click="emailErrorDelete">
+                   @click="emailErrorDelete"
+            >
         </label>
-
-        <label class="form__label" for="password">
+        <label class="form__label"
+               for="password"
+        >
             Hasło
             <input class="form__input"
                    :class="{'form__input--error': credentialsError.length > 0}"
@@ -24,17 +28,36 @@
                    name="password"
                    v-model="password"
                    :placeholder="credentialsError"
-                   @click="credentialsErrorDelete">
+                   @click="credentialsErrorDelete"
+            >
         </label>
-        <label class="form__remember" for="remember">
+        <label class="form__remember"
+               for="remember"
+        >
             Zapamiętaj mnie
-            <input class="form__remember-input" type="checkbox" id="remember" name="remember">
+            <input class="form__remember-input"
+                   type="checkbox"
+                   id="remember"
+                   name="remember"
+            >
             <span class="form__remember-checkbox"></span>
         </label>
-        <input class="form__submit" type="submit" value="Zatwierdź" @click.prevent="performLogin()">
+        <input class="form__submit"
+               type="submit"
+               value="Zatwierdź"
+               @click.prevent="performLogin()"
+        >
         <div class="form__links">
-            <a class="form__link" href="#">Utwórz konto</a>
-            <a class="form__link" href="#">Nie pamiętam hasła</a>
+            <a class="form__link"
+               href="#"
+            >
+                Utwórz konto
+            </a>
+            <a class="form__link"
+               href="#"
+            >
+                Nie pamiętam hasła
+            </a>
         </div>
     </form>
 </template>

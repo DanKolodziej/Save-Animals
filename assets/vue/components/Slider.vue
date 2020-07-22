@@ -1,37 +1,51 @@
 <template>
     <div class="slider">
-        <carousel :per-page="1" :autoplay="true" :loop="true" :paginationPadding="6" :paginationPosition="'bottom-overlay'" :mouse-drag="false">
+        <Carousel
+                :per-page="1"
+                :autoplay="true"
+                :loop="true"
+                :paginationPadding="6"
+                :paginationPosition="'bottom-overlay'"
+                :mouse-drag="false"
+        >
             <slide class="slider__slide"
                    v-for="animal in animals"
-                   :style="{'background-image': 'url(' + getImage(animal.imageSrc) + ')'}">
-                <div v-if="animal.imageSrc === null" class="slider__no-image-info">
+                   :style="{'background-image': 'url(' + getImage(animal.imageSrc) + ')'}"
+            >
+                <div v-if="animal.imageSrc === null"
+                     class="slider__no-image-info"
+                >
                     Brak zdjęcia
                 </div>
                 <div class="slider__slide-text">
                     <h2 v-show="animal.name.length > 0"
-                        class="slider__slide-title">
+                        class="slider__slide-title"
+                    >
                         {{ animal.name }}
                     </h2>
                     <p v-show="animal.description.length > 0"
-                       class="slider__slide-description">
+                       class="slider__slide-description"
+                    >
                         {{ animal.description }}
                     </p>
                     <p class="slider__slide-category">
                         <span v-if="animal.type === 'endangeredSpecies'">Kategoria zagrożenia: </span>{{ category(animal.category) }}
                     </p>
-                    <router-link v-if="animal.type === 'animal'"
+                    <RouterLink v-if="animal.type === 'animal'"
                                  :to="{name: 'animal', params: {id: animal.id}}"
-                                 class="slider__slide-link">
+                                 class="slider__slide-link"
+                    >
                         Sprawdź
-                    </router-link>
-                    <router-link v-else-if="animal.type === 'endangeredSpecies'"
+                    </RouterLink>
+                    <RouterLink v-else-if="animal.type === 'endangeredSpecies'"
                                  :to="{name: 'endangeredSpecies', params: {name: encodeName(animal.name)}}"
-                                 class="slider__slide-link">
+                                 class="slider__slide-link"
+                    >
                         Sprawdź
-                    </router-link>
+                    </RouterLink>
                 </div>
             </slide>
-        </carousel>
+        </Carousel>
     </div>
 </template>
 
@@ -73,6 +87,23 @@
                 }
             }
         },
+        created() {
+            axios.get('/three-random-animals')
+                .then(response => {
+                    var randomAnimals = response.data.animals.map(animal => {
+                        return {
+                            id: animal.id,
+                            name: animal.name,
+                            description: animal.description,
+                            category: animal.category,
+                            imageSrc: animal.image_file_name,
+                            type: 'animal'
+                        }
+                    });;
+                    this.animals = this.animals.concat(randomAnimals);
+                    this.animals = this.animals.sort(() => 0.5 - Math.random());
+                });
+        },
         methods: {
             category: function(category) {
                 if(category === 'adoption') {
@@ -98,23 +129,6 @@
             encodeName: function(name) {
                 return encodeURI(name);
             },
-        },
-        created() {
-            axios.get('/three-random-animals')
-                .then(response => {
-                    var randomAnimals = response.data.animals.map(animal => {
-                        return {
-                            id: animal.id,
-                            name: animal.name,
-                            description: animal.description,
-                            category: animal.category,
-                            imageSrc: animal.image_file_name,
-                            type: 'animal'
-                        }
-                    });;
-                    this.animals = this.animals.concat(randomAnimals);
-                    this.animals = this.animals.sort(() => 0.5 - Math.random());
-                });
         }
     }
 </script>

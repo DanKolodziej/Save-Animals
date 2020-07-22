@@ -7,18 +7,14 @@
                :placeholder="error"
                @input="onInputChange"
                @click="onClick"
-               type="text">
+               type="text"
+        >
     </label>
 </template>
 
 <script>
     export default {
         name: "TextInput",
-        data() {
-            return {
-                value: ''
-            }
-        },
         props: {
             label: {
                 type: String,
@@ -29,12 +25,9 @@
                 required: false
             }
         },
-        methods: {
-            onInputChange: function() {
-                this.$emit('updateValue', this.value);
-            },
-            onClick: function() {
-                this.$emit('deleteErrorMessage');
+        data() {
+            return {
+                value: ''
             }
         },
         watch: {
@@ -42,6 +35,14 @@
                 if(this.error.length > 0) {
                     this.value = '';
                 }
+            }
+        },
+        methods: {
+            onInputChange: function() {
+                this.$emit('updateValue', this.value);
+            },
+            onClick: function() {
+                this.$emit('deleteErrorMessage');
             }
         }
     }

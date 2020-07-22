@@ -1,29 +1,49 @@
 <template>
     <form class="form" method="post">
-        <h1 class="form__title">Rejestracja</h1>
-        <label class="form__label" for="email">
+        <h1 class="form__title">
+            Rejestracja
+        </h1>
+        <label class="form__label"
+               for="email"
+        >
             Email
             <input class="form__input"
                    :class="{'form__input--error': emailError.length > 0}"
-                   :placeholder="emailError" type="email"
-                   id="email" name="email"
-                   v-model="email" @click="emailErrorDelete">
+                   :placeholder="emailError"
+                   type="email"
+                   id="email"
+                   name="email"
+                   v-model="email"
+                   @click="emailErrorDelete"
+            >
         </label>
-        <label class="form__label" for="password">
+        <label class="form__label"
+               for="password"
+        >
             Hasło
             <input class="form__input"
                    :class="{'form__input--error': passwordError.length > 0}"
-                   :placeholder="passwordError" type="password"
-                   id="password" name="password"
-                   v-model="password" @click="passwordErrorDelete">
+                   :placeholder="passwordError"
+                   type="password"
+                   id="password"
+                   name="password"
+                   v-model="password"
+                   @click="passwordErrorDelete"
+            >
         </label>
-        <label class="form__label" for="repeat-password">
+        <label class="form__label"
+               for="repeat-password"
+        >
             Powtórz hasło
             <input class="form__input"
                    :class="{'form__input--error': repeatPasswordError.length > 0}"
-                   :placeholder="repeatPasswordError" type="password"
-                   id="repeat-password" name="repeat-password"
-                   v-model="repeatPassword" @click="repeatPasswordErrorDelete">
+                   :placeholder="repeatPasswordError"
+                   type="password"
+                   id="repeat-password"
+                   name="repeat-password"
+                   v-model="repeatPassword"
+                   @click="repeatPasswordErrorDelete"
+            >
         </label>
         <label class="form__label">
             Rodzaj użytkownika
@@ -31,55 +51,91 @@
         <div class="form__radio-group">
             <div class="form__radio-button-container">
                 <input class="form__radio-button"
-                       type="radio" id="person" name="role"
-                       value="PERSON" v-model="role">
-                <label class="form__radio-label" for="person">Osoba fizyczna</label>
+                       type="radio"
+                       id="person"
+                       name="role"
+                       value="PERSON"
+                       v-model="role">
+                <label class="form__radio-label"
+                       for="person">
+                    Osoba fizyczna
+                </label>
             </div>
             <div class="form__radio-button-container">
                 <input class="form__radio-button"
-                       type="radio" id="animal-shelter" name="role"
-                       value="ANIMAL_SHELTER" v-model="role">
-                <label class="form__radio-label" for="animal-shelter">Schronisko (lub inny typ organizacji)</label>
+                       type="radio"
+                       id="animal-shelter"
+                       name="role"
+                       value="ANIMAL_SHELTER"
+                       v-model="role"
+                >
+                <label class="form__radio-label"
+                       for="animal-shelter"
+                >
+                    Schronisko (lub inny typ organizacji)
+                </label>
             </div>
         </div>
-        <text-input
+        <TextInput
                 :label="nameLabel"
                 :error="nameError"
                 @updateValue="nameUpdate"
-                @deleteErrorMessage="nameErrorDelete">
-        </text-input>
+                @deleteErrorMessage="nameErrorDelete"
+        />
         <label class="form__label">
             Województwo
         </label>
-        <div class="form__dropdown-container" @focusout="hideProvinces" tabindex="0">
-            <div class="form__dropdown-group" @click="toggleProvinces">
-                <input type="text" id="province" class="form__dropdown"
+        <div class="form__dropdown-container"
+             @focusout="hideProvinces"
+             tabindex="0"
+        >
+            <div class="form__dropdown-group"
+                 @click="toggleProvinces"
+            >
+                <input type="text"
+                       id="province"
+                       class="form__dropdown"
                        :class="{'add-animal-form__dropdown--error': provinceError.length > 0}"
-                       v-model="selectedProvince" disabled>
+                       v-model="selectedProvince"
+                       disabled
+                >
                 <div class="form__dropdown-arrow-container">
                     <font-awesome-icon class="form__dropdown-arrow"
                                        icon="chevron-down"
-                                       :class="{'form__dropdown-arrow--active': areProvincesDisplayed}"/>
+                                       :class="{'form__dropdown-arrow--active': areProvincesDisplayed}"
+                    />
                 </div>
             </div>
             <div class="provinces-list-container">
-                <ul class="provinces-list" :class="{'provinces-list--displayed': areProvincesDisplayed}">
+                <ul class="provinces-list"
+                    :class="{'provinces-list--displayed': areProvincesDisplayed}"
+                >
                     <li class="provinces-list__item"
                         v-for="province in provinces"
-                        @click="setProvince(province)">
+                        @click="setProvince(province)"
+                    >
                         {{ province }}
                     </li>
                 </ul>
             </div>
         </div>
-        <text-input
+        <TextInput
                 :label="'Miejscowość'"
                 :error="cityError"
                 @updateValue="cityUpdate"
-                @deleteErrorMessage="cityErrorDelete">
-        </text-input>
-        <input class="form__submit" type="submit" value="Zatwierdź" @click.prevent="register" v-show="!isLoading">
-        <clip-loader :loading="isLoading" :color="'#fff'" :size="'45px'"></clip-loader>
+                @deleteErrorMessage="cityErrorDelete"
+        />
+        <input class="form__submit"
+               type="submit"
+               value="Zatwierdź"
+               @click.prevent="register"
+               v-show="!isLoading"
+        >
+        <ClipLoader
+                :loading="isLoading"
+                :color="'#fff'"
+                :size="'45px'"
+        />
     </form>
 </template>
 
@@ -116,6 +172,11 @@
                 provinceError: '',
                 cityError: '',
                 isLoading: false
+            }
+        },
+        computed: {
+            nameLabel: function() {
+                return this.role === 'PERSON' ? 'Imię (+ opcjonalnie nazwisko)' : 'Nazwa'
             }
         },
         methods: {
@@ -169,7 +230,7 @@
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then(response => {
+                }).then(() => {
                     this.isLoading = false;
                 }).catch(error => {
                     var errorMessages = error.response.data;
@@ -200,11 +261,6 @@
 
                     this.isLoading = false;
                 });
-            }
-        },
-        computed: {
-            nameLabel: function() {
-                return this.role === 'PERSON' ? 'Imię (+ opcjonalnie nazwisko)' : 'Nazwa'
             }
         }
     }

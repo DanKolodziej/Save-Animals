@@ -1,9 +1,12 @@
 <template>
     <div class="post">
         <img class="post__image"
-             :src="imageName">
+             :src="imageName"
+        >
         <div class="post__text">
-            <h2 class="post__name">{{ title }}</h2>
+            <h2 class="post__name">
+                {{ title }}
+            </h2>
             <p class="post__description">
                 {{ description }}
             </p>
@@ -11,10 +14,12 @@
                 Kategoria zagrożenia: {{ endangeredSpeciesType }}
             </p>
             <router-link :to="{name: 'endangeredSpecies', params: {name: encodedName}}"
-                         class="post__link">
+                         class="post__link"
+            >
                 Czytaj więcej
                 <font-awesome-icon class="post__arrow-icon"
-                               icon="long-arrow-alt-right"/>
+                               icon="long-arrow-alt-right"
+                />
             </router-link>
         </div>
         <div class="post__divider"></div>

@@ -1,6 +1,6 @@
 <template>
     <div class="sign-in-page">
-        <sign-in-form></sign-in-form>
+        <SignInForm/>
     </div>
 </template>
 
