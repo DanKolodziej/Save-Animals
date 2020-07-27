@@ -10,6 +10,9 @@
             <p class="animal__description">
                 {{ description }}
             </p>
+            <p class="animal__contact">
+                Kontakt: {{ contact }}
+            </p>
             <RouterLink class="animal__owner-link"
                          :to="{name: 'userAnimals', params: {id: ownerId}}"
             >
@@ -37,7 +40,8 @@
                 name: '',
                 description: '',
                 imageFileName: '',
-                ownerId: ''
+                ownerId: '',
+                contact: ''
             }
         },
         computed: {
@@ -59,6 +63,7 @@
                         this.description = response.data['animal'].description;
                         this.imageFileName = response.data['animal'].imageFileName;
                         this.ownerId = response.data['animal'].owner.id;
+                        this.contact = response.data['animal'].contact;
                     })
             }
         }

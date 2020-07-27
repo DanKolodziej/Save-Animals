@@ -127,7 +127,7 @@ class AnimalController extends AbstractController {
             ->getRepository(Animal::class)
             ->find($id);
 
-        $animalNormalized = $entityNormalizer->normalize($animal, ['id', 'name', 'description', 'imageFileName', 'owner']);
+        $animalNormalized = $entityNormalizer->normalize($animal, ['id', 'name', 'description', 'imageFileName', 'owner', 'contact']);
 
         return new JsonResponse(['animal' => $animalNormalized]);
     }
