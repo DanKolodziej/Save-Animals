@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Species;
+use App\Service\EntityNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +16,10 @@ class SpeciesController extends AbstractController
     /**
      * @Route("/species", name="getSpecies", methods={"GET"})
      */
-    public function getSpecies(): JsonResponse {
+    public function getSpecies(EntityNormalizer $entityNormalizer): JsonResponse {
         $species = $this->getDoctrine()->getRepository(Species::class)->findAll();
+        $speciesNormalized = $entityNormalizer->normalize($species, ['id', 'name', 'nameSingular']);
 
-        $serializer = new Serializer([new ObjectNormalizer()]);
-
-        $data = $serializer->normalize($species, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'nameSingular']]);
-
-        return new JsonResponse($data);
+        return new JsonResponse($speciesNormalized);
     }
 }

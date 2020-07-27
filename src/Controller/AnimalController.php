@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Animal;
 use App\Entity\Species;
 use App\Entity\User;
+use App\Service\EntityNormalizer;
 use App\Service\ImageUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -88,7 +89,7 @@ class AnimalController extends AbstractController {
      * @Route("/animals-by-category-species-name-description",
      *     name="animalsByCategorySpeciesNameDescription", methods={"GET"})
      */
-    public function getAnimalsByCategorySpeciesNameDescription(Request $request): JsonResponse {
+    public function getAnimalsByCategorySpeciesNameDescription(Request $request, EntityNormalizer $entityNormalizer): JsonResponse {
 
         $category = $request->get('category');
         $species = $request->get('species');
@@ -100,11 +101,9 @@ class AnimalController extends AbstractController {
             ->getRepository(Animal::class)
             ->filter($category, $species, $name, $description, $province, $city);
 
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $animalsNormalized = $entityNormalizer->normalize($animals, ['id', 'name', 'description', 'imageFileName']);
 
-        $data = $serializer->normalize($animals, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName']]);
-
-        return new JsonResponse(['animals' => $data]);
+        return new JsonResponse(['animals' => $animalsNormalized]);
     }
 
     /**
@@ -122,33 +121,29 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/animal/{id}", name="animal", methods={"GET"})
      */
-    public function getAnimal(int $id): JsonResponse {
+    public function getAnimal(int $id, EntityNormalizer $entityNormalizer): JsonResponse {
 
         $animal = $this->getDoctrine()
             ->getRepository(Animal::class)
             ->find($id);
 
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $animalNormalized = $entityNormalizer->normalize($animal, ['id', 'name', 'description', 'imageFileName', 'owner']);
 
-        $data = $serializer->normalize($animal, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName', 'owner']]);
-
-        return new JsonResponse(['animal' => $data]);
+        return new JsonResponse(['animal' => $animalNormalized]);
     }
 
     /**
      * @Route("/owner/{id}", name="owner", methods={"GET"})
      */
-    public function getAnimalOwner(int $id): JsonResponse {
+    public function getAnimalOwner(int $id, EntityNormalizer $entityNormalizer): JsonResponse {
 
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
 
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $userNormalized = $entityNormalizer->normalize($user, ['id', 'name']);
 
-        $data = $serializer->normalize($user, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name']]);
-
-        return new JsonResponse(['owner' => $data]);
+        return new JsonResponse(['owner' => $userNormalized]);
     }
 
     /**
@@ -162,9 +157,9 @@ class AnimalController extends AbstractController {
 
         $category = $animal->getCategory();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($animal);
-            $entityManager->flush();
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($animal);
+        $entityManager->flush();
 
         return new JsonResponse(['deleted animal' => $id, 'category' => $category]);
     }

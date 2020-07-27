@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\EntityNormalizer;
+use App\Service\UserNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -9,14 +11,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class MainController extends AbstractController
-{
-    /** @var SerializerInterface */
-    private $serializer;
-
-    public function __construct(SerializerInterface $serializer) {
-        $this->serializer = $serializer;
-    }
+class MainController extends AbstractController {
 
     /**
      * @Route("/", name="index")
@@ -31,17 +26,13 @@ class MainController extends AbstractController
      * @Route("/logowanie", name="singIn")
      * @Route("/rejestracja", name="singUp")
      */
-    public function main() {
-        $serializer = new Serializer([new ObjectNormalizer()]);
+    public function main(EntityNormalizer $entityNormalizer) {
 
-        $data = null;
-        if($this->getUser()) {
-            $data = $serializer->normalize($this->getUser(), null, [AbstractNormalizer::ATTRIBUTES => ['id', 'email', 'name']]);
-        }
-        
+        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name']);
+
         return $this->render('main/main.html.twig', [
-            'isAuthenticated' => json_encode(!empty($data)),
-            'user' => json_encode($data) ?? ''
+            'isAuthenticated' => json_encode(!empty($user)),
+            'user' => json_encode($user) ?? ''
         ]);
     }
 }

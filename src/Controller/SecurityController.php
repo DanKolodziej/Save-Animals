@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\EntityNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class SecurityController extends AbstractController
-{
-    /** @var SerializerInterface */
-    private $serializer;
-
-    public function __construct(SerializerInterface $serializer) {
-        $this->serializer = $serializer;
-    }
+class SecurityController extends AbstractController {
 
     /**
      * @Route("/register", name="app_register", methods={"POST"})
@@ -77,15 +71,10 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login", methods={"POST"})
      */
-    public function login() {
-        $serializer = new Serializer([new ObjectNormalizer()]);
+    public function login(EntityNormalizer $entityNormalizer): JsonResponse {
+        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name']);
 
-        $data = null;
-        if($this->getUser()) {
-            $data = $serializer->normalize($this->getUser(), null, [AbstractNormalizer::ATTRIBUTES => ['id', 'email', 'name']]);
-        }
-
-        return new JsonResponse($data);
+        return new JsonResponse($user);
     }
 
     /**
