@@ -3,18 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Animal;
-use App\Entity\Species;
-use App\Entity\User;
+use App\Service\AnimalFetcher;
+use App\Service\AnimalInserter;
 use App\Service\EntityNormalizer;
 use App\Service\ImageUploader;
+use App\Service\SpeciesFetcher;
+use App\Service\UserFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AnimalController extends AbstractController {
@@ -22,27 +20,34 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/add-animal", name="addAnimal", methods={"POST"})
      */
-    public function addAnimal(Request $request, ValidatorInterface $validator, ImageUploader $imageUploader): JsonResponse {
+    public function addAnimal(
+        Request $request,
+        AnimalInserter $animalInserter,
+        SpeciesFetcher $speciesFetcher,
+        ValidatorInterface $validator,
+        ImageUploader $imageUploader): JsonResponse {
 
         $animal = new Animal();
         $name = $request->get('name');
         $speciesName = $request->get('species');
-        $species = $this->getDoctrine()
-            ->getRepository(Species::class)
-            ->findOneByNameSingular($speciesName);
+        $species = $speciesFetcher->getSpeciesByNameSingular($speciesName);
         $description = $request->get('description');
         $category = $request->get('category');
         $contact = $request->get('contact');
         $user = $this->getUser();
-        $animal->setName($name);
-        $animal->setSpecies($species);
-        $animal->setDescription($description);
-        $animal->setCategory($category);
-        $animal->setOwner($user);
-        $animal->setContact($contact);
+        $image = $request->files->get('image');
+
+        $animalInserter->setProperties($animal, [
+            'name' => $name,
+            'species' => $species,
+            'description' => $description,
+            'category' => $category,
+            'contact' => $contact,
+            'user' => $user,
+            'image' => $image
+        ]);
 
         $errors = $validator->validate($animal);
-
         if(count($errors) > 0) {
 
             $messages = [];
@@ -52,14 +57,7 @@ class AnimalController extends AbstractController {
             return new JsonResponse($messages, 400);
         }
 
-        $image = $request->files->get('image');
-        if($image) {
-            $newImageFileName = $imageUploader->upload($image);
-            $animal->setImageFileName($newImageFileName);
-        }
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($animal);
-        $entityManager->flush();
+        $animalInserter->insert($animal);
 
         return new JsonResponse(['added animal id' => $animal->getId()]);
     }
@@ -67,29 +65,30 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/animals-by-user-category", name="animalsByUserCategory", methods={"GET"})
      */
-    public function getAnimalsByUserCategory(Request $request): JsonResponse {
+    public function getAnimalsByUserCategory(
+        Request $request,
+        AnimalFetcher $animalFetcher,
+        UserFetcher $userFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
 
         $userId = $request->get('user-id');
         $category = $request->get('category');
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find($userId);
-        $animals = $this->getDoctrine()
-            ->getRepository(Animal::class)
-            ->findBy(['owner' => $user, 'category' => $category]);
 
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $user = $userFetcher->getUser($userId);
+        $animals = $animalFetcher->getAnimalsByUserAndCategory($user, $category);
+        $animalsNormalized = $entityNormalizer->normalize($animals, ['id', 'name', 'description', 'imageFileName']);
 
-        $data = $serializer->normalize($animals, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'name', 'description', 'imageFileName']]);
-
-        return new JsonResponse(['animals' => $data]);
+        return new JsonResponse(['animals' => $animalsNormalized]);
     }
 
     /**
      * @Route("/animals-by-category-species-name-description",
      *     name="animalsByCategorySpeciesNameDescription", methods={"GET"})
      */
-    public function getAnimalsByCategorySpeciesNameDescription(Request $request, EntityNormalizer $entityNormalizer): JsonResponse {
+    public function getAnimalsByCategorySpeciesNameDescription(
+        Request $request,
+        AnimalFetcher $animalFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
 
         $category = $request->get('category');
         $species = $request->get('species');
@@ -97,10 +96,8 @@ class AnimalController extends AbstractController {
         $description = $request->get('description');
         $province = $request->get('province');
         $city = $request->get('city');
-        $animals = $this->getDoctrine()
-            ->getRepository(Animal::class)
-            ->filter($category, $species, $name, $description, $province, $city);
 
+        $animals = $animalFetcher->filterAnimals($category, $species, $name, $description, $province, $city);
         $animalsNormalized = $entityNormalizer->normalize($animals, ['id', 'name', 'description', 'imageFileName']);
 
         return new JsonResponse(['animals' => $animalsNormalized]);
@@ -109,11 +106,9 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/three-random-animals", name="threeRandomAnimals", methods={"GET"})
      */
-    public function getThreeRandomAnimals(): JsonResponse {
+    public function getThreeRandomAnimals(AnimalFetcher $animalFetcher): JsonResponse {
 
-        $animals = $this->getDoctrine()
-            ->getRepository(Animal::class)
-            ->findThreeRandomAnimals();
+        $animals = $animalFetcher->getRandomAnimals(3);
 
         return new JsonResponse(['animals' => $animals]);
     }
@@ -121,12 +116,12 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/animal/{id}", name="animal", methods={"GET"})
      */
-    public function getAnimal(int $id, EntityNormalizer $entityNormalizer): JsonResponse {
+    public function getAnimal(
+        int $id,
+        AnimalFetcher $animalFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
 
-        $animal = $this->getDoctrine()
-            ->getRepository(Animal::class)
-            ->find($id);
-
+        $animal = $animalFetcher->getAnimal($id);
         $animalNormalized = $entityNormalizer->normalize($animal, ['id', 'name', 'description', 'imageFileName', 'owner', 'contact']);
 
         return new JsonResponse(['animal' => $animalNormalized]);
@@ -135,12 +130,12 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/owner/{id}", name="owner", methods={"GET"})
      */
-    public function getAnimalOwner(int $id, EntityNormalizer $entityNormalizer): JsonResponse {
+    public function getAnimalOwner(
+        int $id,
+        UserFetcher $userFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
 
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find($id);
-
+        $user = $userFetcher->getUser($id);
         $userNormalized = $entityNormalizer->normalize($user, ['id', 'name']);
 
         return new JsonResponse(['owner' => $userNormalized]);
@@ -149,12 +144,9 @@ class AnimalController extends AbstractController {
     /**
      * @Route("/delete-animal/{id}", name="deleteAnimal", methods={"DELETE"})
      */
-    public function deleteAnimal(int $id): JsonResponse {
+    public function deleteAnimal(int $id, AnimalFetcher $animalFetcher): JsonResponse {
 
-        $animal = $this->getDoctrine()
-            ->getRepository(Animal::class)
-            ->find($id);
-
+        $animal = $animalFetcher->getAnimal($id);
         $category = $animal->getCategory();
 
         $entityManager = $this->getDoctrine()->getManager();

@@ -219,7 +219,7 @@
                 var formData = new FormData();
                 formData.append('email', this.email);
                 formData.append('password', this.password);
-                formData.append('repeat-password', this.repeatPassword);
+                formData.append('password-repeat', this.repeatPassword);
                 formData.append('role', this.role);
                 formData.append('name', this.name);
                 formData.append('city', this.city);

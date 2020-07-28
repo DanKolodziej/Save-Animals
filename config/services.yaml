@@ -40,6 +40,26 @@ services:
 
     App\Service\EntityNormalizer: ~
 
+    App\Service\UserFetcher: ~
+
+    App\Service\AnimalFetcher: ~
+
+    App\Service\SpeciesFetcher: ~
+
+    App\Service\AbstractDBInserter:
+        abstract: true
+        arguments: ['@doctrine.orm.entity_manager']
+
+    App\Service\AnimalInserter:
+        parent: App\Service\AbstractDBInserter
+        autowire: true
+        autoconfigure: false
+
+    App\Service\UserInserter:
+        parent: App\Service\AbstractDBInserter
+        autowire: true
+        autoconfigure: false
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 #    app.security.hash.password.listener:

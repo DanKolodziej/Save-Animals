@@ -58,6 +58,7 @@ class EndangeredSpecies implements JsonSerializable {
         return [
             'name' => $this->name,
             'description' => $this->description,
+            'endangeredSpeciesType' => $this->endangeredSpeciesType,
             'imageLink' => $this->imageLink
         ];
     }
