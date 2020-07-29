@@ -258,7 +258,7 @@
 
 <style lang="scss" scoped>
     .animal-tabs {
-        max-width: 650px;
+        max-width: 700px;
         margin: 0 auto;
 
         &__titles {
@@ -322,6 +322,9 @@
         }
 
         &__content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             background-color: #fff;
             padding-top: 30px;
             border: 1px solid #e0e0e0;

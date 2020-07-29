@@ -391,7 +391,7 @@
         .add-animal-form-column {
             display: flex;
             flex-direction: column;
-            width: 300px;
+            width: 275px;
             margin: 0 auto;
 
             .fade-enter-active, .fade-leave-active {
