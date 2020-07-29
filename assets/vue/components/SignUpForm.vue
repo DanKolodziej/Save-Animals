@@ -232,6 +232,7 @@
                     }
                 }).then(() => {
                     this.isLoading = false;
+                    this.$emit('showSuccessMessage');
                 }).catch(error => {
                     var errorMessages = error.response.data;
                     if (errorMessages.email) {
