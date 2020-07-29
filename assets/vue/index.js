@@ -8,6 +8,7 @@ import PostPage from './components/PostPage';
 import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import Administration from "./components/Administration";
 import VueRouter from "vue-router";
 import { store } from "./store/store";
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -28,7 +29,8 @@ const routes = [
     { path: '/zwierzaki-uzytkownika', component: UserAnimals, meta: { requiresAuth: true }},
     { path: '/zwierzaki-uzytkownika/:id', name: 'userAnimals', component: UserAnimals, props: true},
     { path: '/logowanie', component: SignIn, props: true},
-    { path: '/rejestracja', component: SignUp, props: true}
+    { path: '/rejestracja', component: SignUp, props: true},
+    { path: '/admin', component: Administration, meta: { requiresAuth: true }}
 ];
 
 const router = new VueRouter({
@@ -37,14 +39,19 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if(to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
-        if (store.getters.isAuthenticated) {
+        if(store.getters.isAuthenticated) {
             next();
+            if(to.path === '/admin' && !store.getters.isAdministrator) {
+                next({
+                    path: '/'
+                });
+            }
         } else {
             next({
-                path: "/logowanie",
+                path: '/logowanie',
                 query: { redirect: to.fullPath }
             });
         }

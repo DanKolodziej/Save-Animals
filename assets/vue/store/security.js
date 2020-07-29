@@ -40,6 +40,9 @@ export default {
         userName(state) {
             return state.user.name
         },
+        isAdministrator(state) {
+            return state.user.roles.indexOf('ADMINISTRATOR') >= 0;
+        },
         hasRole(state) {
             return role => {
                 return state.user.roles.indexOf(role) !== -1;

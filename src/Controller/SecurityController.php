@@ -64,7 +64,7 @@ class SecurityController extends AbstractController {
      * @Route("/login", name="app_login", methods={"POST"})
      */
     public function login(EntityNormalizer $entityNormalizer): JsonResponse {
-        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name']);
+        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name', 'roles']);
 
         return new JsonResponse($user);
     }

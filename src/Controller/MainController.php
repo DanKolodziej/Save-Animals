@@ -21,10 +21,11 @@ class MainController extends AbstractController {
      * @Route("/blog", name="blog")
      * @Route("/logowanie", name="singIn")
      * @Route("/rejestracja", name="singUp")
+     * @Route("/admin", name="admin")
      */
     public function main(EntityNormalizer $entityNormalizer) {
 
-        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name']);
+        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name', 'roles']);
 
         return $this->render('main/main.html.twig', [
             'isAuthenticated' => json_encode(!empty($user)),
