@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\EndangeredSpecies;
+use App\Service\EndangeredSpeciesInserter;
 use App\Service\EndangeredSpeciesScraper;
 use App\Service\EntityNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -47,5 +50,37 @@ class EndangeredSpeciesController extends AbstractController {
             'imageLink']);
 
         return new JsonResponse($endangeredSpeciesDataNormalized);
+    }
+
+    /**
+     * @Route("/update-endangered-species", name="updateEndangeredSpecies", methods={"POST"})
+     */
+    public function updateEndangeredSpecies(
+        Request $request,
+        EndangeredSpeciesInserter $endangeredSpeciesInserter): JsonResponse {
+
+        $endangeredSpecies = $this->getDoctrine()
+            ->getRepository(EndangeredSpecies::class)
+            ->findAll();
+
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach($endangeredSpecies as $singularEndangeredSpecies) {
+            $entityManager->remove($singularEndangeredSpecies);
+        }
+        $entityManager->flush();
+
+        $endangeredSpecies = $request->getContent();
+        $endangeredSpecies = json_decode($endangeredSpecies, true)['endangeredSpecies'];
+        foreach($endangeredSpecies as $singularEndangeredSpecies) {
+            $newEndangeredSpecies = new EndangeredSpecies(
+                $singularEndangeredSpecies['name'],
+                $singularEndangeredSpecies['description'],
+                $singularEndangeredSpecies['endangeredSpeciesType'],
+                $singularEndangeredSpecies['imageLink']
+            );
+            $endangeredSpeciesInserter->insert($newEndangeredSpecies);
+        }
+
+        return new JsonResponse(['updated endangered species' => true]);
     }
 }

@@ -24,8 +24,7 @@ class AnimalController extends AbstractController {
         Request $request,
         AnimalInserter $animalInserter,
         SpeciesFetcher $speciesFetcher,
-        ValidatorInterface $validator,
-        ImageUploader $imageUploader): JsonResponse {
+        ValidatorInterface $validator): JsonResponse {
 
         $animal = new Animal();
         $name = $request->get('name');

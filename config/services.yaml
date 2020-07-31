@@ -60,6 +60,11 @@ services:
         autowire: true
         autoconfigure: false
 
+    App\Service\EndangeredSpeciesInserter:
+        parent: App\Service\AbstractDBInserter
+        autowire: true
+        autoconfigure: false
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 #    app.security.hash.password.listener:
