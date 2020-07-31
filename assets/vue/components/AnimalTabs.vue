@@ -43,7 +43,7 @@
             </animal-card>
             <clip-loader class="animal-tabs__loading-icon"
                          :loading="isAdoptionLoading"
-                         :color="'#008c4b'"
+                         :color="'#00A650'"
                          :size="'45px'">
             </clip-loader>
             <p v-show="adoptionAnimals.length === 0 && !isAdoptionLoading"
@@ -68,7 +68,7 @@
             </animal-card>
             <clip-loader class="animal-tabs__loading-icon"
                          :loading="isWantedLoading"
-                         :color="'#00b84b'"
+                         :color="'#00E88B'"
                          :size="'45px'">
             </clip-loader>
             <p v-show="wantedAnimals.length === 0 && !isWantedLoading"
@@ -93,7 +93,7 @@
             </animal-card>
             <clip-loader class="animal-tabs__loading-icon"
                          :loading="isLostLoading"
-                         :color="'#192bc2'"
+                         :color="'#0057E8'"
                          :size="'45px'">
             </clip-loader>
             <p v-show="lostAnimals.length === 0 && !isLostLoading"
@@ -306,15 +306,15 @@
         }
 
         .adoption-underline {
-            background-color: #008c4b;
+            background-color: #00A650;
         }
 
         .wanted-underline {
-            background-color: #00b84b;
+            background-color: #00E88B;
         }
 
         .lost-underline {
-            background-color: #192bc2;
+            background-color: #0057E8;
         }
 
         .found-underline {

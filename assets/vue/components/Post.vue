@@ -103,17 +103,14 @@
             width: fit-content;
             width: -moz-fit-content;
             margin-left: auto;
+            color: #0057E8;
             text-decoration: none;
             font-size: 20px;
             font-weight: bold;
             align-self: flex-end;
 
-            &:active {
-                color: #192BC2;
-            }
-
-            &:visited {
-                color: #6495ed;
+            &:active, &:visited {
+                color: #0057E8;
             }
         }
 
@@ -131,7 +128,7 @@
         }
 
         &__divider {
-            border-bottom: 2px solid #192BC2;
+            border-bottom: 2px solid #0057E8;
             width: 90%;
             margin: 15px auto 30px;
 

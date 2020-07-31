@@ -12,15 +12,15 @@ class EndangeredSpeciesFetcher {
         $this->endangeredSpeciesRepository = $endangeredSpeciesRepository;
     }
 
-    public function getEndangeredSpecies() {
+    public function getEndangeredSpecies(): ?array {
         return $this->endangeredSpeciesRepository->findAll();
     }
 
-    public function getEndangeredSpeciesByType($type) {
+    public function getEndangeredSpeciesByType($type): ?array {
         return $this->endangeredSpeciesRepository->findByEndangeredSpeciesType($type);
     }
 
-    public function getEndangeredSpeciesByName($name) {
+    public function getEndangeredSpeciesByName($name): ?\App\Entity\EndangeredSpecies {
         return $this->endangeredSpeciesRepository->findOneByName($name);
     }
 }

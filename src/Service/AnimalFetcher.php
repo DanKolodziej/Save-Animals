@@ -18,24 +18,21 @@ class AnimalFetcher {
      * @param string $category
      * @return \App\Entity\Animal[]
      */
-    public function getAnimalsByUserAndCategory(User $user, string $category): array
-    {
+    public function getAnimalsByUserAndCategory(User $user, string $category): ?array {
         return $this->animalRepository->findBy(['owner' => $user, 'category' => $category]);
     }
 
     /**
      * @return \App\Entity\Animal[]
      */
-    public function filterAnimals($category, $species, $name, $description, $province, $city): array
-    {
+    public function filterAnimals($category, $species, $name, $description, $province, $city): ?array {
         return $this->animalRepository->filter($category, $species, $name, $description, $province, $city);
     }
 
     /**
      * @return \App\Entity\Animal[]
      */
-    public function getRandomAnimals($amount): array
-    {
+    public function getRandomAnimals($amount): ?array {
         return $this->animalRepository->findRandomAnimals($amount);
     }
 
@@ -43,8 +40,7 @@ class AnimalFetcher {
      * @param int $id
      * @return \App\Entity\Animal
      */
-    public function getAnimal(int $id): \App\Entity\Animal
-    {
+    public function getAnimal(int $id): ?\App\Entity\Animal {
         return $this->animalRepository->find($id);
     }
 }

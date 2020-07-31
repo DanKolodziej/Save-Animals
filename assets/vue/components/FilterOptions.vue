@@ -214,7 +214,7 @@
     .filter-options {
         position: relative;
         height: fit-content;
-        background-color: #6495ed;
+        background-color: #0057E8;
         margin: 0 auto 30px;
         padding: 15px;
         border-radius: 5px;

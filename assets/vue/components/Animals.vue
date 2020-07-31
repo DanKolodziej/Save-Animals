@@ -71,7 +71,7 @@
         <div class="animal-content">
             <ClipLoader class="animal-content__loader"
                         :loading="isLoading"
-                        :color="'#192BC2'"
+                        :color="'#0057E8'"
                         :size="'45px'"
             />
             <div class="animal-cards-container"
@@ -210,7 +210,7 @@
         &__radio-group {
             width: fit-content;
             width: -moz-fit-content;
-            background-color: #6495ed;
+            background-color: #0057E8;
             margin: 0 auto 30px;
             padding: 15px;
             border-radius: 5px;
@@ -326,7 +326,7 @@
             }
 
             &__no-animals-message {
-                color: #192BC2;
+                color: #0057E8;
                 font-size: 22px;
                 font-weight: bold;
                 text-align: center;

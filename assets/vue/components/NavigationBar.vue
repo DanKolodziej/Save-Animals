@@ -192,8 +192,8 @@
             padding: 15px 20px 20px;
             box-sizing: border-box;
             transition: 350ms ease-in-out;
-            box-shadow: inset 0px -2px 0px 0px #192BC2;
-            border-right: 2px solid #192BC2;
+            box-shadow: inset 0px -2px 0px 0px #0057E8;
+            border-right: 2px solid #0057E8;
 
             @media (min-width: 768px) {
                 text-align: center;
@@ -208,16 +208,16 @@
             }
 
             &:hover, &--active {
-                background-color: #008c4b;
+                background-color: #00A650;
 
                 @media (min-width: 768px) {
-                    box-shadow: inset 0px -5px 0px 0px #192BC2;
+                    box-shadow: inset 0px -5px 0px 0px #0057E8;
                 }
             }
         }
 
         &__items > &__item:first-child {
-            border-top: 2px solid #192BC2;
+            border-top: 2px solid #0057E8;
             @media (min-width: 768px) {
                 border-top: none;
             }

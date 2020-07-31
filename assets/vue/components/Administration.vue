@@ -67,7 +67,7 @@
 
         &__button {
             width: 300px;
-            background-color: #192BC2;
+            background-color: #0057E8;
             color: #fff;
             padding: 5px;
             font-size: 30px;

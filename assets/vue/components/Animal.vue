@@ -99,15 +99,12 @@
             width: fit-content;
             width: -moz-fit-content;
             margin-left: auto;
+            color: #0057E8;
             text-decoration: none;
             font-weight: bold;
 
-            &:active {
-                color: #192BC2;
-            }
-
-            &:visited {
-                color: #6495ed;
+            &:active, &:visited {
+                color: #0057E8;
             }
         }
 

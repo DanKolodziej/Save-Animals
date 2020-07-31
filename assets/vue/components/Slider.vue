@@ -145,27 +145,27 @@
             height: 60vh;
 
             &:first-child {
-                background-color: #008ee8;
+                background-color: #00A650;
             }
 
             &:nth-child(2) {
-                background-color: #0096AF;
+                background-color: #00E813;
             }
 
             &:nth-child(3) {
-                background-color: #00A64B;
+                background-color: #00E8B2;
             }
 
             &:nth-child(4) {
-                background-color: #6495ed;
+                background-color: #007FE8;
             }
 
             &:nth-child(5) {
-                background-color: #008C65;
+                background-color: #0057E8;
             }
 
             &:last-child {
-                background-color: #007CAF;
+                background-color: #002FE8;
             }
         }
 
@@ -228,11 +228,11 @@
         }
 
         &__slide-link {
-            color: #192BC2;
+            color: #0057E8;
             text-decoration: none;
 
             &:active, &:visited {
-                color: #6495ed;
+                color: #0057E8;
             }
         }
     }

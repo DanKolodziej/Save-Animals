@@ -272,7 +272,7 @@
         width: 250px;
         margin: 0 auto;
         padding: 15px;
-        background-color: #6495ed;
+        background-color: #0057E8;
         border-radius: 5px;
         box-shadow: 0 0 20px 0 rgba(0,0,0,0.75);
 

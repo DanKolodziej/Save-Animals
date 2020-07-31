@@ -15,16 +15,14 @@ class SpeciesFetcher {
     /**
      * @return \App\Entity\Species[]
      */
-    public function getAllSpecies(): array
-    {
+    public function getAllSpecies(): ?array {
         return $this->speciesRepository->findAll();
     }
 
     /**
      * @return \App\Entity\Species
      */
-    public function getSpeciesByNameSingular($speciesName): \App\Entity\Species
-    {
+    public function getSpeciesByNameSingular($speciesName): ?\App\Entity\Species {
         return $this->speciesRepository->findOneByNameSingular($speciesName);
     }
 }

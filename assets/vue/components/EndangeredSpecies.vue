@@ -11,7 +11,7 @@
             >
                 <ClipLoader class="endangered-species-content__loader"
                             :loading="isLoadingEndangeredSpecies"
-                            :color="'#192BC2'"
+                            :color="'#0057E8'"
                             :size="'45px'"
                 />
                 <div class="endangered-species-content__loading-message"
@@ -341,7 +341,7 @@
 
             &__loading-message {
                 text-align: center;
-                color: #192BC2;
+                color: #0057E8;
                 font-size: 22px;
                 font-weight: bold;
                 margin-bottom: 30px;
@@ -377,7 +377,7 @@
             &__checkbox-group {
                 height: fit-content;
                 height: -moz-fit-content;
-                background-color: #6495ed;
+                background-color: #0057E8;
                 margin: 0 auto 30px;
                 padding: 15px;
                 border-radius: 5px;

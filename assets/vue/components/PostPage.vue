@@ -45,9 +45,7 @@
                 if(endangeredSpecies !== undefined) {
                     this.description = endangeredSpecies.description;
                     this.imageName = endangeredSpecies.imageLink;
-                    console.log('xd');
                 } else {
-                    console.log('XD');
                     axios.get('/endangered-species/' + this.name)
                         .then(response => {
                             this.description = response.data.endangeredSpecies.description;

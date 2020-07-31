@@ -16,8 +16,7 @@ class UserFetcher {
      * @param $id
      * @return \App\Entity\User
      */
-    public function getUser($id): \App\Entity\User
-    {
+    public function getUser($id): ?\App\Entity\User {
         return $this->userRepository->find($id);
     }
 }
