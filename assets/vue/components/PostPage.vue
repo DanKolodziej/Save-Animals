@@ -45,11 +45,13 @@
                 if(endangeredSpecies !== undefined) {
                     this.description = endangeredSpecies.description;
                     this.imageName = endangeredSpecies.imageLink;
+                    console.log('xd');
                 } else {
-                    axios.get('/singular-endangered-species-data/' + this.name)
+                    console.log('XD');
+                    axios.get('/endangered-species/' + this.name)
                         .then(response => {
-                            this.description = response.data.description;
-                            this.imageName = response.data.imageLink;
+                            this.description = response.data.endangeredSpecies.description;
+                            this.imageName = response.data.endangeredSpecies.imageLink;
                         });
                 }
             }

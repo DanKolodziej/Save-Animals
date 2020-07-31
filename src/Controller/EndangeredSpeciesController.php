@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\EndangeredSpecies;
+use App\Service\EndangeredSpeciesFetcher;
 use App\Service\EndangeredSpeciesInserter;
 use App\Service\EndangeredSpeciesScraper;
 use App\Service\EntityNormalizer;
@@ -82,5 +83,47 @@ class EndangeredSpeciesController extends AbstractController {
         }
 
         return new JsonResponse(['updated endangered species' => true]);
+    }
+
+    /**
+     * @Route("/endangered-species", name="getEndangeredSpecies")
+     */
+    public function getEndangeredSpecies(
+        EndangeredSpeciesFetcher $endangeredSpeciesFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
+
+        $endangeredSpecies = [];
+        $endangeredSpecies['EX'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('EX');
+        $endangeredSpecies['EXP'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('EXP');
+        $endangeredSpecies['CR'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('CR');
+        $endangeredSpecies['EN'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('EN');
+        $endangeredSpecies['VU'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('VU');
+        $endangeredSpecies['NT'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('NT');
+        $endangeredSpecies['LC'] = $endangeredSpeciesFetcher->getEndangeredSpeciesByType('LC');
+        $endangeredSpeciesNormalized = $entityNormalizer->normalize($endangeredSpecies, [
+            'name',
+            'description',
+            'endangeredSpeciesType',
+            'imageLink'
+        ]);
+        return new JsonResponse(['endangeredSpecies' => $endangeredSpeciesNormalized]);
+    }
+
+    /**
+     * @Route("/endangered-species/{name}", name="getEndangeredSpeciesByName")
+     */
+    public function getEndangeredSpeciesByName(
+        string $name,
+        EndangeredSpeciesFetcher $endangeredSpeciesFetcher,
+        EntityNormalizer $entityNormalizer): JsonResponse {
+
+        $endangeredSpecies = $endangeredSpeciesFetcher->getEndangeredSpeciesByName($name);
+        $endangeredSpeciesNormalized = $entityNormalizer->normalize($endangeredSpecies, [
+            'name',
+            'description',
+            'endangeredSpeciesType',
+            'imageLink'
+        ]);
+        return new JsonResponse(['endangeredSpecies' => $endangeredSpeciesNormalized]);
     }
 }

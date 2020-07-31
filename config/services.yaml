@@ -46,6 +46,8 @@ services:
 
     App\Service\SpeciesFetcher: ~
 
+    App\Service\EndangeredSpeciesFetcher: ~
+
     App\Service\AbstractDBInserter:
         abstract: true
         arguments: ['@doctrine.orm.entity_manager']

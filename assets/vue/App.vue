@@ -35,16 +35,16 @@
         methods: {
             getEndangeredSpecies: function() {
                 this.$store.commit('setLoadingEndangeredSpecies', true);
-                axios.get('/endangered-species-data')
+                axios.get('/endangered-species')
                     .then(response => {
                         this.$store.commit('setEndangeredSpecies', {
-                            extinct: response.data['EX'],
-                            toDisappear: response.data['EXP'],
-                            extremelyEndangered: response.data['CR'],
-                            highlyEndangered: response.data['EN'],
-                            atEndangerRisk: response.data['VU'],
-                            closeToDanger: response.data['NT'],
-                            notEndangered: response.data['LC']
+                            extinct: response.data.endangeredSpecies['EX'],
+                            toDisappear: response.data.endangeredSpecies['EXP'],
+                            extremelyEndangered: response.data.endangeredSpecies['CR'],
+                            highlyEndangered: response.data.endangeredSpecies['EN'],
+                            atEndangerRisk: response.data.endangeredSpecies['VU'],
+                            closeToDanger: response.data.endangeredSpecies['NT'],
+                            notEndangered: response.data.endangeredSpecies['LC']
                         });
                         this.$store.commit('setLoadingEndangeredSpecies', false);
                     }).catch(() => {
