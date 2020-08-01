@@ -465,10 +465,10 @@
             width: 250px;
             margin: 30px auto;
             font-size: 55px;
-            color: #192BC2;
+            color: #0057E8;
 
             &__arrow {
-                background-color: #192BC2;
+                background-color: #0057E8;
                 color: #fff;
                 border-radius: 5px;
                 padding: 5px;

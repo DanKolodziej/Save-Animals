@@ -4,9 +4,9 @@
     >
         <div class="users-animals">
             <div class="user-info">
-                <h2 class="user-info__name">
+                <h1 class="user-info__name">
                     {{ ownerName }}
-                </h2>
+                </h1>
             </div>
             <AnimalTabs :id="parseInt(id)"/>
         </div>
@@ -374,14 +374,11 @@
 
         .user-info {
             display: block;
-            border: 1px solid #e0e0e0;
-            background-color: #fff;
             height: fit-content;
             width: fit-content;
             width: -moz-fit-content;
             margin: 0 auto 30px;
             padding: 10px 30px;
-            border-radius: 5px;
 
             &__name {
                 margin: 0;
