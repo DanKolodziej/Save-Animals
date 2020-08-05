@@ -69,6 +69,9 @@
             Województwo
         </label>
         <div class="filter-options__dropdown-container"
+             @keypress.enter="showProvinces"
+             @keyup.up.stop="selectUpProvince"
+             @keyup.down.stop="selectDownProvince"
              @focusout="hideProvinces"
              tabindex="0"
         >
@@ -94,6 +97,7 @@
                 >
                     <li class="results-list__item"
                         v-for="province in provinces"
+                        :class="{'results-list__item--selected': selectedProvince === province}"
                         @click="setProvince(province)"
                     >
                         {{ province }}
@@ -153,6 +157,31 @@
             },
             toggleProvinces: function() {
                 this.areProvincesDisplayed = !this.areProvincesDisplayed;
+            },
+            showProvinces() {
+                this.areProvincesDisplayed = true;
+            },
+            selectUpProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(provinceIndex > 0) {
+                        this.selectedProvince = this.provinces[provinceIndex - 1];
+                    } else {
+                        this.selectedProvince = this.provinces[this.provinces.length - 1];
+                    }
+                    this.$emit('filterProvince', this.selectedProvince)
+                }
+            },
+            selectDownProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(this.provinces.length - 1 > provinceIndex) {
+                        this.selectedProvince = this.provinces[this.provinces.indexOf(this.selectedProvince) + 1];
+                    } else {
+                        this.selectedProvince = this.provinces[0];
+                    }
+                    this.$emit('filterProvince', this.selectedProvince)
+                }
             },
             hideProvinces() {
                 this.areProvincesDisplayed = false;
@@ -351,7 +380,7 @@
                 cursor: pointer;
                 transition: all 0.5s ease-out;
 
-                &:hover {
+                &:hover, &--selected {
                     background-color: #e0e0e0;
                 }
 

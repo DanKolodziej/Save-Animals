@@ -166,6 +166,7 @@
             -ms-user-select: none;
             user-select: none;
             font-weight: normal;
+            -webkit-backface-visibility: hidden;
 
             &-input {
                 position: absolute;

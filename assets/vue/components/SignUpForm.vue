@@ -125,6 +125,22 @@
                 @updateValue="cityUpdate"
                 @deleteErrorMessage="cityErrorDelete"
         />
+        <label class="form__terms"
+               for="terms"
+        >
+            Wyrażam zgodę na przetwarzanie danych osobowych.
+            <input class="form__terms-input"
+                   type="checkbox"
+                   id="terms"
+                   name="terms"
+                   v-model="termsAccepted"
+            >
+            <span class="form__terms-checkbox"></span>
+            <span class="form__terms-unaccepted"
+                  v-show="!termsAccepted">
+                Wymagana jest zgoda na przetwarzanie danych.
+            </span>
+        </label>
         <input class="form__submit"
                type="submit"
                value="Zatwierdź"
@@ -165,6 +181,7 @@
                 selectedProvince: 'Dolnośląskie',
                 areProvincesDisplayed: false,
                 city: '',
+                termsAccepted: false,
                 emailError: '',
                 passwordError: '',
                 repeatPasswordError: '',
@@ -216,52 +233,58 @@
                 this.cityError = '';
             },
             register: function() {
-                var formData = new FormData();
-                formData.append('email', this.email);
-                formData.append('password', this.password);
-                formData.append('password-repeat', this.repeatPassword);
-                formData.append('role', this.role);
-                formData.append('name', this.name);
-                formData.append('city', this.city);
-                formData.append('province', this.selectedProvince);
+                if(this.validate()) {
+                    var formData = new FormData();
+                    formData.append('email', this.email);
+                    formData.append('password', this.password);
+                    formData.append('password-repeat', this.repeatPassword);
+                    formData.append('role', this.role);
+                    formData.append('name', this.name);
+                    formData.append('city', this.city);
+                    formData.append('province', this.selectedProvince);
+                    formData.append('terms-accepted', this.termsAccepted);
 
-                this.isLoading = true;
-                axios.post('/register', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then(() => {
-                    this.isLoading = false;
-                    this.$emit('showSuccessMessage');
-                }).catch(error => {
-                    var errorMessages = error.response.data;
-                    if (errorMessages.email) {
-                        this.emailError = errorMessages.email[0];
-                        this.email = '';
-                    }
-                    if (errorMessages.password) {
-                        this.passwordError = errorMessages.password[0];
-                        this.password = '';
-                    }
-                    if (errorMessages.repeatPassword) {
-                        this.repeatPasswordError = errorMessages.repeatPassword[0];
-                        this.repeatPassword = '';
-                    }
-                    if (errorMessages.name) {
-                        this.nameError = errorMessages.name[0];
-                        this.name = '';
-                    }
-                    if (errorMessages.province) {
-                        this.provinceError = errorMessages.province[0];
-                        this.province = this.provinceError;
-                    }
-                    if (errorMessages.city) {
-                        this.cityError = errorMessages.city[0];
-                        this.city = '';
-                    }
+                    this.isLoading = true;
+                    axios.post('/register', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(() => {
+                        this.isLoading = false;
+                        this.$emit('showSuccessMessage');
+                    }).catch(error => {
+                        var errorMessages = error.response.data;
+                        if (errorMessages.email) {
+                            this.emailError = errorMessages.email[0];
+                            this.email = '';
+                        }
+                        if (errorMessages.password) {
+                            this.passwordError = errorMessages.password[0];
+                            this.password = '';
+                        }
+                        if (errorMessages.repeatPassword) {
+                            this.repeatPasswordError = errorMessages.repeatPassword[0];
+                            this.repeatPassword = '';
+                        }
+                        if (errorMessages.name) {
+                            this.nameError = errorMessages.name[0];
+                            this.name = '';
+                        }
+                        if (errorMessages.province) {
+                            this.provinceError = errorMessages.province[0];
+                            this.province = this.provinceError;
+                        }
+                        if (errorMessages.city) {
+                            this.cityError = errorMessages.city[0];
+                            this.city = '';
+                        }
 
-                    this.isLoading = false;
-                });
+                        this.isLoading = false;
+                    });
+                }
+            },
+            validate: function() {
+                return this.termsAccepted;
             }
         }
     }
@@ -479,6 +502,7 @@
             pointer-events: all;
             scrollbar-width: thin;
             scrollbar-color: #00A8E8 #e0e0e0;
+            z-index: 99;
             &::-webkit-scrollbar {
                 width: 8px;
             }
@@ -515,6 +539,71 @@
                     cursor: default;
                     pointer-events: none;
                 }
+            }
+        }
+
+        &__terms {
+            display: inline-block;
+            width: 100%;
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+            margin-bottom: 12px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-weight: normal;
+            -webkit-backface-visibility: hidden;
+
+            &-input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+
+            &-checkbox {
+                position: absolute;
+                left: 75px;
+                height: 15px;
+                width: 15px;
+                background-color: #fff;
+                border: 1px solid #00A8E8;
+                border-radius: 3px;
+                box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+                    left: 4px;
+                    width: 5px;
+                    height: 10px;
+                    border: solid #00A8E8;
+                    border-width: 0 3px 3px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                }
+
+                &:focus {
+                    outline: none;
+                    box-shadow: 0 0 5px 0 #00dce8;
+                }
+            }
+
+            &-unaccepted {
+                margin-left: 25px;
+                font-weight: bold;
+                color: #ed3e12;
+            }
+
+            &-input:checked ~ &-checkbox:after {
+                display: block;
             }
         }
 

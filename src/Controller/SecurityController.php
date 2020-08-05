@@ -31,6 +31,7 @@ class SecurityController extends AbstractController {
         $name = $request->get('name');
         $province = $request->get('province');
         $city = $request->get('city');
+        $termsAccepted = $request->get('terms-accepted');
 
         $userInserter->setProperties($user, [
             'email' => $email,
@@ -38,7 +39,8 @@ class SecurityController extends AbstractController {
             'password' => $password,
             'name' => $name,
             'province' => $province,
-            'city' => $city
+            'city' => $city,
+            'termsAccepted' => $termsAccepted
         ]);
 
         $errors = $validator->validate($user);

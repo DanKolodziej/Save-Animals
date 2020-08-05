@@ -26,5 +26,6 @@ class UserInserter extends AbstractDBInserter {
         $user->setName($properties['name']);
         $user->setProvince($properties['province']);
         $user->setCity($properties['city']);
+        $user->setTermsAccepted($properties['termsAccepted']);
     }
 }

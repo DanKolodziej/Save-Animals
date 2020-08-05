@@ -67,6 +67,12 @@ class User implements UserInterface
      */
     private $animals;
 
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\IsTrue(message="Wymagana jest zgoda na przetwarzanie danych")
+     */
+    private $termsAccepted;
+
     public function __construct()
     {
         $this->animals = new ArrayCollection();
@@ -213,6 +219,18 @@ class User implements UserInterface
                 $animal->setSpecies(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTermsAccepted(): ?bool
+    {
+        return $this->termsAccepted;
+    }
+
+    public function setTermsAccepted(bool $termsAccepted): self
+    {
+        $this->termsAccepted = $termsAccepted;
 
         return $this;
     }
