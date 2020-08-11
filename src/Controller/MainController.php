@@ -22,6 +22,7 @@ class MainController extends AbstractController {
      * @Route("/logowanie", name="singIn")
      * @Route("/rejestracja", name="singUp")
      * @Route("/admin", name="admin")
+     * @Route("/polityka-prywatnosci", name="privacyPolicy")
      */
     public function main(EntityNormalizer $entityNormalizer) {
 
