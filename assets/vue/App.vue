@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import Slider from "./components/slider";
+    import Slider from "./components/Slider";
     import NavigationBar from './components/NavigationBar';
     import FooterBar from "./components/FooterBar";
     import axios from 'axios';
