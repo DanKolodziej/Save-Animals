@@ -30,14 +30,14 @@
             </li>
         </ul>
         <p class="privacy-policy-page__paragraph">
-            Twoje dane osobowe mogą pochodzić z wypełnionych formularzy na stronie pomoczwierzakom.pl
+            Twoje dane osobowe mogą pochodzić z wypełnionych formularzy na stronie pomoc-zwierzakom.pl
         </p>
         <h2 class="privacy-policy-page__header">
             Cel zbierania danych osobowych
         </h2>
         <p class="privacy-policy-page__paragraph">
             Podanie danych osobowych jest dobrowolne. Nie ma ustawowego obowiązku podawania danych osobowych, jednak
-            niepodanie danych osobowych może skutkować brakiem dostępu do pełnego zakresu funkcjonalności strony pomoczwierzakom.pl
+            niepodanie danych osobowych może skutkować brakiem dostępu do pełnego zakresu funkcjonalności strony pomoc-zwierzakom.pl
         </p>
         <p class="privacy-policy-page__paragraph">
             Cel zbierania danych: utrzymanie i wsparcie techniczne usługi w zakresie niezbędnym do prawidłowego korzystania z serwisu,
@@ -48,7 +48,7 @@
             (art. 6 ust. 1 lit b RODO)
         </p>
         <p class="privacy-policy-page__paragraph">
-            Okres przetwarzania danych: do momentu zamknięcia serwisu pomoczwierzakom.pl
+            Okres przetwarzania danych: do momentu zamknięcia serwisu pomoc-zwierzakom.pl
             (wyjątkiem jest zmiana domeny strony internetowej),
             do momentu pozytywnego rozpatrzenia przez Administratora zażądania usunięcia swoich danych osobowych,
             do momentu samodzielnego usunięcia konta użytkownika.
