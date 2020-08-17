@@ -128,7 +128,13 @@
         <label class="form__terms"
                for="terms"
         >
-            Wyrażam zgodę na przetwarzanie danych osobowych.
+            Wyrażam zgodę na przetwarzanie danych osobowych oraz zapoznałem/am się z
+            <a class="form__link"
+               href="/polityka-prywatnosci"
+               target="_blank"
+            >
+                polityką prywatności
+            </a>.
             <input class="form__terms-input"
                    type="checkbox"
                    id="terms"
@@ -138,7 +144,7 @@
             <span class="form__terms-checkbox"></span>
             <span class="form__terms-unaccepted"
                   v-show="!termsAccepted">
-                Wymagana jest zgoda na przetwarzanie danych.
+                Wymagane jest potwierdzenie.
             </span>
         </label>
         <input class="form__submit"
@@ -568,7 +574,7 @@
 
             &-checkbox {
                 position: absolute;
-                left: 75px;
+                left: 130px;
                 height: 15px;
                 width: 15px;
                 background-color: #fff;
@@ -605,6 +611,10 @@
             &-input:checked ~ &-checkbox:after {
                 display: block;
             }
+        }
+
+        &__link {
+            color: #fff;
         }
 
         &__submit {

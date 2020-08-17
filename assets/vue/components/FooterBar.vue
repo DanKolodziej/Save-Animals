@@ -3,6 +3,7 @@
         ©2020 pomoc-zwierzakom.pl
         <a class="footer__link"
            href="/privacy-policy"
+           target="_blank"
         >
             polityka prywatności
         </a>
