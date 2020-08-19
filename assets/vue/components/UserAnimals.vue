@@ -547,7 +547,7 @@
                     padding: 5px;
                     font-size: 18px;
                     border: 2px solid #00A8E8;
-                    border-radius: 3px;
+                    border-radius: 3px 0 0 3px;
                     box-sizing: border-box;
                     box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
 
@@ -571,10 +571,6 @@
                             box-shadow: 0 0 5px 0 #eeaaaa;
                         }
                     }
-                }
-
-                &__dropdown {
-                    border-radius: 3px 0 0 3px;
                 }
 
                 &__dropdown-arrow-container {

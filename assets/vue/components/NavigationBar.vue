@@ -43,6 +43,13 @@
             >
                 Moje zwierzaki
             </RouterLink>
+            <RouterLink to="/ustawienia-konta"
+                        class="navigation__item"
+                        :class="{'navigation__item--active': isAccountSettingsActive}"
+                        v-show="isUserAuthenticated"
+            >
+                Ustawienia konta
+            </RouterLink>
         </div>
         <div class="navigation__sign-in"
              :class="{'navigation__sign-in--mobile': isMobileMenuActive}"
@@ -95,6 +102,9 @@
             },
             isUserAnimalsActive: function() {
                 return this.$route.path === '/zwierzaki-uzytkownika';
+            },
+            isAccountSettingsActive: function() {
+                return this.$route.path === '/ustawienia-konta';
             },
             isSignInActive: function() {
                 return this.$route.path === '/logowanie';
@@ -200,7 +210,7 @@
                 padding: 0 25px;
                 box-shadow: none;
                 border-right: none;
-                font-size: 14px;
+                font-size: 13px;
             }
 
             @media (min-width: 1024px) {

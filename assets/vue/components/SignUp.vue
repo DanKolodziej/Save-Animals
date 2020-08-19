@@ -3,7 +3,7 @@
         <div class="sign-up-success-message"
              v-show="isUserRegistered"
         >
-            Pomyślnie przebiegła rejestracja!
+            Rejestracja przebiegła pomyślnie!
         </div>
         <signUpForm
                 v-show="!isUserRegistered"

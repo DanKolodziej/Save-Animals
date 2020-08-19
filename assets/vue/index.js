@@ -8,6 +8,7 @@ import PostPage from './components/PostPage';
 import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import AccountSettings from "./components/AccountSettings";
 import Administration from "./components/Administration";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import VueRouter from "vue-router";
@@ -22,8 +23,8 @@ Vue.use(VueRouter);
 
 const routes = [
     { path: '/', component: Index },
-    { path: '/adopcja', component: Animals, props: {category: 'adoption'} },
-    { path: '/zaginione-zwierzaki', component: Animals, props: {category: 'lost'} },
+    { path: '/adopcja', component: Animals, props: { category: 'adoption' } },
+    { path: '/zaginione-zwierzaki', component: Animals, props: { category: 'lost' } },
     { path: '/zagrozone-gatunki', component: EndangeredSpecies },
     { path: '/zwierzak/:id', name: 'animal', component: Animal, props: true },
     { path: '/zagrozony-gatunek/:name', name: 'endangeredSpecies', component: PostPage, props: true },
@@ -31,6 +32,7 @@ const routes = [
     { path: '/zwierzaki-uzytkownika/:id', name: 'userAnimals', component: UserAnimals, props: true },
     { path: '/logowanie', component: SignIn, props: true },
     { path: '/rejestracja', component: SignUp, props: true },
+    { path: '/ustawienia-konta', component: AccountSettings, meta: { requiresAuth: true } },
     { path: '/admin', component: Administration, meta: { requiresAuth: true } },
     { path: '/polityka-prywatnosci', component: PrivacyPolicy }
 ];
