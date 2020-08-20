@@ -27,6 +27,7 @@ class UserFixtures extends Fixture
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user, 'asd123'
         ));
+        $user->setTermsAccepted(true);
         $manager->persist($user);
         $manager->flush();
     }
