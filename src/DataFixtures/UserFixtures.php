@@ -20,7 +20,7 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('Dank0l@o2.pl');
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles(['ADMINISTRATOR']);
         $user->setName('Daniel');
         $user->setProvince('Dolnośląskie');
         $user->setCity('Wrocław');
