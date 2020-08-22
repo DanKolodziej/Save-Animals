@@ -202,6 +202,8 @@
         padding-top: 30px;
 
         .page-title {
+            font-weight: normal;
+            font-size: 38px;
             text-align: center;
             text-transform: uppercase;
             margin: 0 0 30px;

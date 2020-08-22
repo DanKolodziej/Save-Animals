@@ -189,7 +189,7 @@
                 return this.role === 'PERSON' ? 'Imię (+ opcjonalnie nazwisko)' : 'Nazwa'
             }
         },
-        created() {
+        mounted() {
             this.getUser();
         },
         methods: {

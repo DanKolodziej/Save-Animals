@@ -2,7 +2,7 @@
     <footer class="footer">
         ©2020 pomoc-zwierzakom.pl
         <a class="footer__link"
-           href="/privacy-policy"
+           href="/polityka-prywatnosci"
            target="_blank"
         >
             polityka prywatności

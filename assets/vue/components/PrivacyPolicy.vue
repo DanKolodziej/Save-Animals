@@ -115,6 +115,11 @@
 
     .privacy-policy-page {
 
+        &__title {
+            font-weight: normal;
+            font-size: 38px;
+        }
+
         &__title, &__header {
             text-align: center;
             padding: 0 5%;
