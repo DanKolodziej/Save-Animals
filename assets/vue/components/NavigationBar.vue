@@ -131,6 +131,9 @@
         justify-content: space-between;
         height: 90px;
         background-color: #00A8E8;
+        position: sticky;
+        top: 0;
+        z-index: 99;
 
         @media (min-width: 768px) {
             flex-direction: row;

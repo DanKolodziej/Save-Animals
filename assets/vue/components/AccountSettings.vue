@@ -140,12 +140,30 @@
                     :size="'45px'"
             />
         </div>
-        <button class="account-settings__delete-button">
-            <a class="account-settings__link"
-               href="/delete-user">
-                Usuń konto
-            </a>
+        <button class="account-settings__delete-button"
+                @click="toggleConfirmation"
+        >
+            Usuń konto
         </button>
+        <transition name="slide-fade">
+            <div class="account-settings__delete-confirmation"
+                 v-show="isConfirmationDisplayed">
+                Czy na pewno chcesz usunąć konto? Operacja ta jest nieodwracalna!
+                <div class="account-settings__delete-confirmation-buttons">
+                    <button class="account-settings__delete-confirm-button">
+                        <a class="account-settings__link"
+                           href="/delete-user">
+                            Tak
+                        </a>
+                    </button>
+                    <button class="account-settings__delete-no-confirm-button"
+                            @click="hideConfirmation"
+                    >
+                        Nie
+                    </button>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -181,7 +199,8 @@
                 nameError: '',
                 provinceError: '',
                 cityError: '',
-                isLoading: false
+                isLoading: false,
+                isConfirmationDisplayed: false
             }
         },
         computed: {
@@ -232,7 +251,7 @@
                 axios.get('/user')
                     .then(response => {
                         this.email = response.data.email;
-                        this.role = response.data.roles.includes('PERSON') ? 'PERSON' : 'ANIMAL_SHELTER'
+                        this.role = response.data.roles.includes('PERSON') ? 'PERSON' : 'ANIMAL_SHELTER';
                         this.name = response.data.name;
                         this.$refs['name-input'].$data.value = this.name;
                         this.selectedProvince = response.data.province;
@@ -288,6 +307,12 @@
 
                     this.isLoading = false;
                 });
+            },
+            toggleConfirmation: function() {
+                this.isConfirmationDisplayed = !this.isConfirmationDisplayed;
+            },
+            hideConfirmation: function() {
+                this.isConfirmationDisplayed = false;
             }
         }
     }
@@ -295,6 +320,7 @@
 
 <style lang="scss" scoped>
     .account-settings {
+        position: relative;
 
         &__form {
             width: 250px;
@@ -568,9 +594,10 @@
             }
         }
 
-        &__delete-button {
+        &__delete-button, &__delete-confirm-button, &__delete-no-confirm-button {
             display: block;
             background-color: #C82829;
+            color: #fff;
             border: 1px solid #C82829;
             border-radius: 5px;
             padding: 7px 14px;
@@ -584,8 +611,66 @@
         }
 
         &__link {
-            color: #fff;
+            color: #000;
             text-decoration: none;
+        }
+
+        .slide-fade-enter-active {
+            transition: all 0.5s ease-out;
+        }
+        .slide-fade-leave-active {
+            transition: all 0.5s ease-out;
+        }
+        .slide-fade-enter, .slide-fade-leave-to {
+            transform: translateY(-30px);
+            opacity: 0;
+        }
+
+        &__delete-confirmation {
+            width: 350px;
+            background-color: #fff;
+            color: #000;
+            text-align: center;
+            margin: 0 auto 30px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        &__delete-confirmation-buttons {
+            width: 200px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        &__delete-confirm-button, &__delete-no-confirm-button {
+            display: inline-block;
+            background-color: #fff;
+            margin: 10px auto 0;
+        }
+
+        &__delete-confirm-button {
+            transition: all 350ms ease;
+
+            &:hover {
+                background-color: #C82829;
+                color: #fff;
+            }
+        }
+
+        &__delete-confirm-button:hover > &__link {
+            color: #fff;
+        }
+
+        &__delete-no-confirm-button {
+            color: #000;
+            border: 1px solid #0057E8;
+            transition: all 350ms ease;
+
+            &:hover {
+                background-color: #0057E8;
+                color: #fff;
+            }
         }
     }
 </style>

@@ -115,12 +115,11 @@
                     }
                 } else {
                     if (this.errorMessage === 'Username could not be found.') {
-                        this.emailError = this.errorMessage;
+                        this.emailError = 'Nie ma takiego użytkownika';
                         this.email = '';
                         this.credentialsError = '';
                     } else {
-
-                        this.credentialsError = this.errorMessage;
+                        this.credentialsError = 'Nieprawidłowe hasło';
                         this.password = '';
                     }
                 }
