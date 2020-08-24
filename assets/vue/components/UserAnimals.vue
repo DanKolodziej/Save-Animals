@@ -107,6 +107,9 @@
                         Gatunek
                     </label>
                     <div class="add-animal-form__dropdown-container"
+                         @keypress.enter="toggleSpecies"
+                         @keyup.up.stop="selectUpSpecies"
+                         @keyup.down.stop="selectDownSpecies"
                          @focusout="hideSpecies"
                          tabindex="0"
                     >
@@ -133,6 +136,7 @@
                             >
                                 <li class="species-list__item"
                                     v-for="speciesName in species"
+                                    :class="{'species-list__item--selected': selectedSpecies === speciesName.nameSingular}"
                                     @click="setSpecies(speciesName.nameSingular)"
                                 >
                                     {{ speciesName.nameSingular }}
@@ -270,6 +274,27 @@
                 if(this.selectedSpecies === this.speciesError) {
                     this.selectedSpecies = '';
                     this.speciesError = ''
+                }
+            },
+            selectUpSpecies: function() {
+                if(this.areSpeciesDisplayed) {
+                    var speciesIndex = this.species.map(species => species.nameSingular).indexOf(this.selectedSpecies);
+                    if(speciesIndex > 0) {
+                        this.selectedSpecies = this.species[speciesIndex - 1].nameSingular;
+                    } else {
+                        this.selectedSpecies = this.species[this.species.length - 1].nameSingular;
+                    }
+                }
+            },
+            selectDownSpecies: function() {
+                if(this.areSpeciesDisplayed) {
+                    var speciesIndex = this.species.map(species => species.nameSingular).indexOf(this.selectedSpecies);
+                    if(this.species.length - 1 > speciesIndex) {
+                        this.selectedSpecies = this.species[this.species.map(species => species.nameSingular)
+                            .indexOf(this.selectedSpecies) + 1].nameSingular;
+                    } else {
+                        this.selectedSpecies = this.species[0].nameSingular;
+                    }
                 }
             },
             hideSpecies: function() {
@@ -642,7 +667,7 @@
                         cursor: pointer;
                         transition: all 0.5s ease-out;
 
-                        &:hover {
+                        &:hover, &--selected {
                             background-color: #e0e0e0;
                         }
 

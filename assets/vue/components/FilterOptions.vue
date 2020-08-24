@@ -6,6 +6,9 @@
             Gatunek zwierzaka
         </label>
         <div class="filter-options__dropdown-container"
+             @keypress.enter="toggleResults"
+             @keyup.up.stop="selectUpSpecies"
+             @keyup.down.stop="selectDownSpecies"
              @focusout.self="hideResults"
              tabindex="0"
         >
@@ -33,7 +36,7 @@
                     <li class="results-list__item"
                         v-for="speciesName in filteredSpecies"
                         @click="setSpecies(speciesName.name)"
-                        :class="{'results-list__item--disabled': speciesName.name === 'Brak wyników'}"
+                        :class="{'results-list__item--selected': selectedSpecies === speciesName.name, 'results-list__item--disabled': speciesName.name === 'Brak wyników'}"
                     >
                         {{ speciesName.name }}
                     </li>
@@ -69,7 +72,7 @@
             Województwo
         </label>
         <div class="filter-options__dropdown-container"
-             @keypress.enter="showProvinces"
+             @keypress.enter="toggleProvinces"
              @keyup.up.stop="selectUpProvince"
              @keyup.down.stop="selectDownProvince"
              @focusout="hideProvinces"
@@ -151,6 +154,29 @@
             },
             showResults: function() {
                 this.areResultsDisplayed = true;
+            },
+            selectUpSpecies: function() {
+                if(this.areResultsDisplayed) {
+                    var speciesIndex = this.species.map(species => species.name).indexOf(this.selectedSpecies);
+                    if(speciesIndex > 0) {
+                        this.selectedSpecies = this.species[speciesIndex - 1].name;
+                    } else {
+                        this.selectedSpecies = this.species[this.species.length - 1].name;
+                    }
+                    this.$emit('filterSpecies', this.selectedSpecies)
+                }
+            },
+            selectDownSpecies: function() {
+                if(this.areResultsDisplayed) {
+                    var speciesIndex = this.species.map(species => species.name).indexOf(this.selectedSpecies);
+                    if(this.species.length - 1 > speciesIndex) {
+                        this.selectedSpecies = this.species[this.species.map(species => species.name)
+                            .indexOf(this.selectedSpecies) + 1].name;
+                    } else {
+                        this.selectedSpecies = this.species[0].name;
+                    }
+                    this.$emit('filterSpecies', this.selectedSpecies)
+                }
             },
             hideResults: function() {
                 this.areResultsDisplayed = false;

@@ -88,6 +88,9 @@
                 Województwo
             </label>
             <div class="account-settings__dropdown-container"
+                 @keypress.enter="toggleProvinces"
+                 @keyup.up.stop="selectUpProvince"
+                 @keyup.down.stop="selectDownProvince"
                  @focusout="hideProvinces"
                  tabindex="0"
             >
@@ -114,6 +117,7 @@
                     >
                         <li class="provinces-list__item"
                             v-for="province in provinces"
+                            :class="{'provinces-list__item--selected': selectedProvince === province}"
                             @click="setProvince(province)"
                         >
                             {{ province }}
@@ -217,6 +221,26 @@
                 if(this.selectedProvince === this.provinceError) {
                     this.selectedProvince = '';
                     this.provinceError = ''
+                }
+            },
+            selectUpProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(provinceIndex > 0) {
+                        this.selectedProvince = this.provinces[provinceIndex - 1];
+                    } else {
+                        this.selectedProvince = this.provinces[this.provinces.length - 1];
+                    }
+                }
+            },
+            selectDownProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(this.provinces.length - 1 > provinceIndex) {
+                        this.selectedProvince = this.provinces[this.provinces.indexOf(this.selectedProvince) + 1];
+                    } else {
+                        this.selectedProvince = this.provinces[0];
+                    }
                 }
             },
             hideProvinces() {
@@ -445,8 +469,8 @@
             &:focus {
                 outline: none;
 
-                .form__dropdown,
-                .form__dropdown-arrow-container {
+                .account-settings__dropdown,
+                .account-settings__dropdown-arrow-container {
                     box-shadow: 0 0 5px 0 #00dce8;
                 }
             }
@@ -559,7 +583,7 @@
                 cursor: pointer;
                 transition: all 0.5s ease-out;
 
-                &:hover {
+                &:hover, &--selected {
                     background-color: #e0e0e0;
                 }
 

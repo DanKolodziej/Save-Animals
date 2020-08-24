@@ -390,7 +390,7 @@
                 @media (min-width: 1024px) {
                     margin: 0;
                     position: sticky;
-                    top: 30px;
+                    top: 130px;
                 }
             }
 

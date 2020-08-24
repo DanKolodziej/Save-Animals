@@ -86,6 +86,9 @@
             Województwo
         </label>
         <div class="form__dropdown-container"
+             @keypress.enter="toggleProvinces"
+             @keyup.up.stop="selectUpProvince"
+             @keyup.down.stop="selectDownProvince"
              @focusout="hideProvinces"
              tabindex="0"
         >
@@ -112,6 +115,7 @@
                 >
                     <li class="provinces-list__item"
                         v-for="province in provinces"
+                        :class="{'provinces-list__item--selected': selectedProvince === province}"
                         @click="setProvince(province)"
                     >
                         {{ province }}
@@ -208,6 +212,26 @@
                 if(this.selectedProvince === this.provinceError) {
                     this.selectedProvince = '';
                     this.provinceError = ''
+                }
+            },
+            selectUpProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(provinceIndex > 0) {
+                        this.selectedProvince = this.provinces[provinceIndex - 1];
+                    } else {
+                        this.selectedProvince = this.provinces[this.provinces.length - 1];
+                    }
+                }
+            },
+            selectDownProvince() {
+                if(this.areProvincesDisplayed) {
+                    var provinceIndex = this.provinces.indexOf(this.selectedProvince);
+                    if(this.provinces.length - 1 > provinceIndex) {
+                        this.selectedProvince = this.provinces[this.provinces.indexOf(this.selectedProvince) + 1];
+                    } else {
+                        this.selectedProvince = this.provinces[0];
+                    }
                 }
             },
             hideProvinces() {
@@ -533,7 +557,7 @@
                 cursor: pointer;
                 transition: all 0.5s ease-out;
 
-                &:hover {
+                &:hover, &--selected {
                     background-color: #e0e0e0;
                 }
 
