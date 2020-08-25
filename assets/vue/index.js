@@ -8,6 +8,7 @@ import PostPage from './components/PostPage';
 import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import SignUpVerification from "./components/SignUpVerification";
 import AccountSettings from "./components/AccountSettings";
 import Administration from "./components/Administration";
 import PrivacyPolicy from "./components/PrivacyPolicy";
@@ -32,6 +33,7 @@ const routes = [
     { path: '/zwierzaki-uzytkownika/:id', name: 'userAnimals', component: UserAnimals, props: true },
     { path: '/logowanie', component: SignIn, props: true },
     { path: '/rejestracja', component: SignUp, props: true },
+    { path: '/weryfikacja/:token', component: SignUpVerification, props: true },
     { path: '/ustawienia-konta', component: AccountSettings, meta: { requiresAuth: true } },
     { path: '/admin', component: Administration, meta: { requiresAuth: true } },
     { path: '/polityka-prywatnosci', component: PrivacyPolicy }

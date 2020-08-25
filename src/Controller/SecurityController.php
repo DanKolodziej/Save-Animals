@@ -73,7 +73,7 @@ class SecurityController extends AbstractController {
             ->to($user->getEmail())
             ->subject('Rejestracja - pomoc zwierzakom')
             ->text('Link do weryfikacji konta: '
-                . $this->generateUrl('verifyUser',
+                . $this->generateUrl('verification',
                     ['token' => $user->getConfirmationToken()],
                     UrlGeneratorInterface::ABSOLUTE_URL));
         $mailer->send($email);
@@ -96,7 +96,7 @@ class SecurityController extends AbstractController {
     }
 
     /**
-     * @Route("/weryfikacja/{token}", name="verifyUser")
+     * @Route("/verify-user/{token}", name="verifyUser")
      */
     public function verifyUser($token):JsonResponse {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneByConfirmationToken($token);
@@ -107,9 +107,10 @@ class SecurityController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return new JsonResponse(['Pomyślnie zweryfikowano użytkownika:' => $user->getId()]);
+            return new JsonResponse(['verified' => true]);
         }
-        return new JsonResponse(['error' => 'no user with specified token'], 401);
+
+        return new JsonResponse(['verified' => false], 401);
     }
 
     /**

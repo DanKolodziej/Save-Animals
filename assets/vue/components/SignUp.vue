@@ -3,7 +3,7 @@
         <div class="sign-up-success-message"
              v-show="isUserRegistered"
         >
-            Rejestracja przebiegła pomyślnie!
+            Wysłano link do podanego adresu email w celu weryfikacji!
         </div>
         <signUpForm
                 v-show="!isUserRegistered"
@@ -36,9 +36,10 @@
         padding: 30px 0;
 
         .sign-up-success-message {
-            width: fit-content;
+            width: 250px;
             background-color: #008c4b;
             color: #fff;
+            text-align: center;
             font-weight: bold;
             padding: 20px;
             margin-top: 30px;
