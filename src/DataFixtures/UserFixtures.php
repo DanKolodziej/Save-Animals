@@ -28,6 +28,10 @@ class UserFixtures extends Fixture
             $user, 'asd123'
         ));
         $user->setTermsAccepted(true);
+        $user->setIsVerified(true);
+        $dateTime = new \DateTime();
+        $dateTime->format('H:i:s \O\n Y-m-d');
+        $user->setCreateDate($dateTime);
         $manager->persist($user);
         $manager->flush();
     }

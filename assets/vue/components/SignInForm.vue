@@ -118,9 +118,13 @@
                         this.emailError = 'Nie ma takiego użytkownika';
                         this.email = '';
                         this.credentialsError = '';
-                    } else {
+                    } else if(this.errorMessage === 'Invalid credentials.') {
                         this.credentialsError = 'Nieprawidłowe hasło';
                         this.password = '';
+                    } else {
+                        this.emailError = this.errorMessage;
+                        this.email = '';
+                        this.credentialsError = '';
                     }
                 }
             }

@@ -8,7 +8,10 @@ use App\Service\UserInserter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -21,7 +24,8 @@ class SecurityController extends AbstractController {
         Request $request,
         UserInserter $userInserter,
         UserPasswordEncoderInterface $passwordEncoder,
-        ValidatorInterface $validator): JsonResponse {
+        ValidatorInterface $validator,
+        MailerInterface $mailer): JsonResponse {
 
         $user = new User();
         $email = $request->get('email');
@@ -32,6 +36,9 @@ class SecurityController extends AbstractController {
         $province = $request->get('province');
         $city = $request->get('city');
         $termsAccepted = $request->get('terms-accepted');
+        $confirmationToken = bin2hex(random_bytes(16));
+        $dateTime = new \DateTime();
+        $dateTime->format('H:i:s \O\n Y-m-d');
 
         $userInserter->setProperties($user, [
             'email' => $email,
@@ -40,7 +47,9 @@ class SecurityController extends AbstractController {
             'name' => $name,
             'province' => $province,
             'city' => $city,
-            'termsAccepted' => $termsAccepted
+            'termsAccepted' => $termsAccepted,
+            'confirmationToken' => $confirmationToken,
+            'createDate' => $dateTime
         ]);
 
         $errors = $validator->validate($user);
@@ -59,6 +68,16 @@ class SecurityController extends AbstractController {
 
         $userInserter->insert($user);
 
+        $email = (new Email())
+            ->from('pomoc.zwierzakom.kontakt@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Rejestracja - pomoc zwierzakom')
+            ->text('Link do weryfikacji konta: '
+                . $this->generateUrl('verifyUser',
+                    ['token' => $user->getConfirmationToken()],
+                    UrlGeneratorInterface::ABSOLUTE_URL));
+        $mailer->send($email);
+
         return new JsonResponse(['added user id' => $user->getId()]);
     }
 
@@ -66,9 +85,31 @@ class SecurityController extends AbstractController {
      * @Route("/login", name="app_login", methods={"POST"})
      */
     public function login(EntityNormalizer $entityNormalizer): JsonResponse {
-        $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name', 'roles']);
+        $user = $this->getUser();
+        if($user->getIsVerified()) {
+            $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name', 'roles']);
+            return new JsonResponse($user);
+        } else {
+            $this->get('security.token_storage')->setToken(null);
+            return new JsonResponse(['error' => 'Konto nie jest zweryfikowane'], 401);
+        }
+    }
 
-        return new JsonResponse($user);
+    /**
+     * @Route("/weryfikacja/{token}", name="verifyUser")
+     */
+    public function verifyUser($token):JsonResponse {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByConfirmationToken($token);
+
+        if($user) {
+            $user->setIsVerified(true);
+            $user->setConfirmationToken(null);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return new JsonResponse(['Pomyślnie zweryfikowano użytkownika:' => $user->getId()]);
+        }
+        return new JsonResponse(['error' => 'no user with specified token'], 401);
     }
 
     /**

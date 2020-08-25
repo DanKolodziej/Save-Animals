@@ -6,10 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("email", message="Podany email już jest używany")
  */
 class User implements UserInterface
 {
@@ -72,6 +74,31 @@ class User implements UserInterface
      * @Assert\IsTrue(message="Wymagana jest zgoda na przetwarzanie danych")
      */
     private $termsAccepted;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $confirmationToken;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetPasswordToken;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $resetExpireDate;
 
     public function __construct()
     {
@@ -231,6 +258,66 @@ class User implements UserInterface
     public function setTermsAccepted(bool $termsAccepted): self
     {
         $this->termsAccepted = $termsAccepted;
+
+        return $this;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+
+        return $this;
+    }
+
+    public function getCreateDate(): ?\DateTimeInterface
+    {
+        return $this->createDate;
+    }
+
+    public function setCreateDate(\DateTimeInterface $createDate): self
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    public function getResetExpireDate(): ?\DateTimeInterface
+    {
+        return $this->resetExpireDate;
+    }
+
+    public function setResetExpireDate(\DateTimeInterface $resetExpireDate): self
+    {
+        $this->resetExpireDate = $resetExpireDate;
 
         return $this;
     }
