@@ -315,7 +315,7 @@ class User implements UserInterface
         return $this->resetExpireDate;
     }
 
-    public function setResetExpireDate(\DateTimeInterface $resetExpireDate): self
+    public function setResetExpireDate(?\DateTimeInterface $resetExpireDate): self
     {
         $this->resetExpireDate = $resetExpireDate;
 

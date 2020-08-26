@@ -91,14 +91,14 @@ class SecurityController extends AbstractController {
             return new JsonResponse($user);
         } else {
             $this->get('security.token_storage')->setToken(null);
-            return new JsonResponse(['error' => 'Konto nie jest zweryfikowane'], 401);
+            return new JsonResponse(['error' => 'Konto nie jest zweryfikowane'], 400);
         }
     }
 
     /**
      * @Route("/verify-user/{token}", name="verifyUser")
      */
-    public function verifyUser($token):JsonResponse {
+    public function verifyUser(string $token):JsonResponse {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneByConfirmationToken($token);
 
         if($user) {
@@ -110,7 +110,90 @@ class SecurityController extends AbstractController {
             return new JsonResponse(['verified' => true]);
         }
 
-        return new JsonResponse(['verified' => false], 401);
+        return new JsonResponse(['verified' => false], 400);
+    }
+
+    /**
+     * @Route("/password-reset", name="passwordReset", methods={"POST"})
+     */
+    public function passwordReset(Request $request, MailerInterface $mailer) {
+
+        $email = $request->get('email');
+        $resetPasswordToken = bin2hex(random_bytes(16));
+        $dateTime = new \DateTime();
+        $dateTime->format('H:i:s \O\n Y-m-d');
+        $dateTime->modify('+ 1 hour');
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($email);
+        if($user) {
+            $user->setResetPasswordToken($resetPasswordToken);
+            $user->setResetExpireDate($dateTime);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $email = (new Email())
+                ->from('pomoc.zwierzakom.kontakt@gmail.com')
+                ->to($email)
+                ->subject('Rejestracja - pomoc zwierzakom')
+                ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
+                    . $this->generateUrl('passwordResetForm',
+                        ['token' => $resetPasswordToken],
+                        UrlGeneratorInterface::ABSOLUTE_URL));
+            $mailer->send($email);
+
+            return new JsonResponse(['sentLink' => true]);
+        }
+
+        return new JsonResponse(['sentLink' => false], 400);
+    }
+
+    /**
+     * @Route("/password-change", name="passwordChange", methods={"POST"})
+     */
+    public function passwordChange(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        ValidatorInterface $validator):JsonResponse {
+
+        $token = $request->get('token');
+        $password = $request->get('password');
+        $passwordRepeat = $request->get('password-repeat');
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByResetPasswordToken($token);
+
+
+        $dateTime = new \DateTime();
+        $dateTime->format('H:i:s \O\n Y-m-d');
+
+        if($user && $dateTime < $user->getResetExpireDate()) {
+            $user->setResetPasswordToken(null);
+            $user->setResetExpireDate(null);
+            $user->setPassword('');
+            if($password !== '') {
+                $user->setPassword($passwordEncoder->encodePassword($user, $password));
+            }
+            $errors = $validator->validate($user);
+
+            $messages = [];
+            if($password !== $passwordRepeat && $password !== '') {
+                $messages['repeatPassword'] = ['Hasła nie pasują'];
+            }
+            if(count($errors) > 0 || count($messages) > 0) {
+
+                foreach($errors as $violation) {
+                    $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+                }
+                return new JsonResponse($messages, 400);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return new JsonResponse(['changed password' => true]);
+        }
+
+        $messages['password'] = ['Nie aktualny link'];
+
+        return new JsonResponse($messages, 400);
     }
 
     /**

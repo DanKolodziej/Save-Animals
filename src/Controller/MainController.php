@@ -22,6 +22,8 @@ class MainController extends AbstractController {
      * @Route("/logowanie", name="singIn")
      * @Route("/rejestracja", name="singUp")
      * @Route("/weryfikacja/{token}", name="verification")
+     * @Route("/reset-hasla", name="forgottenPassword")
+     * @Route("/nowe-haslo/{token}", name="passwordResetForm")
      * @Route("/ustawienia-konta", name="accountSettings")
      * @Route("/admin", name="admin")
      * @Route("/polityka-prywatnosci", name="privacyPolicy")

@@ -48,16 +48,16 @@
                @click.prevent="performLogin()"
         >
         <div class="form__links">
-            <a class="form__link"
-               href="#"
+            <RouterLink class="form__link"
+               to="/rejestracja"
             >
                 Utwórz konto
-            </a>
-            <a class="form__link"
-               href="#"
+            </RouterLink>
+            <RouterLink class="form__link"
+               to="/reset-hasla"
             >
                 Nie pamiętam hasła
-            </a>
+            </RouterLink>
         </div>
     </form>
 </template>

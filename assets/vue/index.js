@@ -9,6 +9,8 @@ import UserAnimals from "./components/UserAnimals";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import SignUpVerification from "./components/SignUpVerification";
+import PasswordReset from "./components/PasswordReset";
+import PasswordChange from "./components/PasswordChange";
 import AccountSettings from "./components/AccountSettings";
 import Administration from "./components/Administration";
 import PrivacyPolicy from "./components/PrivacyPolicy";
@@ -34,6 +36,8 @@ const routes = [
     { path: '/logowanie', component: SignIn, props: true },
     { path: '/rejestracja', component: SignUp, props: true },
     { path: '/weryfikacja/:token', component: SignUpVerification, props: true },
+    { path: '/reset-hasla', component: PasswordReset },
+    { path: '/nowe-haslo/:token', component: PasswordChange, props: true },
     { path: '/ustawienia-konta', component: AccountSettings, meta: { requiresAuth: true } },
     { path: '/admin', component: Administration, meta: { requiresAuth: true } },
     { path: '/polityka-prywatnosci', component: PrivacyPolicy }
