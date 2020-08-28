@@ -24,8 +24,7 @@ class SecurityController extends AbstractController {
         Request $request,
         UserInserter $userInserter,
         UserPasswordEncoderInterface $passwordEncoder,
-        ValidatorInterface $validator,
-        MailerInterface $mailer): JsonResponse {
+        ValidatorInterface $validator): JsonResponse {
 
         $user = new User();
         $email = $request->get('email');
@@ -116,7 +115,7 @@ class SecurityController extends AbstractController {
     /**
      * @Route("/password-reset", name="passwordReset", methods={"POST"})
      */
-    public function passwordReset(Request $request, MailerInterface $mailer) {
+    public function passwordReset(Request $request) {
 
         $email = $request->get('email');
         $resetPasswordToken = bin2hex(random_bytes(16));
