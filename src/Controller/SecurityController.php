@@ -69,7 +69,7 @@ class SecurityController extends AbstractController {
         $userInserter->insert($user);
 
         $email = (new Email())
-            ->from('pomoc.zwierzakom.kontakt@gmail.com')
+            ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
             ->to($user->getEmail())
             ->subject('Rejestracja - pomoc zwierzakom')
             ->text('Link do weryfikacji konta: '
@@ -133,7 +133,7 @@ class SecurityController extends AbstractController {
             $entityManager->flush();
 
             $email = (new Email())
-                ->from('pomoc.zwierzakom.kontakt@gmail.com')
+                ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
                 ->to($email)
                 ->subject('Rejestracja - pomoc zwierzakom')
                 ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
