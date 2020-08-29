@@ -24,7 +24,8 @@ class SecurityController extends AbstractController {
         Request $request,
         UserInserter $userInserter,
         UserPasswordEncoderInterface $passwordEncoder,
-        ValidatorInterface $validator): JsonResponse {
+        ValidatorInterface $validator,
+        MailerInterface $mailer): JsonResponse {
 
         $user = new User();
         $email = $request->get('email');
@@ -67,15 +68,15 @@ class SecurityController extends AbstractController {
 
         $userInserter->insert($user);
 
-//        $email = (new Email())
-//            ->from('pomoc.zwierzakom.kontakt@gmail.com')
-//            ->to($user->getEmail())
-//            ->subject('Rejestracja - pomoc zwierzakom')
-//            ->text('Link do weryfikacji konta: '
-//                . $this->generateUrl('verification',
-//                    ['token' => $user->getConfirmationToken()],
-//                    UrlGeneratorInterface::ABSOLUTE_URL));
-//        $mailer->send($email);
+        $email = (new Email())
+            ->from('pomoc.zwierzakom.kontakt@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Rejestracja - pomoc zwierzakom')
+            ->text('Link do weryfikacji konta: '
+                . $this->generateUrl('verification',
+                    ['token' => $user->getConfirmationToken()],
+                    UrlGeneratorInterface::ABSOLUTE_URL));
+        $mailer->send($email);
 
         return new JsonResponse(['added user id' => $user->getId()]);
     }
@@ -85,13 +86,13 @@ class SecurityController extends AbstractController {
      */
     public function login(EntityNormalizer $entityNormalizer): JsonResponse {
         $user = $this->getUser();
-//        if($user->getIsVerified()) {
+        if($user->getIsVerified()) {
             $user = $entityNormalizer->normalize($this->getUser(), ['id', 'email', 'name', 'roles']);
             return new JsonResponse($user);
-//        } else {
-//            $this->get('security.token_storage')->setToken(null);
-//            return new JsonResponse(['error' => 'Konto nie jest zweryfikowane'], 400);
-//        }
+        } else {
+            $this->get('security.token_storage')->setToken(null);
+            return new JsonResponse(['error' => 'Konto nie jest zweryfikowane'], 400);
+        }
     }
 
     /**
@@ -115,7 +116,7 @@ class SecurityController extends AbstractController {
     /**
      * @Route("/password-reset", name="passwordReset", methods={"POST"})
      */
-    public function passwordReset(Request $request) {
+    public function passwordReset(Request $request, MailerInterface $mailer) {
 
         $email = $request->get('email');
         $resetPasswordToken = bin2hex(random_bytes(16));
@@ -131,15 +132,15 @@ class SecurityController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-//            $email = (new Email())
-//                ->from('pomoc.zwierzakom.kontakt@gmail.com')
-//                ->to($email)
-//                ->subject('Rejestracja - pomoc zwierzakom')
-//                ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
-//                    . $this->generateUrl('passwordResetForm',
-//                        ['token' => $resetPasswordToken],
-//                        UrlGeneratorInterface::ABSOLUTE_URL));
-//            $mailer->send($email);
+            $email = (new Email())
+                ->from('pomoc.zwierzakom.kontakt@gmail.com')
+                ->to($email)
+                ->subject('Rejestracja - pomoc zwierzakom')
+                ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
+                    . $this->generateUrl('passwordResetForm',
+                        ['token' => $resetPasswordToken],
+                        UrlGeneratorInterface::ABSOLUTE_URL));
+            $mailer->send($email);
 
             return new JsonResponse(['sentLink' => true]);
         }
