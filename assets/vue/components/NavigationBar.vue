@@ -176,6 +176,7 @@
         &__items {
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
             background-color: #00A8E8;
             position: relative;
             z-index: 99;
@@ -201,6 +202,8 @@
             font-size: 18px;
             display: flex;
             align-items: center;
+            -webkit-flex: 1;
+            flex-shrink: 0;
             height: 100%;
             padding: 15px 20px 20px;
             box-sizing: border-box;
@@ -239,6 +242,7 @@
         &__sign-in {
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
             background-color: #00A8E8;
             position: relative;
             z-index: 99;

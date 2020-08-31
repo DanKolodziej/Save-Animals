@@ -458,6 +458,7 @@
         &__dropdown {
             display: block;
             width: 100%;
+            margin: 0;
             padding: 5px;
             font-size: 18px;
             border: 2px solid #00A8E8;
@@ -468,6 +469,7 @@
             &:disabled {
                 background-color: #fff;
                 color: #000;
+                opacity: 1;
                 cursor: pointer;
             }
 
