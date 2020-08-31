@@ -217,6 +217,7 @@
                 box-shadow: none;
                 border-right: none;
                 font-size: 13px;
+                -webkit-flex: auto;
             }
 
             @media (min-width: 1024px) {
