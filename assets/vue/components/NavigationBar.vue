@@ -186,6 +186,7 @@
 
             @media (min-width: 768px) {
                 flex-direction: row;
+                flex-shrink: 1;
                 max-width: none;
                 margin-left: 0;
             }
@@ -253,6 +254,7 @@
 
             @media (min-width: 768px) {
                 flex-direction: row;
+                flex-shrink: 1;
                 max-width: none;
                 margin-left: 0;
             }
