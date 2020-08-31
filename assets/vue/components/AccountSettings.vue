@@ -484,6 +484,7 @@
         &__dropdown {
             display: block;
             width: 100%;
+            margin: 0;
             padding: 5px;
             font-size: 18px;
             border: 2px solid #00A8E8;
@@ -494,6 +495,7 @@
             &:disabled {
                 background-color: #fff;
                 color: #000;
+                opacity: 1;
                 cursor: pointer;
             }
 
@@ -611,6 +613,7 @@
             border-radius: 3px;
             cursor: pointer;
             box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+            -webkit-appearance: none;
 
             &:focus {
                 outline: none;

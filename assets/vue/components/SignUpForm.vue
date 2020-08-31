@@ -656,6 +656,7 @@
             border-radius: 3px;
             cursor: pointer;
             box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+            -webkit-appearance: none;
 
             &:focus {
                 outline: none;
