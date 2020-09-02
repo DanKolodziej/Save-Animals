@@ -8,6 +8,7 @@ use App\Service\UserInserter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,7 +77,13 @@ class SecurityController extends AbstractController {
                 . $this->generateUrl('verification',
                     ['token' => $user->getConfirmationToken()],
                     UrlGeneratorInterface::ABSOLUTE_URL));
-        $mailer->send($email);
+        try {
+            $mailer->send($email);
+        } catch(TransportExceptionInterface $e) {
+            echo $e->getMessage();
+            echo '---------------';
+            echo $e->getDebug();
+        }
 
         return new JsonResponse(['added user id' => $user->getId()]);
     }
@@ -140,7 +147,13 @@ class SecurityController extends AbstractController {
                     . $this->generateUrl('passwordResetForm',
                         ['token' => $resetPasswordToken],
                         UrlGeneratorInterface::ABSOLUTE_URL));
-            $mailer->send($email);
+            try {
+                $mailer->send($email);
+            } catch(TransportExceptionInterface $e) {
+                echo $e->getMessage();
+                echo '---------------';
+                echo $e->getDebug();
+            }
 
             return new JsonResponse(['sentLink' => true]);
         }
