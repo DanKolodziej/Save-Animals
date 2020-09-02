@@ -25,7 +25,7 @@ class SecurityController extends AbstractController {
         UserInserter $userInserter,
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
-        MailerInterface $mailer): JsonResponse {
+        \Swift_Mailer $mailer): JsonResponse {
 
         $user = new User();
         $email = $request->get('email');
@@ -68,14 +68,25 @@ class SecurityController extends AbstractController {
 
         $userInserter->insert($user);
 
-        $email = (new Email())
-            ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
-            ->to($user->getEmail())
-            ->subject('Rejestracja - pomoc zwierzakom')
-            ->text('Link do weryfikacji konta: '
+        $email = (new \Swift_Message('Rejestracja - pomoc zwierzakom'))
+            ->setFrom('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
+            ->setTo($user->getEmail())
+            ->setBody(
+                'Link do weryfikacji konta: '
                 . $this->generateUrl('verification',
                     ['token' => $user->getConfirmationToken()],
-                    UrlGeneratorInterface::ABSOLUTE_URL));
+                    UrlGeneratorInterface::ABSOLUTE_URL),
+                'text/plain'
+            );
+
+//        $email = (new Email())
+//            ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
+//            ->to($user->getEmail())
+//            ->subject('Rejestracja - pomoc zwierzakom')
+//            ->text('Link do weryfikacji konta: '
+//                . $this->generateUrl('verification',
+//                    ['token' => $user->getConfirmationToken()],
+//                    UrlGeneratorInterface::ABSOLUTE_URL));
         $mailer->send($email);
 
         return new JsonResponse(['added user id' => $user->getId()]);
@@ -116,7 +127,7 @@ class SecurityController extends AbstractController {
     /**
      * @Route("/password-reset", name="passwordReset", methods={"POST"})
      */
-    public function passwordReset(Request $request, MailerInterface $mailer) {
+    public function passwordReset(Request $request, \Swift_Mailer $mailer) {
 
         $email = $request->get('email');
         $resetPasswordToken = bin2hex(random_bytes(16));
@@ -132,14 +143,25 @@ class SecurityController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            $email = (new Email())
-                ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
-                ->to($email)
-                ->subject('Rejestracja - pomoc zwierzakom')
-                ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
+            $email = (new \Swift_Message('nowe hasło - pomoc zwierzakom'))
+                ->setFrom('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    'Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
                     . $this->generateUrl('passwordResetForm',
                         ['token' => $resetPasswordToken],
-                        UrlGeneratorInterface::ABSOLUTE_URL));
+                        UrlGeneratorInterface::ABSOLUTE_URL),
+                    'text/plain'
+                );
+
+//            $email = (new Email())
+//                ->from('pomoczwierzakom@smtp.pomoc-zwierzakom.pl')
+//                ->to($email)
+//                ->subject('Rejestracja - pomoc zwierzakom')
+//                ->text('Link do ustawienia nowego hasła (ważny tylko przez 1 godz.): '
+//                    . $this->generateUrl('passwordResetForm',
+//                        ['token' => $resetPasswordToken],
+//                        UrlGeneratorInterface::ABSOLUTE_URL));
             $mailer->send($email);
 
             return new JsonResponse(['sentLink' => true]);
